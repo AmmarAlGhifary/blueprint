@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.ui.Modifier
 import io.github.ammaralghifary.blueprint.Blueprint
-import io.github.ammaralghifary.blueprint.render.BlueprintRenderer
+import io.github.ammaralghifary.blueprint.BlueprintRenderer
 import io.github.ammaralghifary.blueprint.SduiComponent
 import io.github.ammaralghifary.blueprint.SduiModifier
 import io.github.ammaralghifary.blueprint.sduiRegistry

@@ -9,6 +9,6 @@ public interface SduiScope {
     @Composable
     public fun Render(component: SduiComponent, modifier: Modifier = Modifier)
 
-    /** Forwards [action] to the `onAction` callback given to [io.github.ammaralghifary.blueprint.render.BlueprintRenderer]. */
+    /** Forwards [action] to the `onAction` callback given to [BlueprintRenderer]. */
     public fun dispatch(action: SduiAction)
 }

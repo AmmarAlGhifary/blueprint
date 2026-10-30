@@ -37,10 +37,10 @@ modifier and explicit return type, or the build fails.
 ## Architecture
 
 ### Directory ≠ package
-Source sits in `model/`, `render/`, `registry/`, `modifier/` folders, but nearly every file declares
-`package io.github.ammaralghifary.blueprint` regardless. The sole exception is
-`render/BlueprintRenderer.kt` (`…blueprint.render`). Keep this pattern when adding files: group by
-folder, but do not add a package segment unless you are extending `render`.
+Source sits in `model/`, `render/`, `registry/`, `modifier/` folders, but every file in `:core`
+declares `package io.github.ammaralghifary.blueprint` regardless — the folders group files, they are
+not package segments. Keep this pattern when adding files: never add a package segment to match a
+folder. `:core` is one flat package, so files reach each other without imports.
 
 ### Registry-driven polymorphism
 `SduiComponent` and `SduiAction` are `@Serializable abstract class`es, deliberately **not sealed**, so
