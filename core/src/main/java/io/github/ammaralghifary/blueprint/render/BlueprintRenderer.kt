@@ -2,6 +2,7 @@ package io.github.ammaralghifary.blueprint
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
@@ -50,6 +51,13 @@ private class RegistryScope(
                     component.modifier
                 )
             registry.fallback(unknown, mod)
+        }
+    }
+
+    @Composable
+    override fun RenderAll(children: List<SduiComponent>, childModifier: (SduiComponent) -> Modifier) {
+        children.forEachIndexed { index, child ->
+            key(index, child::class) { Render(child, childModifier(child)) }
         }
     }
 
