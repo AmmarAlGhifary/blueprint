@@ -62,8 +62,13 @@ direction — encoding exists just to satisfy `KSerializer`.
 `BlueprintRenderer` creates a `RegistryScope` (remembered per `Blueprint`) implementing `SduiScope`.
 For each node it applies the server modifier (`SduiModifier.toComposeModifier`) *before* invoking the
 registered composable, then dispatches to `registry.registrationFor(component)`; anything unregistered
-goes to the fallback. Container components recurse via `scope.Render(child)` and emit events via
+goes to the fallback. Container components recurse via `scope.RenderAll(children)` — which keys each
+child by position and class — or `scope.Render(child)` for a single slot, and emit events via
 `scope.dispatch(action)`, which forwards to the single `onAction` callback at the root.
+
+`RenderAll`'s `childModifier` lambda is how a container supplies the scope-only half of the server
+modifier: `weight` and `alignment` are `RowScope`/`ColumnScope` extensions, so only the enclosing
+layout can resolve them. A container that ignores them silently drops those fields.
 
 `ComponentRegistration.Render` casts the **component**, never the render lambda — casting a
 `ComposableLambdaImpl` to a function type fails Kotlin's arity check because it implements
