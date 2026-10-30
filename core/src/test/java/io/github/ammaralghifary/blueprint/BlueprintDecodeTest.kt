@@ -2,6 +2,7 @@ package io.github.ammaralghifary.blueprint
 
 import kotlinx.serialization.Serializable
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertThrows
 import org.junit.Assert.assertTrue
@@ -64,6 +65,56 @@ class BlueprintDecodeTest {
     fun malformedModifierOnUnknownComponentDoesNotThrow() {
         val screen = blueprint().decodeScreen("""{"body":{"type":"nope","modifier":{"padding":"oops"}}}""")
         assertNull((screen.body as UnknownComponent).modifier)
+    }
+
+    @Test
+    fun registeredTypeMissingRequiredFieldDegradesToUnknownWithError() {
+        val screen = blueprint().decodeScreen(
+            """{"body":{"type":"column","children":[
+                {"type":"text","text":"a"},
+                {"type":"text","modifier":{"padding":{"all":6}}},
+                {"type":"text","text":"b"}]}}""",
+        )
+        val children = (screen.body as TestColumn).children
+        assertEquals(TestText("a"), children[0])
+        val broken = children[1] as UnknownComponent
+        assertEquals("text", broken.type)
+        assertNotNull(broken.error)
+        assertEquals(6, broken.modifier?.padding?.all)
+        assertEquals(TestText("b"), children[2])
+    }
+
+    @Test
+    fun registeredTypeWithWrongValueTypeDegradesToUnknown() {
+        val screen = blueprint().decodeScreen("""{"body":{"type":"text","text":{"nested":1}}}""")
+        val broken = screen.body as UnknownComponent
+        assertEquals("text", broken.type)
+        assertNotNull(broken.error)
+    }
+
+    @Test
+    fun brokenChildDoesNotTakeDownItsParent() {
+        val screen = blueprint().decodeScreen(
+            """{"body":{"type":"column","children":[
+                {"type":"column","children":"not a list"},{"type":"text","text":"ok"}]}}""",
+        )
+        val children = (screen.body as TestColumn).children
+        assertTrue(children[0] is UnknownComponent)
+        assertEquals(TestText("ok"), children[1])
+    }
+
+    @Test
+    fun unregisteredTypeHasNoError() {
+        val screen = blueprint().decodeScreen("""{"body":{"type":"nope"}}""")
+        assertNull((screen.body as UnknownComponent).error)
+    }
+
+    @Test
+    fun registeredActionMissingFieldDegradesToUnknownAction() {
+        val action = blueprint().json.decodeFromString(SduiAction.serializer(), """{"type":"navigation_action"}""")
+        val unknown = action as UnknownAction
+        assertEquals("navigation_action", unknown.type)
+        assertNotNull(unknown.error)
     }
 
     @Test
