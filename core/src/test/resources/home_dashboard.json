@@ -1,0 +1,35 @@
+{
+  "type": "screen",
+  "screen_id": "home_dashboard",
+  "app_bar": { "title": "Home", "show_notification_icon": true, "notification_count": 3 },
+  "body": {
+    "type": "column",
+    "arrangement": "space_between",
+    "modifier": { "width": { "type": "fill" } },
+    "children": [
+      { "type": "spacer", "size": "medium" },
+      { "type": "carousel", "items": [ { "url": "https://x/a.jpg" }, { "url": "https://x/b.jpg" } ] },
+      {
+        "type": "warning_banner",
+        "title": "Tunggakan",
+        "description": "Mohon segera melunasi",
+        "modifier": {
+          "margin": { "horizontal": 16, "top": 16, "bottom": 8 },
+          "padding": { "all": 11 },
+          "background_color": "#930b20",
+          "corner_radius": 12,
+          "text_color": "#ffffff"
+        },
+        "action": { "type": "navigation_action", "destination": "keuangan" }
+      },
+      { "type": "section_header", "title": "Jadwal Kelas Hari Ini" },
+      {
+        "type": "horizontal_list",
+        "children": [
+          { "type": "schedule_card", "course_name": "Algoritma", "time": "08:00", "room": "R101" }
+        ]
+      },
+      { "type": "section_header", "title": "Layanan Akademik" }
+    ]
+  }
+}
