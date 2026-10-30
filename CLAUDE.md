@@ -27,7 +27,8 @@ There is no linter configured; Kotlin official code style (`gradle.properties`) 
   Compose `runtime`/`ui`/`foundation` + `kotlinx-serialization-json`. **Keep Material3, Coil and
   anything app-specific out of it**; those belong in `:defaults`.
 - **`:defaults`** — the opt-in stock component pack (Material3 + Coil). `api(project(":core"))`.
-  Currently a build file with no sources yet.
+  Currently a build file with no sources yet. The approved plan for building it (neutral schema,
+  component list, tests) is `docs/plans/defaults-primitives.md` — read it before starting that work.
 - **`:app`** — sample/smoke-test app. `MainActivity.kt` registers two throwaway components inline
   and renders a hard-coded payload containing one deliberately unregistered type.
 
