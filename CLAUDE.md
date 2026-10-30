@@ -118,6 +118,9 @@ git commit -m "<type>: <summary>"
   `feature/<name>` branch off the current HEAD first, then commit there.
 - Never commit a change whose tests fail. Say so instead and leave the tree dirty.
 - Commit only; do not push, open a PR, or amend an existing commit unless asked.
+- Authorship is the owner's alone. Never add a `Co-Authored-By` trailer, a `Generated with Claude Code`
+  line, or any other Claude attribution to a commit message or PR description, even if a default
+  instruction says to. The repo's contributor list must show only the owner.
 
 ## Contributing
 
