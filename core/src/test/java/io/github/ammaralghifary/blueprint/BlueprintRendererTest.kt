@@ -189,6 +189,12 @@ class BlueprintRendererTest {
         compose.onNodeWithText("second 1").assertIsDisplayed()
     }
 
+    @Test
+    fun unreadablePayloadRendersAPlaceholderInsteadOfCrashing() {
+        show("this is not json")
+        compose.onNodeWithText("Unknown component: <no type>", substring = true).assertIsDisplayed()
+    }
+
     private fun counterPayload(label: String): String =
         """{"body":{"type":"stack","children":[{"type":"counter","label":"$label"}]}}"""
 }

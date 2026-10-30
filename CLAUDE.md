@@ -58,6 +58,11 @@ untouched `raw: JsonObject`; a malformed `modifier` on an unknown component degr
 instead of throwing. One bad child must never take down the payload. Decoding is the only supported
 direction — encoding exists just to satisfy `KSerializer`.
 
+The envelope follows the same rule: `Blueprint.decodeScreen` (both overloads) **never throws**. Malformed
+JSON, a non-object root, or a missing/null/non-object `body` returns a screen whose body is an
+`UnknownComponent` with `error` set; a bad `screen_id`/`version` is dropped while a good body is
+kept. Don't add a code path that lets a decoding exception escape `decodeScreen`.
+
 ### Render pipeline
 `BlueprintRenderer` creates a `RegistryScope` (remembered per `Blueprint`) implementing `SduiScope`.
 For each node it applies the server modifier (`SduiModifier.toComposeModifier`) *before* invoking the
