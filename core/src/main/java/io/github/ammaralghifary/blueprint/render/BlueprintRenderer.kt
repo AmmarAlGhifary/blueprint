@@ -1,18 +1,11 @@
-package io.github.ammaralghifary.blueprint.render
+package io.github.ammaralghifary.blueprint
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
-import io.github.ammaralghifary.blueprint.Blueprint
-import io.github.ammaralghifary.blueprint.SduiAction
-import io.github.ammaralghifary.blueprint.SduiComponent
-import io.github.ammaralghifary.blueprint.SduiRegistry
-import io.github.ammaralghifary.blueprint.SduiScope
-import io.github.ammaralghifary.blueprint.SduiScreen
-import io.github.ammaralghifary.blueprint.UnknownComponent
-import io.github.ammaralghifary.blueprint.toComposeModifier
 import kotlinx.serialization.json.JsonObject
 
 /** Renders [screen].body recursively through [blueprint]'s registry. */
@@ -58,6 +51,13 @@ private class RegistryScope(
                     component.modifier
                 )
             registry.fallback(unknown, mod)
+        }
+    }
+
+    @Composable
+    override fun RenderAll(children: List<SduiComponent>, childModifier: (SduiComponent) -> Modifier) {
+        children.forEachIndexed { index, child ->
+            key(index, child::class) { Render(child, childModifier(child)) }
         }
     }
 
