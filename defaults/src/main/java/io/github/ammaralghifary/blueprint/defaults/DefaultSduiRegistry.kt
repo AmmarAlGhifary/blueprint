@@ -2,6 +2,7 @@ package io.github.ammaralghifary.blueprint.defaults
 
 import io.github.ammaralghifary.blueprint.model.NavigateAction
 import io.github.ammaralghifary.blueprint.registry.SduiRegistry
+import io.github.ammaralghifary.blueprint.registry.SduiRegistryBuilder
 import io.github.ammaralghifary.blueprint.registry.sduiRegistry
 
 /**
