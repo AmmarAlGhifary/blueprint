@@ -44,6 +44,7 @@ private class RegistryScope(
         if (registration != null) {
             registration.Render(component, mod, this)
         } else {
+            // A class nobody registered still needs something for the fallback to show
             val unknown = component as? UnknownComponent
                 ?: UnknownComponent(
                     component::class.simpleName,
@@ -57,6 +58,7 @@ private class RegistryScope(
     @Composable
     override fun RenderAll(children: List<SduiComponent>, childModifier: (SduiComponent) -> Modifier) {
         children.forEachIndexed { index, child ->
+            // Position + class, see SduiScope.RenderAll
             key(index, child::class) { Render(child, childModifier(child)) }
         }
     }

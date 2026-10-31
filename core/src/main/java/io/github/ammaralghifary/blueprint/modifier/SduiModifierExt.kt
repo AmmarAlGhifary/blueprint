@@ -19,20 +19,19 @@ import androidx.compose.ui.unit.dp
 private fun Int.safeDp(): Dp = coerceAtLeast(0).dp
 
 /**
- * Applies the server box model on top of [baseModifier], in this order:
- * margin, size, shadow, clip, border, background, padding.
- *
- * Bad input never throws: negative dp values are clamped to 0 and unparsable colors or unknown
- * size types are skipped.
+ * Applies the server box model on top of [baseModifier]. Bad input never throws: negative dp
+ * clamps to 0, unparsable colors and unknown size types are skipped.
  */
 public fun SduiModifier.toComposeModifier(baseModifier: Modifier = Modifier): Modifier {
     var mod = baseModifier
     val shape = RoundedCornerShape((cornerRadius ?: 0).safeDp())
 
+    // 1. MARGIN (Outer Spacing)
     margin?.let {
         mod = mod.padding(it.resolvedStart.safeDp(), it.resolvedTop.safeDp(), it.resolvedEnd.safeDp(), it.resolvedBottom.safeDp())
     }
 
+    // 2. SIZING
     width?.let { size ->
         mod = when (size.type) {
             "fill" -> mod.fillMaxWidth()
@@ -50,18 +49,22 @@ public fun SduiModifier.toComposeModifier(baseModifier: Modifier = Modifier): Mo
         }
     }
 
-    // The shadow must come before clip, otherwise the clip cuts the shadow off.
+    // 3. ELEVATION (Shadows, before clip or the clip cuts them off)
     elevation?.let { mod = mod.shadow(it.safeDp(), shape, clip = false) }
 
+    // 4. CLIP (Rounded corners physically cut the content)
     cornerRadius?.let { mod = mod.clip(shape) }
 
+    // 5. BORDER
     val borderColorParsed = borderColor.toColorOrNull()
     if (borderWidth != null && borderColorParsed != null) {
         mod = mod.border(borderWidth.safeDp(), borderColorParsed, shape)
     }
 
+    // 6. BACKGROUND COLOR
     backgroundColor.toColorOrNull()?.let { mod = mod.background(it, shape) }
 
+    // 7. PADDING (Inner Spacing)
     padding?.let {
         mod = mod.padding(it.resolvedStart.safeDp(), it.resolvedTop.safeDp(), it.resolvedEnd.safeDp(), it.resolvedBottom.safeDp())
     }

@@ -22,16 +22,22 @@ import kotlinx.serialization.json.contentOrNull
  * decoding message for a registered type that failed.
  */
 public class UnknownComponent(
+    /** The payload's `type` string, or null when it is missing. */
     public val type: String?,
+    /** The untouched JSON object. */
     public val raw: JsonObject,
     override val modifier: SduiModifier? = null,
+    /** Why this node degraded, or null when its type is simply unregistered. */
     public val error: String? = null,
 ) : SduiComponent()
 
 /** Action counterpart of [UnknownComponent]: unregistered type, or a registered one that failed to decode. */
 public class UnknownAction(
+    /** The payload's `type` string, or null when it is missing. */
     public val type: String?,
+    /** The untouched JSON object. */
     public val raw: JsonObject,
+    /** Why this action degraded, or null when its type is simply unregistered. */
     public val error: String? = null,
 ) : SduiAction()
 
