@@ -37,6 +37,9 @@ Until then you can try it locally: run `./gradlew publishToMavenLocal` in this r
 ## Use it
 
 ```kotlin
+import android.util.Log
+import androidx.activity.compose.setContent
+import androidx.compose.material3.Text
 import io.github.ammaralghifary.blueprint.Blueprint
 import io.github.ammaralghifary.blueprint.defaults.DefaultSduiRegistry
 import io.github.ammaralghifary.blueprint.model.SduiComponent
