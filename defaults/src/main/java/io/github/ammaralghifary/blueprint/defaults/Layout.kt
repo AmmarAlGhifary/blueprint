@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -78,7 +77,10 @@ internal fun RenderColumn(c: SduiColumn, mod: Modifier, scope: SduiScope) {
     val base = if (c.scrollable) mod.verticalScroll(rememberScrollState()) else mod
     Column(base, verticalArrangement = verticalArrangementOf(c.arrangement)) {
         scope.RenderAll(c.children) { child ->
-            horizontalAlignmentOf(child.modifier?.alignment)?.let { Modifier.align(it) } ?: Modifier
+            var m: Modifier = Modifier
+            child.modifier?.weight?.takeIf { it > 0f }?.let { m = m.weight(it) }
+            horizontalAlignmentOf(child.modifier?.alignment)?.let { m = m.align(it) }
+            m
         }
     }
 }

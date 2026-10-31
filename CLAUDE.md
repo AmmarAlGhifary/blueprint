@@ -11,7 +11,7 @@ networking — the host app fetches the JSON and calls `Blueprint.decodeScreen`.
 ## Commands
 
 ```bash
-./gradlew :core:testDebugUnitTest      # unit tests (the only test source set today)
+./gradlew :core:testDebugUnitTest :defaults:testDebugUnitTest   # unit tests
 ./gradlew :core:testDebugUnitTest --tests '*BlueprintDecodeTest'          # one class
 ./gradlew :core:testDebugUnitTest --tests '*BlueprintDecodeTest.colorParsing'  # one test
 ./gradlew assembleDebug                # build everything, including the sample APK
@@ -27,10 +27,13 @@ There is no linter configured; Kotlin official code style (`gradle.properties`) 
   Compose `runtime`/`ui`/`foundation` + `kotlinx-serialization-json`. **Keep Material3, Coil and
   anything app-specific out of it**; those belong in `:defaults`.
 - **`:defaults`** — the opt-in stock component pack (Material3 + Coil). `api(project(":core"))`.
-  Currently a build file with no sources yet. The approved plan for building it (neutral schema,
-  component list, tests) is `docs/plans/defaults-primitives.md` — read it before starting that work.
-- **`:app`** — sample/smoke-test app. `MainActivity.kt` registers two throwaway components inline
-  and renders a hard-coded payload containing one deliberately unregistered type.
+  `DefaultSduiRegistry` registers `text`, `image`, `button`, `card`, `column`, `row`, `box`, `list`,
+  `spacer`, `divider` and the `navigate` action; the schema is documented in `docs/components.md`
+  (neutral, not StudentDesk's). Package `io.github.ammaralghifary.blueprint.defaults`; its tests live
+  in `defaults/src/test` because `:core` tests cannot see it. Origin plan: `docs/plans/defaults-primitives.md`.
+- **`:app`** — sample/smoke-test app. `MainActivity.kt` includes `DefaultSduiRegistry`, adds one custom
+  `schedule_card`, and renders a hard-coded payload with two deliberate failures (an unregistered type
+  and a `text` missing its required field).
 
 `:core` and `:defaults` use `explicitApi()`: every public declaration needs an explicit visibility
 modifier and explicit return type, or the build fails.
@@ -85,7 +88,8 @@ layout can resolve them. A container that ignores them silently drops those fiel
 padding — and shadow must stay before clip or the clip crops it. Bad input never throws: negative dp
 clamps to 0, unparsable colors and unknown size types are skipped. `weight` and `alignment` are
 **not** applied here because they need a `RowScope`/`ColumnScope`; layout components must read them
-off the model themselves. Sizes are `fill` / `wrap` / `exact` (+ `value` in dp). Padding precedence:
+off the model themselves. Likewise `text_color`/`font_size`/`font_weight` are not applied here: text
+components read them via `modifier.toTextStyle(base)`. Sizes are `fill` / `wrap` / `exact` (+ `value` in dp). Padding precedence:
 specific side → `horizontal`/`vertical` → `all`.
 
 `parseColorArgb` is pure Kotlin (no `android.graphics`) so colors stay JVM-unit-testable.

@@ -94,7 +94,10 @@ through `Function21`) and crashes at render time, not compile time. Don't "simpl
 
 ## The tests
 
-Both suites live in `core/src/test/java/io/github/ammaralghifary/blueprint/`, in the flat package.
+Both suites live in `core/src/test/java/io/github/ammaralghifary/blueprint/`, in the flat package. Stock-pack
+(`:defaults`) components are tested in `defaults/src/test/java/io/github/ammaralghifary/blueprint/defaults/`
+(`DefaultsDecodeTest`, `DefaultsRendererTest`) — `:core` tests cannot see `:defaults`. Stock types use the neutral
+schema in `docs/components.md`; update it when a stock component changes.
 Add to both — decode tests cannot catch render-time crashes, and render tests are slower.
 
 In `BlueprintDecodeTest.kt`, cover the happy path plus the degradation you chose:
