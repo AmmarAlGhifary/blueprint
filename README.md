@@ -124,8 +124,9 @@ From the build files (details in [CHANGELOG.md](CHANGELOG.md)):
 
 - Compiled against Compose BOM 2024.09.00 (runtime, ui and foundation 1.7.0); the render tests also run
   against BOM 2026.06.01. Older Compose is untested.
-- Built with Kotlin 2.2.10 and `languageVersion`/`apiVersion` 2.0. The published POM depends on
-  `kotlin-stdlib` 2.2.10, and a consumer on an older Kotlin compiler has not been verified yet.
+- Built with Kotlin 2.2.10 and `languageVersion`/`apiVersion` 2.0. The published POMs depend on
+  `kotlin-stdlib` 2.0.21. Verified with a consumer on Kotlin 2.0.21 and Compose BOM 2024.09.00, and with
+  one on Kotlin 2.4.21 and Compose BOM 2026.06.01.
 - `minSdk` 23, `compileSdk` 36, Java 11 bytecode.
 - Kotlin only; the public API is pinned by `./gradlew apiCheck`.
 

@@ -21,8 +21,8 @@ Read from `gradle/libs.versions.toml`, `core/build.gradle.kts` and `defaults/bui
 - **Serialization:** `kotlinx-serialization-json` **1.7.3** is an `api` dependency of `:core`, and
   Coil **2.4.0** is used by `:defaults`.
 - **Artifacts:** `io.github.ammaralghifary:blueprint-core` and `blueprint-defaults`, both at the version in
-  `gradle.properties`. Their POMs depend on `kotlin-stdlib` **2.2.10**; a consumer on an older Kotlin
-  compiler has not been verified yet.
+  `gradle.properties`. Their POMs depend on `kotlin-stdlib` **2.0.21**. Verified with a consumer on
+  Kotlin 2.0.21 and Compose BOM 2024.09.00, and with one on Kotlin 2.4.21 and Compose BOM 2026.06.01.
 
 ### Added
 
