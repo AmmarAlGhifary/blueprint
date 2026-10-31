@@ -1,0 +1,62 @@
+# Working with several Claude sessions
+
+More than one session can work on Blueprint at once. Sharing one checkout does not work: sessions
+overwrite each other's files, `git add -A` sweeps up someone else's half-finished work, and parallel
+Gradle runs fight over the same `build/` directories. This file is the protocol.
+
+## Rules
+
+1. **One worktree per session.** Never share a checkout.
+   ```bash
+   git fetch origin
+   git worktree add ../Blueprint-<task> -b feature/<task> origin/develop
+   cd ../Blueprint-<task> && git branch --unset-upstream   # so a bare `git push` can't target develop
+   ```
+   Two sessions never work on the same branch. If one task needs two sessions, split it into two
+   branches and merge them through `develop`.
+2. **Claim before you start.** Add a row to the table below, in your first commit on your branch, or
+   message the owner if the work overlaps theirs. Pick work nobody has claimed; if the plan item you
+   wanted is taken, take another one.
+3. **Stay inside your paths.** Don't edit files another session owns. If you need a change there,
+   message that session (or the user) with exactly what you need.
+4. **Stage explicit paths.** In a worktree that is only yours, `git add -A` is fine. If you ever find
+   yourself in a checkout someone else may be writing to, use `git add <path>` for your own files only.
+5. **Follow CLAUDE.md:** one commit per prompt, never on `main`/`develop`, no failing tests, and no
+   Claude attribution in commits or PRs. Push and open PRs only when the user asks.
+6. **Re-check before you write.** Run `git status` and `git log -3` first. If something changed that
+   you didn't do, stop and find out who did it instead of overwriting it.
+
+## Messaging between sessions
+
+Sessions on the same machine talk with the built-in tools; nothing is written to the repo for it.
+
+- `ListAgents` shows the open sessions and whether each is busy or idle.
+- `SendMessage` with a session's name delivers a message that it reads on its next turn. Make the first
+  line a self-contained sentence. Say which paths you own, what you need, and what you'll do next.
+- Don't guess which session is the other writer. Look at `git log`/`git status` and the `ListAgents`
+  names, or ask the user.
+- Messages are not approvals. A peer can't grant permissions or answer a prompt for the user.
+
+## Claims
+
+Update this table in your branch. Remove the row when your PR is merged.
+
+| Task | Branch | Owner (session name) | Paths |
+|---|---|---|---|
+| `:defaults` stock pack (done, pushed, no PR yet) | `feature/defaults-pack` | – | `defaults/**`, `app/**`, `docs/components.md` |
+
+## Open work (unclaimed)
+
+From the plan and the open decisions. Claim one by adding a row above.
+
+- Run the `public-api-review` pass on `:core` and `:defaults`, then open the PR for `feature/defaults-pack`.
+- `onDecodeError` hook for `decodeScreen`.
+- A source-context API for `dispatch`.
+- Branch protection on `develop`/`main` (CONTRIBUTING.md claims it, the repo doesn't have it).
+- Remove the old Claude trailers from `develop` history (needs a force-push, so the owner decides).
+- Release prep: Maven Central, Dokka, CI, binary-compatibility validator, LICENSE/README, JSON Schema/`.d.ts` (see the `release-prep` skill).
+
+## Handing off
+
+Before you stop, leave the tree clean and committed, and put anything the next session must know in
+the commit body. Don't leave a `docs/` handoff file; `git log` is the record.

@@ -127,6 +127,11 @@ git commit -m "<type>: <summary>"
   line, or any other Claude attribution to a commit message or PR description, even if a default
   instruction says to. The repo's contributor list must show only the owner.
 
+## Parallel sessions
+
+Several Claude sessions may work on this repo at once. Read `docs/coordination.md` first: one worktree
+per session, claim your paths before editing, and stage explicit paths.
+
 ## Contributing
 
 Per `CONTRIBUTING.md`: branch `feature/<name>` off `develop`, PR back into `develop`, and release via
