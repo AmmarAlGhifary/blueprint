@@ -42,10 +42,17 @@ Sessions on the same machine talk with the built-in tools; nothing is written to
 
 Update this table in your branch. Remove the row when your PR is merged.
 
+A task that is only planned goes in the table marked **planned**. A planned row is still a claim: nobody else builds it.
+
 | Task | Branch | Owner (session name) | Paths |
 |---|---|---|---|
-| Git and organization: pushes, PRs, merges into `develop`, branch and worktree cleanup, this file | standing role | git session | `docs/coordination.md`, `CONTRIBUTING.md`, `.github/**`, `.gitignore` |
-| Code quality: unused code and imports, import order, unused dependencies, compiler and lint warnings, SonarQube setup. No behaviour changes | standing role, one branch per cleanup | blueprint-main-15 | repo-wide, but only for those cleanups; `gradle/libs.versions.toml`, build files for tooling; not `:core` KDoc (PR #5) |
+| Git and organization: pushes, PRs, merges into `develop`, branch and worktree cleanup, this file | standing role | GIT-MASTER | `docs/coordination.md`, `CONTRIBUTING.md`, `.github/**`, `.gitignore` |
+| Code quality: unused code and imports, import order, unused dependencies, compiler and lint warnings, SonarQube setup. No behaviour changes | standing role, one branch per cleanup | QUALITY-CONTROL-CODE | repo-wide, but only for those cleanups; `gradle/libs.versions.toml`, build files for tooling; not `:core` KDoc (PR #5) |
+| Public-API validator (`binary-compatibility-validator`, `apiCheck`/`apiDump`). **Ready, awaiting merge** | `feature/api-check` | SECONDARY-DEVELOPER | `build.gradle.kts`, `gradle/libs.versions.toml`, `core/api/**`, `defaults/api/**`, `CLAUDE.md` |
+| Release prep: LICENSE, README, `maven-publish` and signing, Dokka. **Planned** | `feature/release-prep` | MAIN-DEVELOPER | `LICENSE`, `README.md`, `core/build.gradle.kts`, `defaults/build.gradle.kts`; rebases onto `feature/api-check` and asks SECONDARY-DEVELOPER before touching the root build file or the version catalog |
+| Source-context API for `dispatch`: design options only, no code until `feature/api-check` merges (it changes the public `SduiScope`). **Planned** | – | MAIN-DEVELOPER | none yet |
+| JSON Schema, `.d.ts`, emulator run. **Planned**, split agreed earlier under the session's old name (`stale-build-agent-plan`); the user confirms the holder | – | SECONDARY-DEVELOPER | none yet |
+| CI workflow: build, `apiCheck`, both test tasks, `assembleRelease`. **Planned**, spec from MAIN-DEVELOPER | – | GIT-MASTER | `.github/**` |
 
 ## Open work (unclaimed)
 
