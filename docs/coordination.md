@@ -62,7 +62,7 @@ From the plan and the open decisions. Claim one by adding a row above.
 - Binary-compatibility validator: `feature/api-review` (`192ca44`) predates PR #8, so it needs a rebase and an `apiDump` before it can merge.
 - A source-context API for `dispatch`.
 - Branch protection on `develop`/`main` (CONTRIBUTING.md claims it; GitHub won't enable it on a private free-plan repo, so this file is the only guard).
-- Release prep: Maven Central, Dokka, CI, binary-compatibility validator, LICENSE/README, JSON Schema/`.d.ts` (see the `release-prep` skill).
+- Release prep: Maven Central, Dokka, CI, LICENSE/README, JSON Schema/`.d.ts` (see the `release-prep` skill).
 
 ## Handing off
 

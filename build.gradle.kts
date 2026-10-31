@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.compose) apply false
     alias(libs.plugins.kotlin.serialization) apply false
     alias(libs.plugins.sonarqube)
+    alias(libs.plugins.binary.compatibility.validator)
 }
 
 // Self-hosted SonarQube. The token is never committed: set SONAR_TOKEN (and SONAR_HOST_URL to override
@@ -28,4 +29,10 @@ subprojects {
             property("sonar.tests", "src/test")
         }
     }
+}
+
+// `./gradlew apiCheck` fails when the public API differs from the committed api/*.api dumps;
+// `./gradlew apiDump` refreshes them. The sample app is not a library, so it is not tracked.
+apiValidation {
+    ignoredProjects.add("app")
 }

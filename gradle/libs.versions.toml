@@ -1,6 +1,7 @@
 [versions]
 agp = "8.13.2"
 kotlin = "2.2.10"
+binaryCompatibilityValidator = "0.18.1"
 composeBom = "2024.09.00"
 composeBomLatest = "2026.06.01"
 kotlinxSerialization = "1.7.3"
@@ -34,3 +35,4 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" }
+binary-compatibility-validator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version.ref = "binaryCompatibilityValidator" }
