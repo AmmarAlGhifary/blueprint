@@ -79,6 +79,11 @@ composed, not just the visible ones), so prefer `column` for short content and `
 
 A complete payload: `defaults/src/test/resources/stock_screen.json`.
 
+## Schema
+
+A JSON Schema and TypeScript types for everything on this page, for the team writing the server, are in
+[`schema/`](schema/README.md). They are stricter than the library on purpose; the README lists where.
+
 ## Callbacks
 
 Blueprint tells the host what happened. All of these are optional.
