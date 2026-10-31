@@ -38,12 +38,19 @@ import kotlinx.serialization.modules.polymorphic
  * Tolerating is silent in release builds, so [onDecodeError] is how you find out: it is called once
  * per tolerated problem, after [decodeScreen] has finished, on the calling thread. Log it, count it,
  * send it to your crash reporter. It is not called for decoding done directly through [json].
+ *
+ * [onDecoded] is the per-call summary: once per [decodeScreen], after the errors above were delivered,
+ * it receives the screen and every error of that call (an empty list for a clean payload). Use it to
+ * log "screen X decoded with N problems" or to decide on an error state. A throwing callback is
+ * swallowed; it can never make [decodeScreen] throw. The screen and [DecodeError.raw] carry payload
+ * text: keep them out of analytics and crash reporters, and log [DecodeError.message] instead.
  */
 public class Blueprint(
     /** Type strings this instance decodes and renders. */
     public val registry: SduiRegistry,
     json: Json = Json,
     private val onDecodeError: ((DecodeError) -> Unit)? = null,
+    private val onDecoded: ((SduiScreen, List<DecodeError>) -> Unit)? = null,
 ) {
     private val sink = DecodeErrorSink(registry)
 
@@ -88,8 +95,7 @@ public class Blueprint(
     /** Same contract as the [String] overload: bad input degrades to an [UnknownComponent] body. */
     public fun decodeScreen(element: JsonElement): SduiScreen {
         val (screen, errors) = sink.collect { decodeGuarded(element) }
-        deliver(errors)
-        return screen
+        return finish(screen, errors)
     }
 
     private fun decodeGuarded(element: JsonElement): SduiScreen {
@@ -140,13 +146,21 @@ public class Blueprint(
         return brokenScreen(root, message)
     }
 
-    private fun unreadable(message: String?): SduiScreen {
-        deliver(listOf(DecodeError(DecodeErrorKind.InvalidPayload, null, message, null)))
-        return brokenScreen(JsonObject(emptyMap()), message)
-    }
+    private fun unreadable(message: String?): SduiScreen =
+        finish(
+            brokenScreen(JsonObject(emptyMap()), message),
+            listOf(DecodeError(DecodeErrorKind.InvalidPayload, null, message, null)),
+        )
 
     private fun brokenScreen(raw: JsonObject, message: String?): SduiScreen =
         SduiScreen(body = UnknownComponent(null, raw, error = message))
+
+    /** The one place a call ends: per-error callback first, then the summary, each at most once. */
+    private fun finish(screen: SduiScreen, errors: List<DecodeError>): SduiScreen {
+        deliver(errors)
+        summarize(screen, errors)
+        return screen
+    }
 
     /** A throwing observer must not break the never-throws promise it is there to watch. */
     private fun deliver(errors: List<DecodeError>) {
@@ -157,6 +171,15 @@ public class Blueprint(
             } catch (e: Exception) {
                 // dropped on purpose
             }
+        }
+    }
+
+    private fun summarize(screen: SduiScreen, errors: List<DecodeError>) {
+        val callback = onDecoded ?: return
+        try {
+            callback(screen, errors.toList()) // a copy, so a host holding it cannot see the sink's list change
+        } catch (e: Exception) {
+            // dropped on purpose, same as deliver
         }
     }
 

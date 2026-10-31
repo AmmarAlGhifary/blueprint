@@ -38,6 +38,8 @@ private val blueprint = Blueprint(
     },
     // Tells the host what the server got wrong; here it just goes to logcat (tag "Blueprint").
     onDecodeError = { Log.w("Blueprint", "${it.kind} type=${it.type}: ${it.message}") },
+    // One summary per decodeScreen call. The screen carries payload text, so log only its id and the count.
+    onDecoded = { screen, errors -> Log.i("Blueprint", "decoded ${screen.id}: ${errors.size} problem(s)") },
 )
 
 // Two deliberate failures, each of which must stay local:
@@ -82,7 +84,13 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         val screen = blueprint.decodeScreen(PAYLOAD)
         setContent {
-            BlueprintRenderer(screen, blueprint, Modifier.safeDrawingPadding())
+            BlueprintRenderer(
+                screen,
+                blueprint,
+                Modifier.safeDrawingPadding(),
+                // Says which component fired the action; toString names classes only, so it is safe to log.
+                onActionEvent = { Log.i("Blueprint", "action from $it") },
+            )
         }
     }
 }

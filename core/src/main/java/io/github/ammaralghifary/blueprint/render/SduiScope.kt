@@ -25,6 +25,9 @@ public interface SduiScope {
         childModifier: (SduiComponent) -> Modifier = { Modifier },
     )
 
-    /** Forwards [action] to the `onAction` callback given to [BlueprintRenderer]. */
+    /**
+     * Forwards [action] to the host: `onActionEvent` (with the component that owns this scope as the
+     * source) and `onAction`, as given to [BlueprintRenderer].
+     */
     public fun dispatch(action: SduiAction)
 }
