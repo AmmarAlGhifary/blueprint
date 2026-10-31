@@ -48,10 +48,11 @@ A task that is only planned goes in the table marked **planned**. A planned row 
 |---|---|---|---|
 | Git and organization: pushes, PRs, merges into `develop`, branch and worktree cleanup, this file | standing role | GIT-MASTER | `docs/coordination.md`, `CONTRIBUTING.md`, `.github/**`, `.gitignore` |
 | Code quality: unused code and imports, import order, unused dependencies, compiler and lint warnings, SonarQube setup. No behaviour changes | standing role, one branch per cleanup | QUALITY-CONTROL-CODE | repo-wide, but only for those cleanups; `gradle/libs.versions.toml`, build files for tooling; not `:core` KDoc (PR #5) |
-| Release prep: LICENSE, README, `maven-publish` and signing, Dokka. **Planned** | `feature/release-prep` | MAIN-DEVELOPER | `LICENSE`, `README.md`, `core/build.gradle.kts`, `defaults/build.gradle.kts`; rebases onto `feature/api-check` and asks SECONDARY-DEVELOPER before touching the root build file or the version catalog |
-| Source-context API for `dispatch`: design options only, no code until `feature/api-check` merges (it changes the public `SduiScope`). **Planned** | – | MAIN-DEVELOPER | none yet |
-| JSON Schema, `.d.ts`, emulator run. **Planned**, split agreed earlier under the session's old name (`stale-build-agent-plan`); the user confirms the holder | – | SECONDARY-DEVELOPER | none yet |
-| CI workflow: build, `apiCheck`, both test tasks, `assembleRelease`. **Planned**, spec from MAIN-DEVELOPER | – | GIT-MASTER | `.github/**` |
+| Repackage `:core` into folder-matching packages (`.model`, `.modifier`, `.registry`, `.render`), finishing the owner's uncommitted change from `/tmp/claude-501/blueprint-shared/owner-repackage-baseline.patch`. Stacked so `develop` stays green: MAIN-DEVELOPER first, then SECONDARY-DEVELOPER on top | `feature/repackage-core`, then `feature/repackage-rest` | MAIN-DEVELOPER, then SECONDARY-DEVELOPER | `core/src/main/**` (MAIN-DEVELOPER); `core/src/test/**`, `defaults/**`, `app/**`, `core/api/**`, `defaults/api/**`, `CLAUDE.md` (SECONDARY-DEVELOPER) |
+| Release prep: LICENSE, README, `maven-publish` and signing, Dokka. **Paused** until the repackaging merges | `feature/release-prep` | MAIN-DEVELOPER | `LICENSE`, `README.md`, `core/build.gradle.kts`, `defaults/build.gradle.kts`; rebases onto `feature/api-check` and asks SECONDARY-DEVELOPER before touching the root build file or the version catalog |
+| Source-context API for `dispatch`: design options only, no code until `feature/api-check` merges (it changes the public `SduiScope`). **Paused** until the repackaging merges | – | MAIN-DEVELOPER | none yet |
+| JSON Schema, `.d.ts`, emulator run. **Paused** until the repackaging merges, split agreed earlier under the session's old name (`stale-build-agent-plan`); the user confirms the holder | – | SECONDARY-DEVELOPER | none yet |
+| CI workflow: build, `apiCheck`, both test tasks, `assembleRelease`. **Paused** until the repackaging merges, spec from MAIN-DEVELOPER | – | GIT-MASTER | `.github/**` |
 
 ## Open work (unclaimed)
 
