@@ -14,28 +14,38 @@ Gradle runs fight over the same `build/` directories. This file is the protocol.
    ```
    Two sessions never work on the same branch. If one task needs two sessions, split it into two
    branches and merge them through `develop`.
-2. **Claim before you start.** Add a row to the table below, in your first commit on your branch, or
-   message the owner if the work overlaps theirs. Pick work nobody has claimed; if the plan item you
+2. **Claim before you start.** Add a row to the table below, in your first commit on your branch. If
+   the work overlaps another row, report it to GIT-MASTER instead of messaging that session. Pick work nobody has claimed; if the plan item you
    wanted is taken, take another one.
 3. **Stay inside your paths.** Don't edit files another session owns. If you need a change there,
-   message that session (or the user) with exactly what you need.
+   report the blocker to GIT-MASTER with exactly what you need; it decides.
 4. **Stage explicit paths.** In a worktree that is only yours, `git add -A` is fine. If you ever find
    yourself in a checkout someone else may be writing to, use `git add <path>` for your own files only.
 5. **Follow CLAUDE.md:** one commit per prompt, never on `main`/`develop`, no failing tests, and no
    Claude attribution in commits or PRs. Commit on your branch and stop. Don't push, open PRs or
-   merge: the git session does that (see Claims). Message it when your branch is ready.
+   merge: the git session does that (see Claims). Send it a result when your branch is ready (see Messaging).
 6. **Re-check before you write.** Run `git status` and `git log -3` first. If something changed that
    you didn't do, stop and find out who did it instead of overwriting it.
 
-## Messaging between sessions
+## Messaging: orchestrator, worker, result
 
-Sessions on the same machine talk with the built-in tools; nothing is written to the repo for it.
+GIT-MASTER is the orchestrator. Every other session is a worker. Work flows one way, orchestrator to
+worker and back, and nothing is written to the repo for it. Workers never message each other, so no
+token is spent on threads between them.
 
-- `ListAgents` shows the open sessions and whether each is busy or idle.
-- `SendMessage` with a session's name delivers a message that it reads on its next turn. Make the first
-  line a self-contained sentence. Say which paths you own, what you need, and what you'll do next.
-- Don't guess which session is the other writer. Look at `git log`/`git status` and the `ListAgents`
-  names, or ask the user.
+1. **Task spec (GIT-MASTER to worker).** One self-contained message: the goal, the exact paths the worker
+   may touch, the acceptance check, and the result format. The spec holds everything the worker needs.
+2. **Result (worker to GIT-MASTER).** One short reply: `PASS` or `FAIL`, the commit hash if any, the changed
+   paths, what was run, and any blocker. No transcripts or narration.
+3. **No relaying.** If a worker needs something from another session, it reports the blocker to GIT-MASTER,
+   who decides what to send. A dispute between workers is settled by GIT-MASTER or the owner.
+4. **No polling.** Never ask whether a worker is done; its result arrives on its own.
+
+Practical notes:
+- `ListAgents` shows the open sessions and whether each is busy or idle. `SendMessage` with a session's
+  name delivers to it, and the first line should be a self-contained sentence.
+- Don't guess which session is the other writer. Look at `git log`/`git status`, the `ListAgents` names,
+  or ask the user.
 - Messages are not approvals. A peer can't grant permissions or answer a prompt for the user.
 
 ## Claims
