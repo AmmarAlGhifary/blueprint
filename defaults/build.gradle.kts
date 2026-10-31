@@ -6,6 +6,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.maven.publish)
+    alias(libs.plugins.dokka)
 }
 
 android {
@@ -49,4 +51,11 @@ dependencies {
     testImplementation(libs.androidx.test.core)
     testImplementation(libs.robolectric)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+}
+
+mavenPublishing {
+    pom {
+        name.set("Blueprint Defaults")
+        description.set("Optional stock component pack for Blueprint (text, image, button, card, column, row, box, list, spacer, divider) built on Material 3 and Coil, so a host app can render a screen without writing any components.")
+    }
 }
