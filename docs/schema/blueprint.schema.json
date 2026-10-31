@@ -1,0 +1,689 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Blueprint screen",
+  "description": "The payload a server sends to Blueprint (https://github.com/AmmarAlGhifary/blueprint). The library is tolerant and this schema is deliberately stricter, so a validator catches mistakes the decoder would quietly absorb. Both accept unknown fields anywhere (ignored) and a component or action 'type' they do not know. The schema rejects, but the decoder accepts: an enum-like string it does not recognise (it falls back to a default; this includes modifier.alignment and a size's type); a colour that is not hex (skipped when drawing); an 'exact' size with no value (ignored); a node with no string 'type' (shown as unknown); null on an optional field (treated as absent); and a number or boolean sent as a quoted string. One gap the other way: a validator treats 1.0 as an integer and the decoder does not.",
+  "type": "object",
+  "properties": {
+    "screen_id": {
+      "type": "string",
+      "description": "Kept as sent; Blueprint does not act on it."
+    },
+    "version": {
+      "$ref": "#/$defs/int32",
+      "description": "The payload version the server declares. Kept as sent; Blueprint does not act on it."
+    },
+    "body": {
+      "$ref": "#/$defs/Component"
+    }
+  },
+  "required": [
+    "body"
+  ],
+  "$defs": {
+    "int32": {
+      "type": "integer",
+      "minimum": -2147483648,
+      "maximum": 2147483647,
+      "description": "A 32-bit integer. A larger value, or a decimal such as 1.5, makes the decoder reject the field. A schema validator cannot tell 1.0 from 1, but the decoder rejects 1.0: send 1."
+    },
+    "HexColor": {
+      "type": "string",
+      "pattern": "^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$",
+      "description": "#RGB, #RRGGBB or #AARRGGBB. Anything else is skipped by the renderer."
+    },
+    "Padding": {
+      "description": "Spacing in dp. A specific side wins over horizontal/vertical, which win over all.",
+      "type": "object",
+      "properties": {
+        "all": {
+          "$ref": "#/$defs/int32"
+        },
+        "horizontal": {
+          "$ref": "#/$defs/int32"
+        },
+        "vertical": {
+          "$ref": "#/$defs/int32"
+        },
+        "start": {
+          "$ref": "#/$defs/int32"
+        },
+        "top": {
+          "$ref": "#/$defs/int32"
+        },
+        "end": {
+          "$ref": "#/$defs/int32"
+        },
+        "bottom": {
+          "$ref": "#/$defs/int32"
+        }
+      }
+    },
+    "Size": {
+      "description": "A width or height. 'fill' and 'wrap' take no value; 'exact' needs value in dp.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "fill",
+            "wrap",
+            "exact"
+          ]
+        },
+        "value": {
+          "$ref": "#/$defs/int32"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "if": {
+        "properties": {
+          "type": {
+            "const": "exact"
+          }
+        },
+        "required": [
+          "type"
+        ]
+      },
+      "then": {
+        "required": [
+          "value"
+        ]
+      }
+    },
+    "Modifier": {
+      "description": "Box model sent by the server, applied by the renderer before the component draws. Every field is optional. Negative dp values are clamped to 0 and large ones to 16384.",
+      "type": "object",
+      "properties": {
+        "margin": {
+          "$ref": "#/$defs/Padding"
+        },
+        "padding": {
+          "$ref": "#/$defs/Padding"
+        },
+        "width": {
+          "$ref": "#/$defs/Size"
+        },
+        "height": {
+          "$ref": "#/$defs/Size"
+        },
+        "alignment": {
+          "type": "string",
+          "enum": [
+            "start",
+            "center",
+            "end",
+            "top",
+            "bottom",
+            "top_start",
+            "top_center",
+            "top_end",
+            "center_start",
+            "center_end",
+            "bottom_start",
+            "bottom_center",
+            "bottom_end"
+          ],
+          "description": "Read by the parent: column start|center|end, row top|center|bottom, box top_start|top_center|top_end|center_start|center|center_end|bottom_start|bottom_center|bottom_end."
+        },
+        "weight": {
+          "type": "number",
+          "minimum": -3.4028235e+38,
+          "maximum": 3.4028235e+38,
+          "description": "Share of the parent row or column. Honoured only when greater than 0. Beyond the 32-bit float range the decoder drops the whole modifier."
+        },
+        "elevation": {
+          "$ref": "#/$defs/int32",
+          "description": "Shadow elevation in dp."
+        },
+        "background_color": {
+          "$ref": "#/$defs/HexColor"
+        },
+        "corner_radius": {
+          "$ref": "#/$defs/int32",
+          "description": "Corner radius in dp."
+        },
+        "border_width": {
+          "$ref": "#/$defs/int32",
+          "description": "Border width in dp. Drawn only together with border_color."
+        },
+        "border_color": {
+          "$ref": "#/$defs/HexColor"
+        },
+        "text_color": {
+          "$ref": "#/$defs/HexColor"
+        },
+        "font_size": {
+          "$ref": "#/$defs/int32",
+          "description": "Font size in sp. Read by text and button."
+        },
+        "font_weight": {
+          "$ref": "#/$defs/int32",
+          "description": "100 to 900, clamped. Read by text and button."
+        }
+      }
+    },
+    "NavigateAction": {
+      "description": "Asks the host to go somewhere. Blueprint never interprets destination: the host's onAction does.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "navigate"
+        },
+        "destination": {
+          "type": "string"
+        },
+        "params": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "String arguments for destination. Values must be strings."
+        }
+      },
+      "required": [
+        "type",
+        "destination"
+      ]
+    },
+    "Action": {
+      "description": "Something a component fires when tapped. The stock pack registers 'navigate'. Any other 'type' is accepted: the host may register its own, and an unknown one becomes an UnknownAction that is still delivered to the host.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "navigate"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "$ref": "#/$defs/NavigateAction"
+          }
+        }
+      ]
+    },
+    "Text": {
+      "description": "Stock component (:defaults). A run of text.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "text"
+        },
+        "text": {
+          "type": "string"
+        },
+        "style": {
+          "type": "string",
+          "enum": [
+            "display",
+            "headline",
+            "title",
+            "body",
+            "label"
+          ],
+          "description": "Typography role. Unknown falls back to body."
+        },
+        "max_lines": {
+          "$ref": "#/$defs/int32",
+          "description": "Truncates with an ellipsis. Values below 1 are treated as 1."
+        },
+        "align": {
+          "type": "string",
+          "enum": [
+            "start",
+            "center",
+            "end"
+          ],
+          "description": "Text alignment. Unknown falls back to the default."
+        },
+        "modifier": {
+          "$ref": "#/$defs/Modifier"
+        }
+      },
+      "required": [
+        "type",
+        "text"
+      ]
+    },
+    "Image": {
+      "description": "Stock component (:defaults). A remote image.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "image"
+        },
+        "url": {
+          "type": "string"
+        },
+        "content_description": {
+          "type": "string",
+          "description": "Omit for a decorative image."
+        },
+        "scale": {
+          "type": "string",
+          "enum": [
+            "fit",
+            "crop",
+            "fill"
+          ],
+          "description": "Unknown falls back to fit."
+        },
+        "modifier": {
+          "$ref": "#/$defs/Modifier"
+        }
+      },
+      "required": [
+        "type",
+        "url"
+      ]
+    },
+    "Button": {
+      "description": "Stock component (:defaults). Disabled when action is absent.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "button"
+        },
+        "text": {
+          "type": "string"
+        },
+        "action": {
+          "$ref": "#/$defs/Action"
+        },
+        "variant": {
+          "type": "string",
+          "enum": [
+            "filled",
+            "outlined",
+            "text"
+          ],
+          "description": "Unknown falls back to filled."
+        },
+        "modifier": {
+          "$ref": "#/$defs/Modifier"
+        }
+      },
+      "required": [
+        "type",
+        "text"
+      ]
+    },
+    "Card": {
+      "description": "Stock component (:defaults). A container that fires its action when tapped.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "card"
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Component"
+          },
+          "description": "Child components, rendered in order. Each child decodes on its own."
+        },
+        "action": {
+          "$ref": "#/$defs/Action"
+        },
+        "modifier": {
+          "$ref": "#/$defs/Modifier"
+        }
+      },
+      "required": [
+        "type"
+      ]
+    },
+    "Column": {
+      "description": "Stock component (:defaults). A vertical stack.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "column"
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Component"
+          },
+          "description": "Child components, rendered in order. Each child decodes on its own."
+        },
+        "arrangement": {
+          "type": "string",
+          "enum": [
+            "start",
+            "center",
+            "end",
+            "space_between",
+            "space_around",
+            "space_evenly"
+          ],
+          "description": "Unknown falls back to start."
+        },
+        "scrollable": {
+          "type": "boolean",
+          "default": false,
+          "description": "Scrolls vertically when true."
+        },
+        "modifier": {
+          "$ref": "#/$defs/Modifier"
+        }
+      },
+      "required": [
+        "type"
+      ]
+    },
+    "Row": {
+      "description": "Stock component (:defaults). A horizontal stack.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "row"
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Component"
+          },
+          "description": "Child components, rendered in order. Each child decodes on its own."
+        },
+        "arrangement": {
+          "type": "string",
+          "enum": [
+            "start",
+            "center",
+            "end",
+            "space_between",
+            "space_around",
+            "space_evenly"
+          ],
+          "description": "Unknown falls back to start."
+        },
+        "modifier": {
+          "$ref": "#/$defs/Modifier"
+        }
+      },
+      "required": [
+        "type"
+      ]
+    },
+    "Box": {
+      "description": "Stock component (:defaults). Overlapping children, placed by each child's modifier.alignment.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "box"
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Component"
+          },
+          "description": "Child components, rendered in order. Each child decodes on its own."
+        },
+        "modifier": {
+          "$ref": "#/$defs/Modifier"
+        }
+      },
+      "required": [
+        "type"
+      ]
+    },
+    "List": {
+      "description": "Stock component (:defaults). A lazy list. With no bounded room on its scroll axis (inside a scrollable column, or another list's item) it renders as a plain stack.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "list"
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Component"
+          },
+          "description": "Child components, rendered in order. Each child decodes on its own."
+        },
+        "orientation": {
+          "type": "string",
+          "enum": [
+            "vertical",
+            "horizontal"
+          ],
+          "description": "Unknown falls back to vertical."
+        },
+        "spacing": {
+          "$ref": "#/$defs/int32",
+          "description": "Gap between items in dp."
+        },
+        "modifier": {
+          "$ref": "#/$defs/Modifier"
+        }
+      },
+      "required": [
+        "type"
+      ]
+    },
+    "Spacer": {
+      "description": "Stock component (:defaults). Empty space.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "spacer"
+        },
+        "size": {
+          "$ref": "#/$defs/int32",
+          "description": "dp. Default 8. A string such as 'medium' is not accepted."
+        },
+        "modifier": {
+          "$ref": "#/$defs/Modifier"
+        }
+      },
+      "required": [
+        "type"
+      ]
+    },
+    "Divider": {
+      "description": "Stock component (:defaults). A hairline.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "divider"
+        },
+        "thickness": {
+          "$ref": "#/$defs/int32",
+          "description": "dp. Default 1."
+        },
+        "color": {
+          "$ref": "#/$defs/HexColor"
+        },
+        "modifier": {
+          "$ref": "#/$defs/Modifier"
+        }
+      },
+      "required": [
+        "type"
+      ]
+    },
+    "Component": {
+      "description": "One node of the tree. The ten stock types are checked in full. Any other 'type' is accepted and left to the host's registry; an app that does not know it shows a placeholder in debug builds and nothing in release, and the rest of the screen still renders.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "modifier": {
+          "$ref": "#/$defs/Modifier"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "text"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "$ref": "#/$defs/Text"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "image"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "$ref": "#/$defs/Image"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "button"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "$ref": "#/$defs/Button"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "card"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "$ref": "#/$defs/Card"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "column"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "$ref": "#/$defs/Column"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "row"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "$ref": "#/$defs/Row"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "box"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "$ref": "#/$defs/Box"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "list"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "$ref": "#/$defs/List"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "spacer"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "$ref": "#/$defs/Spacer"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "divider"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "$ref": "#/$defs/Divider"
+          }
+        }
+      ]
+    }
+  }
+}

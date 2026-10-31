@@ -58,9 +58,6 @@ public class SduiRegistry internal constructor(
 
     /** Registered component type strings. */
     public val componentTypes: Set<String> get() = components.keys
-
-    /** Registered action type strings. */
-    public val actionTypes: Set<String> get() = actions.keys
 }
 
 /** Builds a [SduiRegistry] from [block]. */
