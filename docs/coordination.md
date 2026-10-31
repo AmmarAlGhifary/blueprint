@@ -45,6 +45,7 @@ Update this table in your branch. Remove the row when your PR is merged.
 | Task | Branch | Owner (session name) | Paths |
 |---|---|---|---|
 | Git and organization: pushes, PRs, merges into `develop`, branch and worktree cleanup, this file | `feature/git-integration` | git session | `docs/coordination.md`, `CONTRIBUTING.md`, `.github/**`, `.gitignore` |
+| Code quality: unused code and imports, import order, unused dependencies, compiler and lint warnings, SonarQube setup. No behaviour changes | `feature/code-quality` | blueprint-main-15 | repo-wide, but only for those cleanups; `gradle/libs.versions.toml`, build files for tooling; not `:core` KDoc (PR #5) |
 
 ## Open work (unclaimed)
 

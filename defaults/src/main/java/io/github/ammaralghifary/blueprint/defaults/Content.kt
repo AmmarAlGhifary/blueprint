@@ -1,14 +1,14 @@
 package io.github.ammaralghifary.blueprint.defaults
 
-import io.github.ammaralghifary.blueprint.toTextStyle
-import io.github.ammaralghifary.blueprint.SduiModifier
-import io.github.ammaralghifary.blueprint.SduiComponent
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import coil.compose.AsyncImage
+import io.github.ammaralghifary.blueprint.SduiComponent
+import io.github.ammaralghifary.blueprint.SduiModifier
+import io.github.ammaralghifary.blueprint.toTextStyle
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

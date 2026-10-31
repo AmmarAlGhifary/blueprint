@@ -1,9 +1,5 @@
 package io.github.ammaralghifary.blueprint.defaults
 
-import io.github.ammaralghifary.blueprint.toColorOrNull
-import io.github.ammaralghifary.blueprint.SduiScope
-import io.github.ammaralghifary.blueprint.SduiModifier
-import io.github.ammaralghifary.blueprint.SduiComponent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -22,7 +18,10 @@ import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import kotlinx.serialization.SerialName
+import io.github.ammaralghifary.blueprint.SduiComponent
+import io.github.ammaralghifary.blueprint.SduiModifier
+import io.github.ammaralghifary.blueprint.SduiScope
+import io.github.ammaralghifary.blueprint.toColorOrNull
 import kotlinx.serialization.Serializable
 
 /** `column`: vertical stack. [arrangement] is `start|center|end|space_between|space_around|space_evenly`. */

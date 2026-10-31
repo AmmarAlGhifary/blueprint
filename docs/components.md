@@ -25,7 +25,7 @@ val blueprint = Blueprint(sduiRegistry {
 - Any component accepts an optional `modifier` (box model, plus the typography fields below).
 - `alignment` on a child's `modifier` is read by its parent: column `start|center|end`,
   row `top|center|bottom`, box `top_start|top_center|top_end|center_start|center|center_end|bottom_start|bottom_center|bottom_end`.
-  `weight` is honoured by `row`.
+  `weight` is honoured by `row` and `column`.
 
 ## Typography on `modifier` (all optional)
 

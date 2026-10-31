@@ -16,10 +16,12 @@ networking — the host app fetches the JSON and calls `Blueprint.decodeScreen`.
 ./gradlew :core:testDebugUnitTest --tests '*BlueprintDecodeTest.colorParsing'  # one test
 ./gradlew assembleDebug                # build everything, including the sample APK
 ./gradlew :app:installDebug            # run the sample on a device/emulator
+./gradlew assembleDebug sonar         # SonarQube analysis; needs SONAR_HOST_URL and SONAR_TOKEN
 ```
 
 HTML test report: `core/build/reports/tests/testDebugUnitTest/index.html`.
-There is no linter configured; Kotlin official code style (`gradle.properties`) is the standard.
+Static analysis is SonarQube only (root `build.gradle.kts`); no detekt or ktlint. `assembleDebug` first so
+Sonar sees the compiled classes. Kotlin official code style (`gradle.properties`) is the standard.
 
 ## Modules
 
