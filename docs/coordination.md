@@ -44,15 +44,15 @@ Update this table in your branch. Remove the row when your PR is merged.
 
 | Task | Branch | Owner (session name) | Paths |
 |---|---|---|---|
-| Git and organization: pushes, PRs, merges into `develop`, branch and worktree cleanup, this file | `feature/git-integration` | git session | `docs/coordination.md`, `CONTRIBUTING.md`, `.github/**`, `.gitignore` |
-| Code quality: unused code and imports, import order, unused dependencies, compiler and lint warnings, SonarQube setup. No behaviour changes | `feature/code-quality` | blueprint-main-15 | repo-wide, but only for those cleanups; `gradle/libs.versions.toml`, build files for tooling; not `:core` KDoc (PR #5) |
+| Git and organization: pushes, PRs, merges into `develop`, branch and worktree cleanup, this file | standing role | git session | `docs/coordination.md`, `CONTRIBUTING.md`, `.github/**`, `.gitignore` |
+| Code quality: unused code and imports, import order, unused dependencies, compiler and lint warnings, SonarQube setup. No behaviour changes | standing role, one branch per cleanup | blueprint-main-15 | repo-wide, but only for those cleanups; `gradle/libs.versions.toml`, build files for tooling; not `:core` KDoc (PR #5) |
 
 ## Open work (unclaimed)
 
 From the plan and the open decisions. Claim one by adding a row above.
 
 - Run the `public-api-review` pass on `:core` and `:defaults`.
-- `onDecodeError` hook for `decodeScreen`.
+- Binary-compatibility validator: `feature/api-review` (`192ca44`) predates PR #8, so it needs a rebase and an `apiDump` before it can merge.
 - A source-context API for `dispatch`.
 - Branch protection on `develop`/`main` (CONTRIBUTING.md claims it; GitHub won't enable it on a private free-plan repo, so this file is the only guard).
 - Release prep: Maven Central, Dokka, CI, binary-compatibility validator, LICENSE/README, JSON Schema/`.d.ts` (see the `release-prep` skill).
