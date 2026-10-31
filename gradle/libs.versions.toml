@@ -2,7 +2,9 @@
 agp = "8.13.2"
 kotlin = "2.2.10"
 binaryCompatibilityValidator = "0.18.1"
+# The Compose floor (runtime 1.7.0): consumers must meet it, so raise it only on purpose.
 composeBom = "2024.09.00"
+# Tests only, so the render tests exercise current Compose.
 composeBomLatest = "2026.06.01"
 kotlinxSerialization = "1.7.3"
 activityCompose = "1.9.3"

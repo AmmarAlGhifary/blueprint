@@ -122,7 +122,6 @@ class DefaultsDecodeTest {
                 {"type":"list","orientation":"diagonal"}]}""",
         )
         assertTrue(kids.none { it is UnknownComponent })
-        // Mappers are the single place the fallbacks live.
         assertEquals(androidx.compose.ui.layout.ContentScale.Fit, contentScaleOf("stretchy"))
         assertNull(textAlignOf("sideways"))
         assertEquals(androidx.compose.foundation.layout.Arrangement.Top, verticalArrangementOf("zigzag"))

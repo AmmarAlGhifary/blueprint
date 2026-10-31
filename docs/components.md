@@ -79,6 +79,38 @@ composed, not just the visible ones), so prefer `column` for short content and `
 
 A complete payload: `defaults/src/test/resources/stock_screen.json`.
 
+## Callbacks
+
+Blueprint tells the host what happened. All of these are optional.
+
+```kotlin
+val blueprint = Blueprint(
+    registry,
+    onDecodeError = { error -> log("${error.kind}: ${error.message}") },   // each tolerated problem
+    onDecoded = { screen, errors -> log("${screen.id}: ${errors.size} problems") },  // once per decodeScreen
+)
+
+BlueprintRenderer(
+    screen, blueprint,
+    onActionEvent = { event -> navigate(event.action, from = event.source) },  // which component fired it
+    onAction = { action -> navigate(action) },                                // the action alone
+)
+```
+
+- `onDecodeError` fires once per tolerated problem (an unregistered type, invalid fields, a dropped
+  modifier, an unreadable payload) after `decodeScreen` finishes. A node reported by a failed attempt is
+  not reported again by its retry.
+- `onDecoded` fires once per `decodeScreen` call, after the `onDecodeError` calls, with the screen and
+  that call's errors (an empty list for a clean payload). It also fires for an unreadable payload.
+- `onActionEvent` receives an `ActionEvent(action, source)`; `source` is the component whose renderer
+  dispatched the action, so a button in a card reports the button. When both action callbacks are set,
+  `onActionEvent` runs first, then `onAction`. Stock components and your own both report their source
+  without any extra code, as long as they call `scope.dispatch`.
+- A callback that throws is swallowed; it can never make `decodeScreen` throw.
+- **Privacy:** the screen, `DecodeError.raw`, `ActionEvent.action` and `ActionEvent.source` carry payload
+  text. `DecodeError.message` and `toString()` of `DecodeError` and `ActionEvent` do not, so log those and
+  keep the objects out of analytics and crash reporters.
+
 ## Non-goals
 
 Icons, forms/inputs/state, grids, tabs, app bars, theming tokens, and KSP codegen for custom components.

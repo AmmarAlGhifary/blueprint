@@ -138,7 +138,6 @@ class BlueprintDecodeTest {
 
     @Test
     fun realStudentDeskHomePayloadSurvivesWithUaiTypesAsUnknown() {
-        // Only "column" is registered, so every UAI-specific child must fall back to Unknown.
         val bp = Blueprint(sduiRegistry { component<TestColumn>("column") { _, _, _ -> } })
         val json = javaClass.classLoader!!.getResource("home_dashboard.json")!!.readText()
         val screen = bp.decodeScreen(json)
@@ -182,7 +181,6 @@ class SduiRegistryTest {
             component<TestColumn>("column") { _, _, _ -> }
         }
         assertEquals(setOf("text", "column"), merged.componentTypes)
-        // Replacing a type with the same class is allowed.
         val replaced = sduiRegistry {
             include(base)
             component<TestText>("text", replace = true) { _, _, _ -> }

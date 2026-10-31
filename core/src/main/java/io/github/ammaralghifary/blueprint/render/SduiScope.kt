@@ -17,14 +17,19 @@ public interface SduiScope {
      *
      * [childModifier] hands down the scope-only part of the server modifier (`weight`, `alignment`),
      * which only the enclosing Row/Column can resolve.
+     *
+     * State does not follow a child through a server-side reorder: that needs a stable node id, which
+     * the payload schema does not carry yet.
      */
-    // TODO key by a node id once the payload schema carries one, so a server reorder keeps state
     @Composable
     public fun RenderAll(
         children: List<SduiComponent>,
         childModifier: (SduiComponent) -> Modifier = { Modifier },
     )
 
-    /** Forwards [action] to the `onAction` callback given to [BlueprintRenderer]. */
+    /**
+     * Forwards [action] to the host: `onActionEvent` (with the component that owns this scope as the
+     * source) and `onAction`, as given to [BlueprintRenderer].
+     */
     public fun dispatch(action: SduiAction)
 }

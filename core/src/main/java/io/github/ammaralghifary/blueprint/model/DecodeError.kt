@@ -34,6 +34,7 @@ public enum class DecodeErrorKind {
  * offending node itself and does carry payload text: do not forward it to analytics or a crash reporter.
  */
 public class DecodeError(
+    /** What kind of problem was tolerated. */
     public val kind: DecodeErrorKind,
     /** The node's `type` string, or null when it is missing or the problem is not about one node. */
     public val type: String?,

@@ -12,7 +12,10 @@ import io.github.ammaralghifary.blueprint.modifier.toTextStyle
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-/** `text`: a run of text. [style] is `display|headline|title|body|label` (unknown → body). */
+/**
+ * `text`: a run of text. [style] is `display|headline|title|body|label` (unknown → body), [align] is
+ * `start|center|end`, and [maxLines] truncates with an ellipsis.
+ */
 @Serializable
 public data class SduiText(
     val text: String,
@@ -22,7 +25,10 @@ public data class SduiText(
     override val modifier: SduiModifier? = null,
 ) : SduiComponent()
 
-/** `image`: a remote image. [scale] is `fit|crop|fill` (unknown → fit). */
+/**
+ * `image`: a remote image. [scale] is `fit|crop|fill` (unknown → fit); a null [contentDescription]
+ * marks it decorative.
+ */
 @Serializable
 public data class SduiImage(
     val url: String,

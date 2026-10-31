@@ -23,7 +23,10 @@ import io.github.ammaralghifary.blueprint.modifier.toColorOrNull
 import io.github.ammaralghifary.blueprint.render.SduiScope
 import kotlinx.serialization.Serializable
 
-/** `column`: vertical stack. [arrangement] is `start|center|end|space_between|space_around|space_evenly`. */
+/**
+ * `column`: vertical stack. [arrangement] is `start|center|end|space_between|space_around|space_evenly`;
+ * [scrollable] makes it scroll vertically.
+ */
 @Serializable
 public data class SduiColumn(
     val children: List<SduiComponent> = emptyList(),
@@ -47,7 +50,10 @@ public data class SduiBox(
     override val modifier: SduiModifier? = null,
 ) : SduiComponent()
 
-/** `list`: lazy list; with no bounded room on its scroll axis (e.g. inside a scrollable column) it is a plain stack. */
+/**
+ * `list`: lazy list, [orientation] `vertical|horizontal` (default vertical), [spacing] is the gap in dp.
+ * With no bounded room on its scroll axis (e.g. inside a scrollable column) it is a plain stack.
+ */
 @Serializable
 public data class SduiList(
     val children: List<SduiComponent> = emptyList(),
