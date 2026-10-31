@@ -59,10 +59,12 @@ A task that is only planned goes in the table marked **planned**. A planned row 
 | Git and organization: pushes, PRs, merges into `develop`, branch and worktree cleanup, this file | standing role | GIT-MASTER | `docs/coordination.md`, `CONTRIBUTING.md`, `.github/**`, `.gitignore` |
 | Code quality: unused code and imports, import order, unused dependencies, compiler and lint warnings, SonarQube setup. No behaviour changes | standing role, one branch per cleanup | QUALITY-CONTROL-CODE | repo-wide, but only for those cleanups; `gradle/libs.versions.toml`, build files for tooling; not `:core` KDoc (PR #5) |
 | Repackage `:core` into folder-matching packages (`.model`, `.modifier`, `.registry`, `.render`), finishing the owner's uncommitted change from `/tmp/claude-501/blueprint-shared/owner-repackage-baseline.patch`. Stacked so `develop` stays green: MAIN-DEVELOPER first, then SECONDARY-DEVELOPER on top | `feature/repackage-core`, then `feature/repackage-rest` | MAIN-DEVELOPER, then SECONDARY-DEVELOPER | `core/src/main/**` (MAIN-DEVELOPER); `core/src/test/**`, `defaults/**`, `app/**`, `core/api/**`, `defaults/api/**`, `CLAUDE.md` (SECONDARY-DEVELOPER) |
-| Release prep: LICENSE, README, `maven-publish` and signing, Dokka. **Paused** until the repackaging merges | `feature/release-prep` | MAIN-DEVELOPER | `LICENSE`, `README.md`, `core/build.gradle.kts`, `defaults/build.gradle.kts`; rebases onto `feature/api-check` and asks SECONDARY-DEVELOPER before touching the root build file or the version catalog |
-| Source-context API for `dispatch`: design options only, no code until `feature/api-check` merges (it changes the public `SduiScope`). **Paused** until the repackaging merges | – | MAIN-DEVELOPER | none yet |
-| JSON Schema, `.d.ts`, emulator run. **Paused** until the repackaging merges, split agreed earlier under the session's old name (`stale-build-agent-plan`); the user confirms the holder | – | SECONDARY-DEVELOPER | none yet |
-| CI workflow: build, `apiCheck`, both test tasks, `assembleRelease`. **Paused** until the repackaging merges, spec from MAIN-DEVELOPER | – | GIT-MASTER | `.github/**` |
+| Release prep, first slice: Apache-2.0 `LICENSE`, one version source, `CHANGELOG.md` (no tag yet) | `feature/release-prep` | MAIN-DEVELOPER | `LICENSE`, `CHANGELOG.md`, `gradle.properties` |
+| Release prep, later slices: README, Maven Central coordinates, `maven-publish` and signing, Dokka. **Paused** until the owner says go | – | MAIN-DEVELOPER | `README.md`, `core/build.gradle.kts`, `defaults/build.gradle.kts` |
+| API freeze: make `Blueprint.MAX_DEPTH` and the `Companion` internal, hand-written `equals`/`hashCode`/`toString` on `DecodeError`, error messages without payload text. Descriptor labels and `actionTypes` wait for the owner | `feature/api-freeze` | SECONDARY-DEVELOPER | `core/src/main/**/Blueprint.kt`, `core/src/main/**/model/DecodeError.kt`, `core/src/main/**/model/Unknown.kt`, `core/src/test/**`, `core/api/core.api` |
+| Source-context API for `dispatch`: design options only, no code until `feature/api-check` merges (it changes the public `SduiScope`). **Paused** until the owner says go | – | MAIN-DEVELOPER | none yet |
+| JSON Schema, `.d.ts`, emulator run. **Paused** until the owner says go, split agreed earlier under the session's old name (`stale-build-agent-plan`); the user confirms the holder | – | SECONDARY-DEVELOPER | none yet |
+| CI workflow: build, `apiCheck`, both test tasks, `assembleRelease`. **Paused** until the owner says go, spec from MAIN-DEVELOPER | – | GIT-MASTER | `.github/**` |
 
 ## Open work (unclaimed)
 
@@ -71,9 +73,9 @@ From the plan and the open decisions. Claim one by adding a row above.
 - Run the `public-api-review` pass on `:core` and `:defaults`.
 - Binary-compatibility validator: `feature/api-review` (`192ca44`) predates PR #8, so it needs a rebase and an `apiDump` before it can merge.
 - Public API decisions waiting on the owner; each needs an `apiDump` in the same commit, and SECONDARY-DEVELOPER has the context:
-  1. Make `Blueprint.MAX_DEPTH` and `Blueprint$Companion` internal (recommended).
-  2. Give `DecodeError` hand-written `equals`, `hashCode` and `toString`, not a data class, so `copy()` and `componentN()` are not frozen (recommended).
-  3. `DecodeError.message` and `UnknownComponent.error` can echo payload text, which leaks if a host forwards them to analytics: trim to the field path (recommended) or warn in the KDoc.
+  1. Make `Blueprint.MAX_DEPTH` and `Blueprint$Companion` internal (recommended). Approved, in progress on `feature/api-freeze`.
+  2. Give `DecodeError` hand-written `equals`, `hashCode` and `toString`, not a data class, so `copy()` and `componentN()` are not frozen (recommended). Approved, in progress on `feature/api-freeze`.
+  3. `DecodeError.message` and `UnknownComponent.error` can echo payload text, which leaks if a host forwards them to analytics: trim to the field path (recommended) or warn in the KDoc. Approved (trim), in progress on `feature/api-freeze`.
 - Render tests for deep trees and large lists (SECONDARY-DEVELOPER, not started).
 - QUALITY-CONTROL-CODE: review the validator for new warnings, unused code and import order.
 - A source-context API for `dispatch`.
