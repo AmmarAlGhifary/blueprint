@@ -48,7 +48,6 @@ A task that is only planned goes in the table marked **planned**. A planned row 
 |---|---|---|---|
 | Git and organization: pushes, PRs, merges into `develop`, branch and worktree cleanup, this file | standing role | GIT-MASTER | `docs/coordination.md`, `CONTRIBUTING.md`, `.github/**`, `.gitignore` |
 | Code quality: unused code and imports, import order, unused dependencies, compiler and lint warnings, SonarQube setup. No behaviour changes | standing role, one branch per cleanup | QUALITY-CONTROL-CODE | repo-wide, but only for those cleanups; `gradle/libs.versions.toml`, build files for tooling; not `:core` KDoc (PR #5) |
-| Public-API validator (`binary-compatibility-validator`, `apiCheck`/`apiDump`). **Ready, awaiting merge** | `feature/api-check` | SECONDARY-DEVELOPER | `build.gradle.kts`, `gradle/libs.versions.toml`, `core/api/**`, `defaults/api/**`, `CLAUDE.md` |
 | Release prep: LICENSE, README, `maven-publish` and signing, Dokka. **Planned** | `feature/release-prep` | MAIN-DEVELOPER | `LICENSE`, `README.md`, `core/build.gradle.kts`, `defaults/build.gradle.kts`; rebases onto `feature/api-check` and asks SECONDARY-DEVELOPER before touching the root build file or the version catalog |
 | Source-context API for `dispatch`: design options only, no code until `feature/api-check` merges (it changes the public `SduiScope`). **Planned** | – | MAIN-DEVELOPER | none yet |
 | JSON Schema, `.d.ts`, emulator run. **Planned**, split agreed earlier under the session's old name (`stale-build-agent-plan`); the user confirms the holder | – | SECONDARY-DEVELOPER | none yet |
@@ -60,6 +59,12 @@ From the plan and the open decisions. Claim one by adding a row above.
 
 - Run the `public-api-review` pass on `:core` and `:defaults`.
 - Binary-compatibility validator: `feature/api-review` (`192ca44`) predates PR #8, so it needs a rebase and an `apiDump` before it can merge.
+- Public API decisions waiting on the owner; each needs an `apiDump` in the same commit, and SECONDARY-DEVELOPER has the context:
+  1. Make `Blueprint.MAX_DEPTH` and `Blueprint$Companion` internal (recommended).
+  2. Give `DecodeError` hand-written `equals`, `hashCode` and `toString`, not a data class, so `copy()` and `componentN()` are not frozen (recommended).
+  3. `DecodeError.message` and `UnknownComponent.error` can echo payload text, which leaks if a host forwards them to analytics: trim to the field path (recommended) or warn in the KDoc.
+- Render tests for deep trees and large lists (SECONDARY-DEVELOPER, not started).
+- QUALITY-CONTROL-CODE: review the validator for new warnings, unused code and import order.
 - A source-context API for `dispatch`.
 - Branch protection on `develop`/`main` (CONTRIBUTING.md claims it; GitHub won't enable it on a private free-plan repo, so this file is the only guard).
 - Release prep: Maven Central, Dokka, CI, LICENSE/README, JSON Schema/`.d.ts` (see the `release-prep` skill).
