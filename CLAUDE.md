@@ -14,6 +14,8 @@ networking — the host app fetches the JSON and calls `Blueprint.decodeScreen`.
 ./gradlew :core:testDebugUnitTest :defaults:testDebugUnitTest   # unit tests
 ./gradlew :core:testDebugUnitTest --tests '*BlueprintDecodeTest'          # one class
 ./gradlew :core:testDebugUnitTest --tests '*BlueprintDecodeTest.colorParsing'  # one test
+./gradlew apiCheck                     # fail if the public API differs from core/api, defaults/api
+./gradlew apiDump                      # refresh those dumps after an intended API change
 ./gradlew assembleDebug                # build everything, including the sample APK
 ./gradlew :app:installDebug            # run the sample on a device/emulator
 ./gradlew assembleDebug sonar         # SonarQube analysis; needs SONAR_HOST_URL and SONAR_TOKEN
@@ -38,7 +40,8 @@ Sonar sees the compiled classes. Kotlin official code style (`gradle.properties`
   and a `text` missing its required field).
 
 `:core` and `:defaults` use `explicitApi()`: every public declaration needs an explicit visibility
-modifier and explicit return type, or the build fails.
+modifier and explicit return type, or the build fails. The committed `api/*.api` dumps pin the public
+API: a change to a public declaration needs `apiDump` and the refreshed dump in the same commit.
 
 ## Architecture
 
