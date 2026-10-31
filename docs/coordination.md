@@ -64,7 +64,6 @@ A task that is only planned goes in the table marked **planned**. A planned row 
 | API freeze: make `Blueprint.MAX_DEPTH` and the `Companion` internal, hand-written `equals`/`hashCode`/`toString` on `DecodeError`, error messages without payload text. Descriptor labels and `actionTypes` wait for the owner | `feature/api-freeze` | SECONDARY-DEVELOPER | `core/src/main/**/Blueprint.kt`, `core/src/main/**/model/DecodeError.kt`, `core/src/main/**/model/Unknown.kt`, `core/src/test/**`, `core/api/core.api` |
 | Source-context API for `dispatch`: design options only, no code until `feature/api-check` merges (it changes the public `SduiScope`). **Paused** until the owner says go | – | MAIN-DEVELOPER | none yet |
 | JSON Schema, `.d.ts`, emulator run. **Paused** until the owner says go, split agreed earlier under the session's old name (`stale-build-agent-plan`); the user confirms the holder | – | SECONDARY-DEVELOPER | none yet |
-| CI workflow: build, `apiCheck`, both test tasks, `assembleRelease`. **Paused** until the owner says go, spec from MAIN-DEVELOPER | – | GIT-MASTER | `.github/**` |
 
 ## Open work (unclaimed)
 
