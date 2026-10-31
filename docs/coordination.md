@@ -22,7 +22,8 @@ Gradle runs fight over the same `build/` directories. This file is the protocol.
 4. **Stage explicit paths.** In a worktree that is only yours, `git add -A` is fine. If you ever find
    yourself in a checkout someone else may be writing to, use `git add <path>` for your own files only.
 5. **Follow CLAUDE.md:** one commit per prompt, never on `main`/`develop`, no failing tests, and no
-   Claude attribution in commits or PRs. Push and open PRs only when the user asks.
+   Claude attribution in commits or PRs. Commit on your branch and stop. Don't push, open PRs or
+   merge: the git session does that (see Claims). Message it when your branch is ready.
 6. **Re-check before you write.** Run `git status` and `git log -3` first. If something changed that
    you didn't do, stop and find out who did it instead of overwriting it.
 
@@ -43,17 +44,16 @@ Update this table in your branch. Remove the row when your PR is merged.
 
 | Task | Branch | Owner (session name) | Paths |
 |---|---|---|---|
-| `:defaults` stock pack (done, pushed, no PR yet) | `feature/defaults-pack` | – | `defaults/**`, `app/**`, `docs/components.md` |
+| Git and organization: pushes, PRs, merges into `develop`, branch and worktree cleanup, this file | `feature/git-integration` | git session | `docs/coordination.md`, `CONTRIBUTING.md`, `.github/**`, `.gitignore` |
 
 ## Open work (unclaimed)
 
 From the plan and the open decisions. Claim one by adding a row above.
 
-- Run the `public-api-review` pass on `:core` and `:defaults`, then open the PR for `feature/defaults-pack`.
+- Run the `public-api-review` pass on `:core` and `:defaults`.
 - `onDecodeError` hook for `decodeScreen`.
 - A source-context API for `dispatch`.
-- Branch protection on `develop`/`main` (CONTRIBUTING.md claims it, the repo doesn't have it).
-- Remove the old Claude trailers from `develop` history (needs a force-push, so the owner decides).
+- Branch protection on `develop`/`main` (CONTRIBUTING.md claims it; GitHub won't enable it on a private free-plan repo, so this file is the only guard).
 - Release prep: Maven Central, Dokka, CI, binary-compatibility validator, LICENSE/README, JSON Schema/`.d.ts` (see the `release-prep` skill).
 
 ## Handing off
