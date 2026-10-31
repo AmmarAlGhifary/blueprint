@@ -15,7 +15,9 @@ import io.github.ammaralghifary.blueprint.render.BlueprintRenderer
  * reporter.
  */
 public class ActionEvent(
+    /** The action that was dispatched. It carries payload text. */
     public val action: SduiAction,
+    /** The component whose renderer dispatched it. It carries payload text. */
     public val source: SduiComponent,
 ) {
     override fun equals(other: Any?): Boolean =

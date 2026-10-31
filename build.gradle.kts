@@ -31,8 +31,9 @@ subprojects {
     }
 }
 
-// `./gradlew apiCheck` fails when the public API differs from the committed api/*.api dumps;
-// `./gradlew apiDump` refreshes them. The sample app is not a library, so it is not tracked.
+// The sample app is not a library, so its API is not tracked. The dumps do pin Compose's generated
+// ComposableSingletons classes: the hash in their `getLambda$<n>` names changes when the declaring file
+// moves package, which is not an API change (editing the lambda body does not change it).
 apiValidation {
     ignoredProjects.add("app")
 }

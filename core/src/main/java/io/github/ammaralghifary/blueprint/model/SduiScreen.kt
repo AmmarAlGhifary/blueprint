@@ -9,7 +9,9 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 public data class SduiScreen(
+    /** The `screen_id` the server sent, if any. */
     @SerialName("screen_id") val id: String? = null,
     val body: SduiComponent,
+    /** The payload version the server declared. It is kept as sent; Blueprint does not act on it. */
     val version: Int? = null,
 )

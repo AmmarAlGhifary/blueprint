@@ -36,7 +36,6 @@ private val blueprint = Blueprint(
             }
         }
     },
-    // Tells the host what the server got wrong; here it just goes to logcat (tag "Blueprint").
     onDecodeError = { Log.w("Blueprint", "${it.kind} type=${it.type}: ${it.message}") },
     // One summary per decodeScreen call. The screen carries payload text, so log only its id and the count.
     onDecoded = { screen, errors -> Log.i("Blueprint", "decoded ${screen.id}: ${errors.size} problem(s)") },

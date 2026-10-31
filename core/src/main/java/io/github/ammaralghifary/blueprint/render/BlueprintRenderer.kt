@@ -74,7 +74,6 @@ private class RegistryScope(
             scope.source = component
             registration.Render(component, mod, scope)
         } else {
-            // A class nobody registered still needs something for the fallback to show
             val unknown = component as? UnknownComponent
                 ?: UnknownComponent(
                     component::class.simpleName,

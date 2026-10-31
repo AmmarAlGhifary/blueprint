@@ -17,17 +17,16 @@ import kotlinx.serialization.json.contentOrNull
 /**
  * What a component decodes to when it cannot be used as a typed component: its `type` is not in
  * the registry (or is missing), or the type is registered but the payload does not fit the model
- * (missing required field, wrong value type). It keeps the untouched [raw] JSON so a fallback
- * renderer or your logging can inspect it. [error] is null for an unregistered type and holds the
- * decoding message for a registered type that failed.
+ * (missing required field, wrong value type). A fallback renderer can inspect [raw]. [error] is null
+ * for an unregistered type; for a registered type that failed it is a message safe to log.
  */
 public class UnknownComponent(
     /** The payload's `type` string, or null when it is missing. */
     public val type: String?,
-    /** The untouched JSON object. */
+    /** The untouched JSON object. It carries payload text: keep it out of analytics and crash reports. */
     public val raw: JsonObject,
     override val modifier: SduiModifier? = null,
-    /** Why this node degraded, or null when its type is simply unregistered. */
+    /** Why this node degraded (never contains payload values), or null when its type is simply unregistered. */
     public val error: String? = null,
 ) : SduiComponent()
 
@@ -35,9 +34,9 @@ public class UnknownComponent(
 public class UnknownAction(
     /** The payload's `type` string, or null when it is missing. */
     public val type: String?,
-    /** The untouched JSON object. */
+    /** The untouched JSON object. It carries payload text: keep it out of analytics and crash reports. */
     public val raw: JsonObject,
-    /** Why this action degraded, or null when its type is simply unregistered. */
+    /** Why this action degraded (never contains payload values), or null when its type is simply unregistered. */
     public val error: String? = null,
 ) : SduiAction()
 

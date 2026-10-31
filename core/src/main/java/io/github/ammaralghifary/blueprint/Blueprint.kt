@@ -111,7 +111,7 @@ public class Blueprint(
                 salvageScreen(root, e)
             }
         } catch (e: StackOverflowError) {
-            // The depth guard keeps this unreachable on a normal stack; a tiny thread stack is not normal.
+            // The depth guard bounds nesting, but a small thread stack can still overflow below the limit.
             sink.rollback(0)
             invalid(root, "Payload exhausted the stack while decoding")
         }

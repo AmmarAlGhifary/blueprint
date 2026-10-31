@@ -10,6 +10,9 @@ import kotlinx.serialization.Serializable
  * [weight] and [alignment] need a parent `RowScope`/`ColumnScope`, so they are not applied
  * here; layout components read them from the model.
  *
+ * Sizes (`elevation`, `corner_radius`, `border_width`) are dp and colors are `#RGB`, `#RRGGBB` or
+ * `#AARRGGBB`.
+ *
  * [textColor], [fontSize] (sp) and [fontWeight] (100-900, clamped) are optional typography hints.
  * Like [weight] and [alignment], [toComposeModifier] does not apply them; text-bearing components
  * read them via [toTextStyle].
