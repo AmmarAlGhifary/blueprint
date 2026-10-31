@@ -1,8 +1,8 @@
 package io.github.ammaralghifary.blueprint.defaults
 
-import io.github.ammaralghifary.blueprint.NavigateAction
-import io.github.ammaralghifary.blueprint.SduiRegistry
-import io.github.ammaralghifary.blueprint.sduiRegistry
+import io.github.ammaralghifary.blueprint.model.NavigateAction
+import io.github.ammaralghifary.blueprint.registry.SduiRegistry
+import io.github.ammaralghifary.blueprint.registry.sduiRegistry
 
 /**
  * The opt-in stock component pack: `text`, `image`, `button`, `card`, `column`, `row`, `box`, `list`,

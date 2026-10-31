@@ -45,11 +45,13 @@ API: a change to a public declaration needs `apiDump` and the refreshed dump in 
 
 ## Architecture
 
-### Directory ≠ package
-Source sits in `model/`, `render/`, `registry/`, `modifier/` folders, but every file in `:core`
-declares `package io.github.ammaralghifary.blueprint` regardless — the folders group files, they are
-not package segments. Keep this pattern when adding files: never add a package segment to match a
-folder. `:core` is one flat package, so files reach each other without imports.
+### Directory = package
+Each `:core` folder is its own package: `model/` is `io.github.ammaralghifary.blueprint.model`, and
+`modifier/`, `registry/` and `render/` likewise. Only `Blueprint.kt` sits in the root package. A new file
+declares the package that matches its folder and imports what it uses from the others, in plain ASCII
+order. Moving a declaration between packages changes every consumer's imports, so it is a breaking
+change and needs `apiDump`. Tests stay in the root test package and import what they use; `internal`
+declarations remain visible to them because they share the module.
 
 ### Registry-driven polymorphism
 `SduiComponent` and `SduiAction` are `@Serializable abstract class`es, deliberately **not sealed**, so

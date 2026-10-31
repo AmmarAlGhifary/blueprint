@@ -3,6 +3,10 @@
 Status: **approved by the owner, not started.** Work on branch `feature/defaults-primitives`
 (Step 0 is done: this file and the CLAUDE.md pointer are committed there). Pick up at "Changes".
 
+> Superseded in part: `:core` was later split into folder-matching packages (`model`, `modifier`,
+> `registry`, `render`). The three "flat package" mentions below describe the state when this plan
+> was written; `CLAUDE.md` has the current rule.
+
 ## Context
 
 Today every app using Blueprint must write a `@Serializable` model **and** a registration for every

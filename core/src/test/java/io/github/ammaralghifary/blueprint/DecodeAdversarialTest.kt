@@ -1,5 +1,10 @@
 package io.github.ammaralghifary.blueprint
 
+import io.github.ammaralghifary.blueprint.model.SduiComponent
+import io.github.ammaralghifary.blueprint.model.SduiModifier
+import io.github.ammaralghifary.blueprint.model.SduiScreen
+import io.github.ammaralghifary.blueprint.model.UnknownComponent
+import io.github.ammaralghifary.blueprint.registry.sduiRegistry
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonPrimitive
 import org.junit.Assert.assertEquals

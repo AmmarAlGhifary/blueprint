@@ -6,9 +6,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import coil.compose.AsyncImage
-import io.github.ammaralghifary.blueprint.SduiComponent
-import io.github.ammaralghifary.blueprint.SduiModifier
-import io.github.ammaralghifary.blueprint.toTextStyle
+import io.github.ammaralghifary.blueprint.model.SduiComponent
+import io.github.ammaralghifary.blueprint.model.SduiModifier
+import io.github.ammaralghifary.blueprint.modifier.toTextStyle
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

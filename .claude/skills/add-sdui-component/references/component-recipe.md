@@ -17,8 +17,8 @@ Three complete components plus the registry that ships them. Copy the shape, not
 package io.github.ammaralghifary.blueprint.defaults
 
 import androidx.compose.material3.Text
-import io.github.ammaralghifary.blueprint.SduiComponent
-import io.github.ammaralghifary.blueprint.SduiModifier
+import io.github.ammaralghifary.blueprint.model.SduiComponent
+import io.github.ammaralghifary.blueprint.model.SduiModifier
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

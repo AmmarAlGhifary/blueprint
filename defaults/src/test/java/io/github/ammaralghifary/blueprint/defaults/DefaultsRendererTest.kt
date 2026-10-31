@@ -14,9 +14,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.height
 import androidx.test.core.app.ApplicationProvider
 import io.github.ammaralghifary.blueprint.Blueprint
-import io.github.ammaralghifary.blueprint.BlueprintRenderer
-import io.github.ammaralghifary.blueprint.NavigateAction
-import io.github.ammaralghifary.blueprint.SduiAction
+import io.github.ammaralghifary.blueprint.model.NavigateAction
+import io.github.ammaralghifary.blueprint.model.SduiAction
+import io.github.ammaralghifary.blueprint.render.BlueprintRenderer
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before

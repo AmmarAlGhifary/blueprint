@@ -11,11 +11,11 @@ import androidx.compose.foundation.text.BasicText
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.github.ammaralghifary.blueprint.Blueprint
-import io.github.ammaralghifary.blueprint.BlueprintRenderer
-import io.github.ammaralghifary.blueprint.SduiComponent
-import io.github.ammaralghifary.blueprint.SduiModifier
 import io.github.ammaralghifary.blueprint.defaults.DefaultSduiRegistry
-import io.github.ammaralghifary.blueprint.sduiRegistry
+import io.github.ammaralghifary.blueprint.model.SduiComponent
+import io.github.ammaralghifary.blueprint.model.SduiModifier
+import io.github.ammaralghifary.blueprint.registry.sduiRegistry
+import io.github.ammaralghifary.blueprint.render.BlueprintRenderer
 import kotlinx.serialization.Serializable
 
 /** A host-specific component, to show the stock pack and custom types living side by side. */
