@@ -81,3 +81,9 @@ per field.
 ```bash
 ./gradlew :core:testDebugUnitTest --tests '*BlueprintDecodeTest'
 ```
+
+## Stock-pack fixtures
+
+Fixtures for `:defaults` use Blueprint's own neutral schema (`docs/components.md`), not StudentDesk's; see
+`defaults/src/test/resources/stock_screen.json`. The StudentDesk `home_dashboard.json` stays as the
+tolerance/regression payload.

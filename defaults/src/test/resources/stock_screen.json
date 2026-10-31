@@ -1,0 +1,36 @@
+{
+  "screen_id": "account_overview",
+  "version": 1,
+  "body": {
+    "type": "column",
+    "modifier": { "padding": { "all": 16 } },
+    "children": [
+      { "type": "text", "text": "Your order", "style": "headline" },
+      { "type": "text", "text": "Arrives Thursday between 10:00 and 12:00", "style": "body", "max_lines": 2,
+        "modifier": { "text_color": "#546E7A", "font_size": 14 } },
+      { "type": "spacer", "size": 12 },
+      { "type": "image", "url": "https://example.com/banner.png", "content_description": "Order banner", "scale": "crop",
+        "modifier": { "width": { "type": "fill" }, "height": { "type": "exact", "value": 140 }, "corner_radius": 12 } },
+      { "type": "divider", "thickness": 1, "color": "#CFD8DC" },
+      { "type": "row", "arrangement": "space_between", "modifier": { "width": { "type": "fill" } },
+        "children": [
+          { "type": "text", "text": "Subtotal", "modifier": { "weight": 1, "alignment": "center" } },
+          { "type": "text", "text": "$48.00", "style": "title", "modifier": { "font_weight": 700 } }
+        ] },
+      { "type": "list", "orientation": "horizontal", "spacing": 8,
+        "children": [
+          { "type": "card", "action": { "type": "navigate", "destination": "item/1" },
+            "children": [ { "type": "text", "text": "Espresso beans" } ] },
+          { "type": "card", "action": { "type": "navigate", "destination": "item/2", "params": { "from": "order" } },
+            "children": [ { "type": "text", "text": "Grinder" } ] }
+        ] },
+      { "type": "box", "modifier": { "width": { "type": "fill" }, "height": { "type": "exact", "value": 48 } },
+        "children": [
+          { "type": "text", "text": "Promo", "modifier": { "alignment": "center_end" } }
+        ] },
+      { "type": "button", "text": "Track delivery", "variant": "filled",
+        "action": { "type": "navigate", "destination": "tracking" } },
+      { "type": "button", "text": "Cancel", "variant": "outlined" }
+    ]
+  }
+}
