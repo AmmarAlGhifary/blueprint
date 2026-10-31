@@ -6,6 +6,7 @@ import io.github.ammaralghifary.blueprint.SduiModifier
 import io.github.ammaralghifary.blueprint.SduiComponent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -48,7 +49,7 @@ public data class SduiBox(
     override val modifier: SduiModifier? = null,
 ) : SduiComponent()
 
-/** `list`: lazy list. Do not nest a vertical list inside a [SduiColumn] with `scrollable`. */
+/** `list`: lazy list; with no bounded room on its scroll axis (e.g. inside a scrollable column) it is a plain stack. */
 @Serializable
 public data class SduiList(
     val children: List<SduiComponent> = emptyList(),
@@ -109,16 +110,19 @@ internal fun RenderBox(c: SduiBox, mod: Modifier, scope: SduiScope) {
 @Composable
 internal fun RenderList(c: SduiList, mod: Modifier, scope: SduiScope) {
     val gap = (c.spacing ?: 0).coerceAtLeast(0).dp
-    if (c.orientation == "horizontal") {
-        LazyRow(mod, horizontalArrangement = Arrangement.spacedBy(gap)) {
-            itemsIndexed(c.children, key = { i, child -> i to child::class }) { _, child ->
-                scope.Render(child)
+    val horizontal = c.orientation == "horizontal"
+    BoxWithConstraints(mod, propagateMinConstraints = true) {
+        // A lazy list given unbounded room on its scroll axis throws (inside a scrollable column,
+        // or another list's item), so it falls back to a plain stack there.
+        val bounded = if (horizontal) constraints.hasBoundedWidth else constraints.hasBoundedHeight
+        when {
+            !bounded && horizontal -> Row(horizontalArrangement = Arrangement.spacedBy(gap)) { scope.RenderAll(c.children) }
+            !bounded -> Column(verticalArrangement = Arrangement.spacedBy(gap)) { scope.RenderAll(c.children) }
+            horizontal -> LazyRow(horizontalArrangement = Arrangement.spacedBy(gap)) {
+                itemsIndexed(c.children, key = { i, child -> i to child::class }) { _, child -> scope.Render(child) }
             }
-        }
-    } else {
-        LazyColumn(mod, verticalArrangement = Arrangement.spacedBy(gap)) {
-            itemsIndexed(c.children, key = { i, child -> i to child::class }) { _, child ->
-                scope.Render(child)
+            else -> LazyColumn(verticalArrangement = Arrangement.spacedBy(gap)) {
+                itemsIndexed(c.children, key = { i, child -> i to child::class }) { _, child -> scope.Render(child) }
             }
         }
     }

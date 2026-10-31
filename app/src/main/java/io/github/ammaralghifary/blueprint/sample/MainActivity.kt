@@ -1,6 +1,7 @@
 package io.github.ammaralghifary.blueprint.sample
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
@@ -35,6 +36,8 @@ private val blueprint = Blueprint(
             }
         }
     },
+    // Tells the host what the server got wrong; here it just goes to logcat (tag "Blueprint").
+    onDecodeError = { Log.w("Blueprint", "${it.kind} type=${it.type}: ${it.message}") },
 )
 
 // Two deliberate failures, each of which must stay local:

@@ -54,8 +54,9 @@ Read by `text` and `button`. Host components can reuse them with `modifier.toTex
 
 Action: `{"type": "navigate", "destination": "…", "params": {"k": "v"}}` → `NavigateAction`.
 
-**Constraint:** do not put a vertical `list` inside a `column` with `"scrollable": true`; Compose throws
-on the unbounded height. Use `column` for short content or `list` for long content.
+**Lists in unbounded space:** a lazy `list` needs bounded room on its scroll axis. Inside a `column` with
+`"scrollable": true`, or inside another list's item, it renders as a plain stack instead (every item is
+composed, not just the visible ones), so prefer `column` for short content and `list` for long content.
 
 ## Examples
 

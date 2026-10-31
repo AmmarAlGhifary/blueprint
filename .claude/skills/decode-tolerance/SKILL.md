@@ -35,6 +35,14 @@ unparsable colours and unknown size types are skipped.
 
 Only the affected node degrades. Siblings and parents still decode.
 
+**Nothing is silent.** Each of the above is also reported to `Blueprint(onDecodeError = …)` as a
+`DecodeError`. Reports are collected per call and a retried attempt rolls its reports back, so a node
+is reported exactly once; adding a degrade path means adding a report and a test that counts them.
+
+**Depth is a decode risk, not just a render one.** kotlinx's `parseToJsonElement` recurses per level
+(about 6 KB of stack each on this code), so `decodeScreen(String)` scans the text for nesting before
+parsing. Do not move that check after the parse.
+
 ## Why the catch is `IllegalArgumentException`
 
 `SerializationException` extends `IllegalArgumentException`, and catching the supertype also covers
@@ -61,6 +69,10 @@ These cases are covered today across `BlueprintDecodeTest`, `DecodeScreenEnvelop
 | registered `text` with `"text": 5` | `UnknownComponent`, `error` set |
 | container whose middle child is any of the above | only that child degrades |
 | `{"type":"nope","modifier":{"padding":"oops"}}` | node survives, `modifier == null` |
+| registered `text` with a malformed `modifier` | component kept, modifier dropped, `ModifierIgnored` reported |
+| `{"type":5}`, `{"type":null}`, `{"type":{}}` | `UnknownComponent`, never a throw |
+| nesting beyond `Blueprint.MAX_DEPTH` (100 JSON levels, 50 components) | body is `UnknownComponent` with a "deeper" error |
+| `padding`/`margin`/`exact` size of 2e9 or 1e6 dp | clamped to 16,384 dp, layout does not throw |
 | unregistered action type | `UnknownAction`, dispatched normally |
 | registered action with a missing field | `UnknownAction`, `error` set |
 | the real `home_dashboard.json` with only `column` registered | every UAI-specific child is `UnknownComponent` |

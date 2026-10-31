@@ -1,6 +1,7 @@
 package io.github.ammaralghifary.blueprint
 
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
@@ -19,12 +20,19 @@ import kotlinx.serialization.modules.polymorphic
  * type) becomes an [UnknownComponent]/[UnknownAction] instead of failing the whole payload. Only the
  * affected node degrades; its siblings and parents still decode. The same holds for the envelope
  * itself, see [decodeScreen]. Decoding is the supported direction; encoding payloads is not.
+ *
+ * Tolerating is silent in release builds, so [onDecodeError] is how you find out: it is called once
+ * per tolerated problem, after [decodeScreen] has finished, on the calling thread. Log it, count it,
+ * send it to your crash reporter. It is not called for decoding done directly through [json].
  */
 public class Blueprint(
     /** Type strings this instance decodes and renders. */
     public val registry: SduiRegistry,
     json: Json = Json,
+    private val onDecodeError: ((DecodeError) -> Unit)? = null,
 ) {
+    private val sink = DecodeErrorSink()
+
     /** The [Json] used for decoding, derived from the one passed in. */
     public val json: Json = Json(from = json) {
         ignoreUnknownKeys = true
@@ -32,12 +40,12 @@ public class Blueprint(
         serializersModule = json.serializersModule + SerializersModule {
             polymorphic(SduiComponent::class) {
                 defaultDeserializer { type ->
-                    registry.componentSerializer(type)?.let(::LenientComponentSerializer) ?: UnknownComponentSerializer
+                    registry.componentSerializer(type)?.let { LenientComponentSerializer(it, sink) } ?: UnknownComponentSerializer(sink)
                 }
             }
             polymorphic(SduiAction::class) {
                 defaultDeserializer { type ->
-                    registry.actionSerializer(type)?.let(::LenientActionSerializer) ?: UnknownActionSerializer
+                    registry.actionSerializer(type)?.let { LenientActionSerializer(it, sink) } ?: UnknownActionSerializer(sink)
                 }
             }
         }
@@ -46,47 +54,144 @@ public class Blueprint(
     /**
      * Decodes [jsonString] into a screen. Never throws on bad input: a payload that cannot be read
      * as a screen (malformed JSON, a root that is not an object, a missing, null or non-object
-     * `body`) comes back as a screen whose body is an [UnknownComponent] carrying the reason in
-     * [UnknownComponent.error]. Render it like any other unknown node, or check
-     * `screen.body is UnknownComponent` first to show your own error state.
+     * `body`, or nesting deeper than [MAX_DEPTH]) comes back as a screen whose body is an
+     * [UnknownComponent] carrying the reason in [UnknownComponent.error]. Render it like any other
+     * unknown node, or check `screen.body is UnknownComponent` first to show your own error state.
      */
     public fun decodeScreen(jsonString: String): SduiScreen {
+        // kotlinx's own parser recurses per level, so depth is checked on the text before parsing.
+        val tooDeep = isNestedDeeperThan(jsonString, MAX_DEPTH)
         val element = try {
-            json.parseToJsonElement(jsonString)
+            if (tooDeep) null else json.parseToJsonElement(jsonString)
         } catch (e: IllegalArgumentException) { // SerializationException extends it
-            return brokenScreen(JsonObject(emptyMap()), e)
+            return unreadable(e.message ?: e::class.simpleName)
+        } catch (e: StackOverflowError) {
+            return unreadable("Payload exhausted the stack while parsing")
         }
-        return decodeScreen(element)
+        return element?.let(::decodeScreen) ?: unreadable("Payload is nested deeper than $MAX_DEPTH levels")
     }
 
     /** Same contract as the [String] overload: bad input degrades to an [UnknownComponent] body. */
-    public fun decodeScreen(element: JsonElement): SduiScreen =
-        try {
-            json.decodeFromJsonElement(SduiScreen.serializer(), element)
-        } catch (e: IllegalArgumentException) {
-            salvageScreen(element, e)
+    public fun decodeScreen(element: JsonElement): SduiScreen {
+        val (screen, errors) = sink.collect { decodeGuarded(element) }
+        deliver(errors)
+        return screen
+    }
+
+    private fun decodeGuarded(element: JsonElement): SduiScreen {
+        val root = element as? JsonObject ?: JsonObject(emptyMap())
+        if (isNestedDeeperThan(element, MAX_DEPTH)) {
+            return invalid(root, "Payload is nested deeper than $MAX_DEPTH levels")
         }
+        return try {
+            try {
+                json.decodeFromJsonElement(SduiScreen.serializer(), element)
+            } catch (e: IllegalArgumentException) {
+                sink.rollback(0)
+                salvageScreen(root, e)
+            }
+        } catch (e: StackOverflowError) {
+            // The depth guard keeps this unreachable on a normal stack; a tiny thread stack is not normal.
+            sink.rollback(0)
+            invalid(root, "Payload exhausted the stack while decoding")
+        }
+    }
 
     /**
      * The envelope failed to decode. Keep whatever is still usable: a bad `screen_id` or `version`
      * must not throw away a perfectly good body.
      */
-    private fun salvageScreen(element: JsonElement, error: IllegalArgumentException): SduiScreen {
-        val root = element as? JsonObject ?: JsonObject(emptyMap())
+    private fun salvageScreen(root: JsonObject, error: IllegalArgumentException): SduiScreen {
+        val message = error.message ?: error::class.simpleName
         val body = (root["body"] as? JsonObject)?.let {
+            val mark = sink.mark()
             try {
                 json.decodeFromJsonElement(SduiComponent.serializer(), it)
             } catch (e: IllegalArgumentException) {
+                sink.rollback(mark)
                 null
             }
         }
+        if (body == null) sink.report(DecodeError(DecodeErrorKind.InvalidPayload, null, message, root))
+        else sink.report(DecodeError(DecodeErrorKind.InvalidPayload, null, "Ignored invalid screen metadata: $message", root))
         return SduiScreen(
             id = (root["screen_id"] as? JsonPrimitive)?.contentOrNull,
-            body = body ?: UnknownComponent(null, root, error = error.message ?: error::class.simpleName),
+            body = body ?: UnknownComponent(null, root, error = message),
             version = (root["version"] as? JsonPrimitive)?.intOrNull,
         )
     }
 
-    private fun brokenScreen(raw: JsonObject, error: IllegalArgumentException): SduiScreen =
-        SduiScreen(body = UnknownComponent(null, raw, error = error.message ?: error::class.simpleName))
+    private fun invalid(root: JsonObject, message: String?): SduiScreen {
+        sink.report(DecodeError(DecodeErrorKind.InvalidPayload, null, message, root))
+        return brokenScreen(root, message)
+    }
+
+    private fun unreadable(message: String?): SduiScreen {
+        deliver(listOf(DecodeError(DecodeErrorKind.InvalidPayload, null, message, null)))
+        return brokenScreen(JsonObject(emptyMap()), message)
+    }
+
+    private fun brokenScreen(raw: JsonObject, message: String?): SduiScreen =
+        SduiScreen(body = UnknownComponent(null, raw, error = message))
+
+    /** A throwing observer must not break the never-throws promise it is there to watch. */
+    private fun deliver(errors: List<DecodeError>) {
+        val callback = onDecodeError ?: return
+        for (error in errors) {
+            try {
+                callback(error)
+            } catch (e: Exception) {
+                // dropped on purpose
+            }
+        }
+    }
+
+    public companion object {
+        /** JSON levels (objects and arrays) a payload may nest; a component takes two. About 6x real screens. */
+        public const val MAX_DEPTH: Int = 100
+    }
+}
+
+/** Iterative so that measuring a hostile payload cannot itself overflow the stack. */
+private fun isNestedDeeperThan(root: JsonElement, max: Int): Boolean {
+    val stack = ArrayDeque<Pair<JsonElement, Int>>()
+    stack.addLast(root to 1)
+    while (stack.isNotEmpty()) {
+        val (node, depth) = stack.removeLast()
+        when (node) {
+            is JsonObject -> {
+                if (depth > max) return true
+                node.values.forEach { stack.addLast(it to depth + 1) }
+            }
+            is JsonArray -> {
+                if (depth > max) return true
+                node.forEach { stack.addLast(it to depth + 1) }
+            }
+            else -> Unit
+        }
+    }
+    return false
+}
+
+/** Counts `{`/`[` nesting outside string literals; stops as soon as [max] is exceeded. */
+private fun isNestedDeeperThan(text: String, max: Int): Boolean {
+    var depth = 0
+    var inString = false
+    var escaped = false
+    for (ch in text) {
+        if (inString) {
+            when {
+                escaped -> escaped = false
+                ch == '\\' -> escaped = true
+                ch == '"' -> inString = false
+            }
+            continue
+        }
+        when (ch) {
+            '"' -> inString = true
+            '{', '[' -> if (++depth > max) return true
+            '}', ']' -> if (depth > 0) depth--
+        }
+    }
+    return false
 }
