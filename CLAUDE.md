@@ -67,6 +67,15 @@ JSON, a non-object root, or a missing/null/non-object `body` returns a screen wh
 `UnknownComponent` with `error` set; a bad `screen_id`/`version` is dropped while a good body is
 kept. Don't add a code path that lets a decoding exception escape `decodeScreen`.
 
+Degrading is never silent: every tolerated problem is also reported as a `DecodeError` (kind, `type`,
+`message`, `raw`) to the optional `Blueprint(onDecodeError = …)` callback. Errors are collected per
+`decodeScreen` call (a `ThreadLocal` sink) and delivered after it finishes, and a retry must `rollback`
+what its failed attempt reported, so no node is reported twice; a throwing callback is swallowed. When
+you add a degrade path, report it. Two more guarantees: a payload nested deeper than
+`Blueprint.MAX_DEPTH` JSON levels is rejected up front (kotlinx's parser recurses, so the string is
+scanned before parsing), and a malformed `modifier` on a *registered* component drops only the
+modifier, not the component.
+
 ### Render pipeline
 `BlueprintRenderer` creates a `RegistryScope` (remembered per `Blueprint`) implementing `SduiScope`.
 For each node it applies the server modifier (`SduiModifier.toComposeModifier`) *before* invoking the
@@ -86,7 +95,7 @@ layout can resolve them. A container that ignores them silently drops those fiel
 ### Modifier mapping
 `toComposeModifier` applies in a fixed order — margin, size, shadow, clip, border, background,
 padding — and shadow must stay before clip or the clip crops it. Bad input never throws: negative dp
-clamps to 0, unparsable colors and unknown size types are skipped. `weight` and `alignment` are
+clamps to 0 (and to 16,384 at the top, past which Compose throws at layout), unparsable colors and unknown size types are skipped. `weight` and `alignment` are
 **not** applied here because they need a `RowScope`/`ColumnScope`; layout components must read them
 off the model themselves. Likewise `text_color`/`font_size`/`font_weight` are not applied here: text
 components read them via `modifier.toTextStyle(base)`. Sizes are `fill` / `wrap` / `exact` (+ `value` in dp). Padding precedence:

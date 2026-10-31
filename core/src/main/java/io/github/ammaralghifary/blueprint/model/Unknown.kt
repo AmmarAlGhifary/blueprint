@@ -41,6 +41,11 @@ public class UnknownAction(
     public val error: String? = null,
 ) : SduiAction()
 
+private object UnknownDescriptors {
+    val component: SerialDescriptor = buildClassSerialDescriptor("io.github.ammaralghifary.blueprint.UnknownComponent")
+    val action: SerialDescriptor = buildClassSerialDescriptor("io.github.ammaralghifary.blueprint.UnknownAction")
+}
+
 private fun unknownComponent(json: Json, raw: JsonObject, error: String?): UnknownComponent {
     val modifier = raw["modifier"]?.let {
         // A malformed modifier must not take the whole component down.
@@ -49,13 +54,16 @@ private fun unknownComponent(json: Json, raw: JsonObject, error: String?): Unkno
     return UnknownComponent(raw.typeName(), raw, modifier, error)
 }
 
-internal object UnknownComponentSerializer : KSerializer<UnknownComponent> {
-    override val descriptor: SerialDescriptor =
-        buildClassSerialDescriptor("io.github.ammaralghifary.blueprint.UnknownComponent")
+internal class UnknownComponentSerializer(
+    private val sink: DecodeErrorSink? = null,
+) : KSerializer<UnknownComponent> {
+    override val descriptor: SerialDescriptor = UnknownDescriptors.component
 
     override fun deserialize(decoder: Decoder): UnknownComponent {
         val input = decoder.asJsonDecoder()
-        return unknownComponent(input.json, input.decodeJsonObject(), error = null)
+        val raw = input.decodeJsonObject()
+        sink?.report(DecodeError(DecodeErrorKind.UnregisteredType, raw.typeName(), "No component registered for this type", raw))
+        return unknownComponent(input.json, raw, error = null)
     }
 
     override fun serialize(encoder: Encoder, value: UnknownComponent) {
@@ -64,12 +72,14 @@ internal object UnknownComponentSerializer : KSerializer<UnknownComponent> {
     }
 }
 
-internal object UnknownActionSerializer : KSerializer<UnknownAction> {
-    override val descriptor: SerialDescriptor =
-        buildClassSerialDescriptor("io.github.ammaralghifary.blueprint.UnknownAction")
+internal class UnknownActionSerializer(
+    private val sink: DecodeErrorSink? = null,
+) : KSerializer<UnknownAction> {
+    override val descriptor: SerialDescriptor = UnknownDescriptors.action
 
     override fun deserialize(decoder: Decoder): UnknownAction {
         val raw = decoder.asJsonDecoder().decodeJsonObject()
+        sink?.report(DecodeError(DecodeErrorKind.UnregisteredType, raw.typeName(), "No action registered for this type", raw))
         return UnknownAction(raw.typeName(), raw)
     }
 
@@ -82,20 +92,41 @@ internal object UnknownActionSerializer : KSerializer<UnknownAction> {
 /**
  * Wraps a registered component serializer so a payload that does not fit the model degrades to an
  * [UnknownComponent] (keeping the error) instead of failing the whole screen. Nested children are
- * decoded through the same Json, so each child degrades on its own.
+ * decoded through the same Json, so each child degrades on its own. A malformed `modifier` alone
+ * only costs the modifier, not the component.
  */
 internal class LenientComponentSerializer(
     private val delegate: KSerializer<out SduiComponent>,
+    private val sink: DecodeErrorSink? = null,
 ) : KSerializer<SduiComponent> {
-    override val descriptor: SerialDescriptor = UnknownComponentSerializer.descriptor
+    override val descriptor: SerialDescriptor = UnknownDescriptors.component
 
     override fun deserialize(decoder: Decoder): SduiComponent {
         val input = decoder.asJsonDecoder()
         val raw = input.decodeJsonObject()
+        val mark = sink?.mark() ?: 0
         return try {
             input.json.decodeFromJsonElement(delegate, raw)
         } catch (e: IllegalArgumentException) { // SerializationException extends it
-            unknownComponent(input.json, raw, e.message ?: e::class.simpleName)
+            sink?.rollback(mark)
+            val message = e.message ?: e::class.simpleName
+            withoutModifier(input.json, raw)?.also {
+                sink?.report(DecodeError(DecodeErrorKind.ModifierIgnored, raw.typeName(), message, raw))
+            } ?: run {
+                sink?.rollback(mark)
+                sink?.report(DecodeError(DecodeErrorKind.InvalidComponent, raw.typeName(), message, raw))
+                unknownComponent(input.json, raw, message)
+            }
+        }
+    }
+
+    /** Retries without `modifier`; null when that is not the problem (or the model requires one). */
+    private fun withoutModifier(json: Json, raw: JsonObject): SduiComponent? {
+        if ("modifier" !in raw) return null
+        return try {
+            json.decodeFromJsonElement(delegate, JsonObject(raw - "modifier"))
+        } catch (e: IllegalArgumentException) {
+            null
         }
     }
 
@@ -106,8 +137,9 @@ internal class LenientComponentSerializer(
 /** Action counterpart of [LenientComponentSerializer]. */
 internal class LenientActionSerializer(
     private val delegate: KSerializer<out SduiAction>,
+    private val sink: DecodeErrorSink? = null,
 ) : KSerializer<SduiAction> {
-    override val descriptor: SerialDescriptor = UnknownActionSerializer.descriptor
+    override val descriptor: SerialDescriptor = UnknownDescriptors.action
 
     override fun deserialize(decoder: Decoder): SduiAction {
         val input = decoder.asJsonDecoder()
@@ -115,7 +147,9 @@ internal class LenientActionSerializer(
         return try {
             input.json.decodeFromJsonElement(delegate, raw)
         } catch (e: IllegalArgumentException) {
-            UnknownAction(raw.typeName(), raw, e.message ?: e::class.simpleName)
+            val message = e.message ?: e::class.simpleName
+            sink?.report(DecodeError(DecodeErrorKind.InvalidAction, raw.typeName(), message, raw))
+            UnknownAction(raw.typeName(), raw, message)
         }
     }
 

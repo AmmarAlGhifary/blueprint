@@ -16,7 +16,10 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
-private fun Int.safeDp(): Dp = coerceAtLeast(0).dp
+// Compose Constraints top out near 2^18 px, and anything between that and Int.MAX_VALUE throws at layout.
+private const val MAX_DP = 16_384
+
+private fun Int.safeDp(): Dp = coerceIn(0, MAX_DP).dp
 
 /**
  * Applies the server box model on top of [baseModifier]. Bad input never throws: negative dp
