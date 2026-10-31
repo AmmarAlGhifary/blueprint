@@ -83,13 +83,23 @@ you add a degrade path, report it. Two more guarantees: a payload nested deeper 
 scanned before parsing), and a malformed `modifier` on a *registered* component drops only the
 modifier, not the component.
 
+`Blueprint(onDecoded = …)` is the per-call summary: once per `decodeScreen`, after the `onDecodeError`
+calls, with the screen and that call's errors (empty when clean); it shares the same single exit, so it
+fires at most once and a throwing callback is swallowed. Privacy: `DecodeError.message` and
+`UnknownComponent.error` are rebuilt from known failure shapes and never carry payload text, but
+`DecodeError.raw`, the screen and `ActionEvent` do — never forward those to analytics. `Blueprint.MAX_DEPTH`
+is internal. Host `require()` messages are not shown in `message`.
+
 ### Render pipeline
-`BlueprintRenderer` creates a `RegistryScope` (remembered per `Blueprint`) implementing `SduiScope`.
+`BlueprintRenderer` creates a private `RegistryScope` (remembered per `Blueprint`) and hands each registered
+component its own `NodeScope`, an `SduiScope` that knows which component owns it.
 For each node it applies the server modifier (`SduiModifier.toComposeModifier`) *before* invoking the
 registered composable, then dispatches to `registry.registrationFor(component)`; anything unregistered
 goes to the fallback. Container components recurse via `scope.RenderAll(children)` — which keys each
 child by position and class — or `scope.Render(child)` for a single slot, and emit events via
-`scope.dispatch(action)`, which forwards to the single `onAction` callback at the root.
+`scope.dispatch(action)`, which calls the root `onActionEvent` (an `ActionEvent` carrying the action and the
+firing component as `source`) and then `onAction` (the action alone). `onActionEvent` precedes `onAction` in the
+parameter list so a trailing lambda still binds to `onAction`.
 
 `RenderAll`'s `childModifier` lambda is how a container supplies the scope-only half of the server
 modifier: `weight` and `alignment` are `RowScope`/`ColumnScope` extensions, so only the enclosing

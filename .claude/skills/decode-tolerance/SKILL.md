@@ -43,6 +43,13 @@ is reported exactly once; adding a degrade path means adding a report and a test
 (about 6 KB of stack each on this code), so `decodeScreen(String)` scans the text for nesting before
 parsing. Do not move that check after the parse.
 
+**Reports carry no payload text.** `DecodeError.message` and `UnknownComponent.error` are rebuilt from known
+failure shapes (a literal that failed, a wrong element, a bad token) and fall back to "Invalid value
+(ExceptionName)"; path segments are kept only when they name a schema field, else `*`. Do not interpolate the
+exception message, a field value or a map key into them. `DecodeError.raw` does hold payload text and is
+documented as not for analytics. `Blueprint.MAX_DEPTH` is internal. The `onDecoded` summary shares the single
+exit with `onDecodeError`; a new degrade path must still be reported exactly once.
+
 ## Why the catch is `IllegalArgumentException`
 
 `SerializationException` extends `IllegalArgumentException`, and catching the supertype also covers
