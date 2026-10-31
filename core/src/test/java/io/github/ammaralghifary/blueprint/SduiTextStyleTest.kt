@@ -10,11 +10,12 @@ import org.junit.Assert.assertNull
 import org.junit.Test
 
 class SduiTextStyleTest {
+    private val json = Json { ignoreUnknownKeys = true }
     private val base = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.Normal, color = Color.Black)
 
     @Test
     fun typographyFieldsDecode() {
-        val m = Json { ignoreUnknownKeys = true }.decodeFromString(
+        val m = json.decodeFromString(
             SduiModifier.serializer(),
             """{"text_color":"#FF0000","font_size":20,"font_weight":700}""",
         )
