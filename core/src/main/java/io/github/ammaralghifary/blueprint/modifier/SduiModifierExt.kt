@@ -1,4 +1,4 @@
-package io.github.ammaralghifary.blueprint
+package io.github.ammaralghifary.blueprint.modifier
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -15,6 +15,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import io.github.ammaralghifary.blueprint.model.SduiModifier
 
 // Compose Constraints top out near 2^18 px, and anything between that and Int.MAX_VALUE throws at layout.
 private const val MAX_DP = 16_384

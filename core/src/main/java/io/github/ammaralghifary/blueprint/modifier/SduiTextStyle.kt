@@ -1,8 +1,9 @@
-package io.github.ammaralghifary.blueprint
+package io.github.ammaralghifary.blueprint.modifier
 
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import io.github.ammaralghifary.blueprint.model.SduiModifier
 
 /**
  * Merges the modifier's typography hints (`text_color`, `font_size`, `font_weight`) onto [base].

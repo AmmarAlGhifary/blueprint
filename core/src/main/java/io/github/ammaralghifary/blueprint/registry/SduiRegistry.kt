@@ -1,7 +1,12 @@
-package io.github.ammaralghifary.blueprint
+package io.github.ammaralghifary.blueprint.registry
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import io.github.ammaralghifary.blueprint.model.SduiAction
+import io.github.ammaralghifary.blueprint.model.SduiComponent
+import io.github.ammaralghifary.blueprint.model.UnknownComponent
+import io.github.ammaralghifary.blueprint.render.DefaultFallback
+import io.github.ammaralghifary.blueprint.render.SduiScope
 import kotlin.reflect.KClass
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.serializer

@@ -1,5 +1,7 @@
-package io.github.ammaralghifary.blueprint
+package io.github.ammaralghifary.blueprint.model
 
+import io.github.ammaralghifary.blueprint.modifier.toComposeModifier
+import io.github.ammaralghifary.blueprint.modifier.toTextStyle
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

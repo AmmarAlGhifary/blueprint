@@ -1,5 +1,6 @@
-package io.github.ammaralghifary.blueprint
+package io.github.ammaralghifary.blueprint.model
 
+import io.github.ammaralghifary.blueprint.Blueprint
 import kotlinx.serialization.json.JsonObject
 
 /** What [Blueprint] tolerated instead of failing the screen. */

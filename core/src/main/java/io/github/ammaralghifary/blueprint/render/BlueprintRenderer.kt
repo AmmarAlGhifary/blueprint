@@ -1,4 +1,4 @@
-package io.github.ammaralghifary.blueprint
+package io.github.ammaralghifary.blueprint.render
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -6,6 +6,13 @@ import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
+import io.github.ammaralghifary.blueprint.Blueprint
+import io.github.ammaralghifary.blueprint.model.SduiAction
+import io.github.ammaralghifary.blueprint.model.SduiComponent
+import io.github.ammaralghifary.blueprint.model.SduiScreen
+import io.github.ammaralghifary.blueprint.model.UnknownComponent
+import io.github.ammaralghifary.blueprint.modifier.toComposeModifier
+import io.github.ammaralghifary.blueprint.registry.SduiRegistry
 import kotlinx.serialization.json.JsonObject
 
 /** Renders [screen].body recursively through [blueprint]'s registry. */
