@@ -14,14 +14,13 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import io.github.ammaralghifary.blueprint.SduiComponent
-import io.github.ammaralghifary.blueprint.SduiModifier
-import io.github.ammaralghifary.blueprint.SduiScope
-import io.github.ammaralghifary.blueprint.toColorOrNull
+import io.github.ammaralghifary.blueprint.model.SduiComponent
+import io.github.ammaralghifary.blueprint.model.SduiModifier
+import io.github.ammaralghifary.blueprint.modifier.toColorOrNull
+import io.github.ammaralghifary.blueprint.render.SduiScope
 import kotlinx.serialization.Serializable
 
 /** `column`: vertical stack. [arrangement] is `start|center|end|space_between|space_around|space_evenly`. */

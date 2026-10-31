@@ -18,6 +18,12 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.unit.dp
 import androidx.test.core.app.ApplicationProvider
+import io.github.ammaralghifary.blueprint.model.SduiAction
+import io.github.ammaralghifary.blueprint.model.SduiComponent
+import io.github.ammaralghifary.blueprint.model.SduiModifier
+import io.github.ammaralghifary.blueprint.model.UnknownAction
+import io.github.ammaralghifary.blueprint.registry.sduiRegistry
+import io.github.ammaralghifary.blueprint.render.BlueprintRenderer
 import kotlinx.serialization.Serializable
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue

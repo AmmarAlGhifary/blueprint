@@ -21,13 +21,15 @@ model decodes to `UnknownComponent` and renders as nothing in release builds.
 Both `:core` and `:defaults` run `explicitApi()`: every public declaration needs an explicit
 visibility modifier *and* an explicit return type, or the build fails.
 
-## The package rule that surprises people
+## The package rule
 
-Files live in `model/`, `render/`, `registry/`, `modifier/` folders, but **every file in `:core`
-declares the same flat package**, `io.github.ammaralghifary.blueprint`. The folders group files for
-humans; they are not package segments. Match the package of the files already in the folder you are
-writing into and never add a segment to mirror a directory — that churns the public API for no gain,
-and `:core` being one package is why its files reach each other without imports.
+Each `:core` folder is its own package: `model/` is `io.github.ammaralghifary.blueprint.model`, and
+`modifier/`, `registry/` and `render/` likewise; only `Blueprint.kt` sits in the root package. A new
+file declares the package that matches its folder and imports what it needs from the others, in plain
+ASCII order. A component in a host app or in `:defaults` imports `SduiComponent`, `SduiModifier` and
+`SduiAction` from `.model`, `sduiRegistry` and `SduiRegistry` from `.registry`, `SduiScope` and
+`BlueprintRenderer` from `.render`, and `toTextStyle` and `toColorOrNull` from `.modifier`. Moving a
+declaration between packages changes every consumer's imports, so treat it as a breaking API change.
 
 ## The model
 
@@ -94,7 +96,7 @@ through `Function21`) and crashes at render time, not compile time. Don't "simpl
 
 ## The tests
 
-Both suites live in `core/src/test/java/io/github/ammaralghifary/blueprint/`, in the flat package. Stock-pack
+Both suites live in `core/src/test/java/io/github/ammaralghifary/blueprint/`, in the root test package (import what you use from `.model`, `.registry` and the rest). Stock-pack
 (`:defaults`) components are tested in `defaults/src/test/java/io/github/ammaralghifary/blueprint/defaults/`
 (`DefaultsDecodeTest`, `DefaultsRendererTest`) — `:core` tests cannot see `:defaults`. Stock types use the neutral
 schema in `docs/components.md`; update it when a stock component changes.

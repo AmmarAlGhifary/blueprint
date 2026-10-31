@@ -56,10 +56,10 @@ source compatibility. Note it is *not* binary compatible for Java callers withou
 `@JvmOverloads`, which Blueprint does not use — Kotlin-only consumption is an implicit decision
 worth stating in the README.
 
-**The flat package is API.** Every `:core` file declares
-`io.github.ammaralghifary.blueprint` regardless of its folder. Moving a declaration into a
-`model`/`render` package would be a breaking import change for no functional gain. Do not
-"tidy" it.
+**The package is API.** `model`, `modifier`, `registry` and `render` are real packages, so a
+declaration's package is part of its name for every consumer. Moving one (say `SduiScope` from `render`
+to the root) is a breaking import change, and `apiDump` shows it as one class removed and another
+added. Put a new declaration in the package that matches its folder and leave it there.
 
 **`api` vs `implementation` is API.** `compose-runtime`, `compose-ui` and
 `kotlinx-serialization-json` are `api` in `:core` because consumers compile against them. Demoting

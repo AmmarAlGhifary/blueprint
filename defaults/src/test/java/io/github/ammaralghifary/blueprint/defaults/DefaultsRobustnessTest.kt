@@ -10,7 +10,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.unit.dp
 import androidx.test.core.app.ApplicationProvider
 import io.github.ammaralghifary.blueprint.Blueprint
-import io.github.ammaralghifary.blueprint.BlueprintRenderer
+import io.github.ammaralghifary.blueprint.render.BlueprintRenderer
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

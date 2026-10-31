@@ -1,7 +1,9 @@
-package io.github.ammaralghifary.blueprint
+package io.github.ammaralghifary.blueprint.render
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import io.github.ammaralghifary.blueprint.model.SduiAction
+import io.github.ammaralghifary.blueprint.model.SduiComponent
 
 /** Handed to every renderer so containers can recurse and components can fire actions. */
 public interface SduiScope {

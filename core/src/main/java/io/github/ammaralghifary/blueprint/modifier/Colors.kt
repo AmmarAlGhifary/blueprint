@@ -1,4 +1,4 @@
-package io.github.ammaralghifary.blueprint
+package io.github.ammaralghifary.blueprint.modifier
 
 import androidx.compose.ui.graphics.Color
 

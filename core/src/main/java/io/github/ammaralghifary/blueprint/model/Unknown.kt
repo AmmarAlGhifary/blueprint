@@ -1,4 +1,4 @@
-package io.github.ammaralghifary.blueprint
+package io.github.ammaralghifary.blueprint.model
 
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerializationException

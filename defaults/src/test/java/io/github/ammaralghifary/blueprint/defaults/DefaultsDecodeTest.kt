@@ -1,9 +1,9 @@
 package io.github.ammaralghifary.blueprint.defaults
 
 import io.github.ammaralghifary.blueprint.Blueprint
-import io.github.ammaralghifary.blueprint.NavigateAction
-import io.github.ammaralghifary.blueprint.SduiComponent
-import io.github.ammaralghifary.blueprint.UnknownComponent
+import io.github.ammaralghifary.blueprint.model.NavigateAction
+import io.github.ammaralghifary.blueprint.model.SduiComponent
+import io.github.ammaralghifary.blueprint.model.UnknownComponent
 import java.io.File
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse

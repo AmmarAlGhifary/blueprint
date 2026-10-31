@@ -1,4 +1,4 @@
-package io.github.ammaralghifary.blueprint
+package io.github.ammaralghifary.blueprint.render
 
 import android.content.pm.ApplicationInfo
 import androidx.compose.foundation.background
@@ -8,6 +8,8 @@ import androidx.compose.foundation.text.BasicText
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import io.github.ammaralghifary.blueprint.registry.SduiFallback
+import io.github.ammaralghifary.blueprint.registry.sduiRegistry
 
 /**
  * Placeholder for any component that could not be rendered as a typed one, whether its type is

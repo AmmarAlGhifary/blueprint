@@ -10,11 +10,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import io.github.ammaralghifary.blueprint.SduiAction
-import io.github.ammaralghifary.blueprint.SduiComponent
-import io.github.ammaralghifary.blueprint.SduiModifier
-import io.github.ammaralghifary.blueprint.SduiScope
-import io.github.ammaralghifary.blueprint.toTextStyle
+import io.github.ammaralghifary.blueprint.model.SduiAction
+import io.github.ammaralghifary.blueprint.model.SduiComponent
+import io.github.ammaralghifary.blueprint.model.SduiModifier
+import io.github.ammaralghifary.blueprint.modifier.toTextStyle
+import io.github.ammaralghifary.blueprint.render.SduiScope
 import kotlinx.serialization.Serializable
 
 /** `button`: [variant] is `filled|outlined|text` (unknown → filled); disabled when [action] is null. */
