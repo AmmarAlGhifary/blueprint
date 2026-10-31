@@ -21,9 +21,11 @@ import kotlinx.serialization.modules.polymorphic
  * itself, see [decodeScreen]. Decoding is the supported direction; encoding payloads is not.
  */
 public class Blueprint(
+    /** Type strings this instance decodes and renders. */
     public val registry: SduiRegistry,
     json: Json = Json,
 ) {
+    /** The [Json] used for decoding, derived from the one passed in. */
     public val json: Json = Json(from = json) {
         ignoreUnknownKeys = true
         coerceInputValues = true
