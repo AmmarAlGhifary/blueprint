@@ -1,4 +1,4 @@
-package io.github.ammaralghifary.blueprint
+package io.github.ammaralghifary.blueprint.modifier
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -15,15 +15,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import io.github.ammaralghifary.blueprint.model.SduiModifier
 
-private fun Int.safeDp(): Dp = coerceAtLeast(0).dp
+// Compose Constraints top out near 2^18 px, and anything between that and Int.MAX_VALUE throws at layout.
+private const val MAX_DP = 16_384
+
+private fun Int.safeDp(): Dp = coerceIn(0, MAX_DP).dp
 
 /**
- * Applies the server box model on top of [baseModifier], in this order:
- * margin, size, shadow, clip, border, background, padding.
- *
- * Bad input never throws: negative dp values are clamped to 0 and unparsable colors or unknown
- * size types are skipped.
+ * Applies the server box model on top of [baseModifier], in this order: margin, size, shadow, clip,
+ * border, background, padding. Bad input never throws: dp values clamp to 0..16384, unparsable colors
+ * and unknown size types are skipped.
  */
 public fun SduiModifier.toComposeModifier(baseModifier: Modifier = Modifier): Modifier {
     var mod = baseModifier
@@ -50,7 +52,7 @@ public fun SduiModifier.toComposeModifier(baseModifier: Modifier = Modifier): Mo
         }
     }
 
-    // The shadow must come before clip, otherwise the clip cuts the shadow off.
+    // The shadow must come before the clip, or the clip cuts it off.
     elevation?.let { mod = mod.shadow(it.safeDp(), shape, clip = false) }
 
     cornerRadius?.let { mod = mod.clip(shape) }

@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [develop, main]
+  workflow_dispatch:
+
+# A newer push to the same PR cancels the older run.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      # Matches gradle/gradle-daemon-jvm.properties (toolchainVersion=25), so Gradle does not download a JDK.
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 25
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      # Public API unchanged, or the dumps refreshed with apiDump.
+      - name: API check
+        run: ./gradlew apiCheck
+
+      - name: Unit tests
+        run: ./gradlew :core:testDebugUnitTest :defaults:testDebugUnitTest
+
+      # The old-Compose floor and explicitApi() are enforced by compiling the release libraries.
+      - name: Release libraries
+        run: ./gradlew :core:assembleRelease :defaults:assembleRelease
+
+      - name: Sample app
+        run: ./gradlew :app:assembleDebug
+
+      - name: Upload test reports
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: |
+            core/build/reports/tests
+            defaults/build/reports/tests
+          if-no-files-found: ignore

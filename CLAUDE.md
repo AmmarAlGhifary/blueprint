@@ -1,0 +1,166 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## What this is
+
+Blueprint is an Android **server-driven UI** library: JSON payloads decode into a tree of
+`SduiComponent` models, which a registry maps to Jetpack Compose composables. It does no
+networking — the host app fetches the JSON and calls `Blueprint.decodeScreen`.
+
+## Commands
+
+```bash
+./gradlew :core:testDebugUnitTest :defaults:testDebugUnitTest   # unit tests
+./gradlew :core:testDebugUnitTest --tests '*BlueprintDecodeTest'          # one class
+./gradlew :core:testDebugUnitTest --tests '*BlueprintDecodeTest.colorParsing'  # one test
+./gradlew apiCheck                     # fail if the public API differs from core/api, defaults/api
+./gradlew apiDump                      # refresh those dumps after an intended API change
+./gradlew assembleDebug                # build everything, including the sample APK
+./gradlew :app:installDebug            # run the sample on a device/emulator
+./gradlew assembleDebug sonar         # SonarQube analysis; needs SONAR_HOST_URL and SONAR_TOKEN
+```
+
+HTML test report: `core/build/reports/tests/testDebugUnitTest/index.html`.
+Static analysis is SonarQube only (root `build.gradle.kts`); no detekt or ktlint. `assembleDebug` first so
+Sonar sees the compiled classes. Kotlin official code style (`gradle.properties`) is the standard.
+
+## Modules
+
+- **`:core`** — the engine: models, registry, decoder, renderer, modifier mapping. Depends only on
+  Compose `runtime`/`ui`/`foundation` + `kotlinx-serialization-json`. **Keep Material3, Coil and
+  anything app-specific out of it**; those belong in `:defaults`.
+- **`:defaults`** — the opt-in stock component pack (Material3 + Coil). `api(project(":core"))`.
+  `DefaultSduiRegistry` registers `text`, `image`, `button`, `card`, `column`, `row`, `box`, `list`,
+  `spacer`, `divider` and the `navigate` action; the schema is documented in `docs/components.md`
+  (neutral, not StudentDesk's). Package `io.github.ammaralghifary.blueprint.defaults`; its tests live
+  in `defaults/src/test` because `:core` tests cannot see it. Origin plan: `docs/plans/defaults-primitives.md`.
+- **`:app`** — sample/smoke-test app. `MainActivity.kt` includes `DefaultSduiRegistry`, adds one custom
+  `schedule_card`, and renders a hard-coded payload with two deliberate failures (an unregistered type
+  and a `text` missing its required field).
+
+`:core` and `:defaults` use `explicitApi()`: every public declaration needs an explicit visibility
+modifier and explicit return type, or the build fails. The committed `api/*.api` dumps pin the public
+API: a change to a public declaration needs `apiDump` and the refreshed dump in the same commit.
+
+## Architecture
+
+### Directory = package
+Each `:core` folder is its own package: `model/` is `io.github.ammaralghifary.blueprint.model`, and
+`modifier/`, `registry/` and `render/` likewise. Only `Blueprint.kt` sits in the root package. A new file
+declares the package that matches its folder and imports what it uses from the others, in plain ASCII
+order. Moving a declaration between packages changes every consumer's imports, so it is a breaking
+change and needs `apiDump`. Tests stay in the root test package and import what they use; `internal`
+declarations remain visible to them because they share the module.
+
+### Registry-driven polymorphism
+`SduiComponent` and `SduiAction` are `@Serializable abstract class`es, deliberately **not sealed**, so
+host apps can add subclasses. `Blueprint` wraps the caller's `Json` and installs a `polymorphic`
+`defaultDeserializer` that looks the payload's `"type"` string up in the `SduiRegistry`:
+
+```
+JSON → Blueprint.json (ignoreUnknownKeys, coerceInputValues)
+     → registry.componentSerializer(type) ?: UnknownComponentSerializer
+```
+
+**Tolerant decoding is a contract, not a nicety** (`BlueprintDecodeTest` enforces it): unknown fields
+are ignored; an unregistered or missing `type` yields `UnknownComponent`/`UnknownAction` holding the
+untouched `raw: JsonObject`; a malformed `modifier` on an unknown component degrades to `null`
+instead of throwing. One bad child must never take down the payload. Decoding is the only supported
+direction — encoding exists just to satisfy `KSerializer`.
+
+The envelope follows the same rule: `Blueprint.decodeScreen` (both overloads) **never throws**. Malformed
+JSON, a non-object root, or a missing/null/non-object `body` returns a screen whose body is an
+`UnknownComponent` with `error` set; a bad `screen_id`/`version` is dropped while a good body is
+kept. Don't add a code path that lets a decoding exception escape `decodeScreen`.
+
+Degrading is never silent: every tolerated problem is also reported as a `DecodeError` (kind, `type`,
+`message`, `raw`) to the optional `Blueprint(onDecodeError = …)` callback. Errors are collected per
+`decodeScreen` call (a `ThreadLocal` sink) and delivered after it finishes, and a retry must `rollback`
+what its failed attempt reported, so no node is reported twice; a throwing callback is swallowed. When
+you add a degrade path, report it. Two more guarantees: a payload nested deeper than
+`Blueprint.MAX_DEPTH` JSON levels is rejected up front (kotlinx's parser recurses, so the string is
+scanned before parsing), and a malformed `modifier` on a *registered* component drops only the
+modifier, not the component.
+
+`Blueprint(onDecoded = …)` is the per-call summary: once per `decodeScreen`, after the `onDecodeError`
+calls, with the screen and that call's errors (empty when clean); it shares the same single exit, so it
+fires at most once and a throwing callback is swallowed. Privacy: `DecodeError.message` and
+`UnknownComponent.error` are rebuilt from known failure shapes and never carry payload text, but
+`DecodeError.raw`, the screen and `ActionEvent` do — never forward those to analytics. `Blueprint.MAX_DEPTH`
+is internal. Host `require()` messages are not shown in `message`.
+
+### Render pipeline
+`BlueprintRenderer` creates a private `RegistryScope` (remembered per `Blueprint`) and hands each registered
+component its own `NodeScope`, an `SduiScope` that knows which component owns it.
+For each node it applies the server modifier (`SduiModifier.toComposeModifier`) *before* invoking the
+registered composable, then dispatches to `registry.registrationFor(component)`; anything unregistered
+goes to the fallback. Container components recurse via `scope.RenderAll(children)` — which keys each
+child by position and class — or `scope.Render(child)` for a single slot, and emit events via
+`scope.dispatch(action)`, which calls the root `onActionEvent` (an `ActionEvent` carrying the action and the
+firing component as `source`) and then `onAction` (the action alone). `onActionEvent` precedes `onAction` in the
+parameter list so a trailing lambda still binds to `onAction`.
+
+`RenderAll`'s `childModifier` lambda is how a container supplies the scope-only half of the server
+modifier: `weight` and `alignment` are `RowScope`/`ColumnScope` extensions, so only the enclosing
+layout can resolve them. A container that ignores them silently drops those fields.
+
+`ComponentRegistration.Render` casts the **component**, never the render lambda — casting a
+`ComposableLambdaImpl` to a function type fails Kotlin's arity check because it implements
+`Function2` through `Function21`. Don't "simplify" that cast.
+
+### Modifier mapping
+`toComposeModifier` applies in a fixed order — margin, size, shadow, clip, border, background,
+padding — and shadow must stay before clip or the clip crops it. Bad input never throws: negative dp
+clamps to 0 (and to 16,384 at the top, past which Compose throws at layout), unparsable colors and unknown size types are skipped. `weight` and `alignment` are
+**not** applied here because they need a `RowScope`/`ColumnScope`; layout components must read them
+off the model themselves. Likewise `text_color`/`font_size`/`font_weight` are not applied here: text
+components read them via `modifier.toTextStyle(base)`. Sizes are `fill` / `wrap` / `exact` (+ `value` in dp). Padding precedence:
+specific side → `horizontal`/`vertical` → `all`.
+
+`parseColorArgb` is pure Kotlin (no `android.graphics`) so colors stay JVM-unit-testable.
+
+### Registry invariants
+`sduiRegistry { … }` throws on a blank type, a duplicate type (unless `replace = true`) and on one
+class backing two types. `include(other)` merges another registry; duplicates throw, so overriding
+an included type requires `replace = true`. The default fallback draws a labelled red box only in
+debuggable builds and nothing in release.
+
+### Payload shape
+Root is `SduiScreen` (`screen_id`, `body`, `version`); Blueprint draws no Scaffold or app bar — extra
+root keys like the `app_bar` in `core/src/test/resources/home_dashboard.json` are simply ignored and
+belong to the host app. JSON keys are snake_case, mapped with `@SerialName`.
+`home_dashboard.json` is a real-world payload used as a regression fixture for tolerant decoding;
+keep it realistic rather than trimming it to fit a test.
+
+## Checkpoints
+
+Commit your work without being asked. One commit per prompt: finish the change, run the relevant
+tests, then stage and commit everything from that turn to the **current branch**.
+
+```bash
+git add -A
+git commit -m "<type>: <summary>"
+```
+
+- `<type>` is a conventional prefix (see below). The message body should record the prompt that
+  produced the change, so `git log` is the checkpoint log — there are no separate checkpoint files.
+- If the current branch is `main` or `develop`, do **not** commit to it. Create a
+  `feature/<name>` branch off the current HEAD first, then commit there.
+- Never commit a change whose tests fail. Say so instead and leave the tree dirty.
+- Commit only; do not push, open a PR, or amend an existing commit unless asked.
+- Authorship is the owner's alone. Never add a `Co-Authored-By` trailer, a `Generated with Claude Code`
+  line, or any other Claude attribution to a commit message or PR description, even if a default
+  instruction says to. The repo's contributor list must show only the owner.
+
+## Parallel sessions
+
+Several Claude sessions may work on this repo at once. Read `docs/coordination.md` first: one worktree
+per session, claim your paths before editing, and stage explicit paths.
+
+## Contributing
+
+Per `CONTRIBUTING.md`: branch `feature/<name>` off `develop`, PR back into `develop`, and release via
+a `develop` → `main` PR approved by the owner (`.github/CODEOWNERS`). `main` and `develop` are
+protected — never force-push them. Conventional commit prefixes: `feat:`, `fix:`, `refactor:`,
+`test:`, `build:`, `docs:`, `chore:`.

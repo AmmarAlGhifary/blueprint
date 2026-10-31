@@ -1,7 +1,18 @@
 package io.github.ammaralghifary.blueprint
 
+import io.github.ammaralghifary.blueprint.model.SduiAction
+import io.github.ammaralghifary.blueprint.model.SduiComponent
+import io.github.ammaralghifary.blueprint.model.SduiModifier
+import io.github.ammaralghifary.blueprint.model.SduiPadding
+import io.github.ammaralghifary.blueprint.model.UnknownAction
+import io.github.ammaralghifary.blueprint.model.UnknownComponent
+import io.github.ammaralghifary.blueprint.modifier.parseColorArgb
+import io.github.ammaralghifary.blueprint.registry.sduiRegistry
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonNull
+import kotlinx.serialization.json.JsonPrimitive
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertThrows
 import org.junit.Assert.assertTrue
@@ -67,6 +78,56 @@ class BlueprintDecodeTest {
     }
 
     @Test
+    fun registeredTypeMissingRequiredFieldDegradesToUnknownWithError() {
+        val screen = blueprint().decodeScreen(
+            """{"body":{"type":"column","children":[
+                {"type":"text","text":"a"},
+                {"type":"text","modifier":{"padding":{"all":6}}},
+                {"type":"text","text":"b"}]}}""",
+        )
+        val children = (screen.body as TestColumn).children
+        assertEquals(TestText("a"), children[0])
+        val broken = children[1] as UnknownComponent
+        assertEquals("text", broken.type)
+        assertNotNull(broken.error)
+        assertEquals(6, broken.modifier?.padding?.all)
+        assertEquals(TestText("b"), children[2])
+    }
+
+    @Test
+    fun registeredTypeWithWrongValueTypeDegradesToUnknown() {
+        val screen = blueprint().decodeScreen("""{"body":{"type":"text","text":{"nested":1}}}""")
+        val broken = screen.body as UnknownComponent
+        assertEquals("text", broken.type)
+        assertNotNull(broken.error)
+    }
+
+    @Test
+    fun brokenChildDoesNotTakeDownItsParent() {
+        val screen = blueprint().decodeScreen(
+            """{"body":{"type":"column","children":[
+                {"type":"column","children":"not a list"},{"type":"text","text":"ok"}]}}""",
+        )
+        val children = (screen.body as TestColumn).children
+        assertTrue(children[0] is UnknownComponent)
+        assertEquals(TestText("ok"), children[1])
+    }
+
+    @Test
+    fun unregisteredTypeHasNoError() {
+        val screen = blueprint().decodeScreen("""{"body":{"type":"nope"}}""")
+        assertNull((screen.body as UnknownComponent).error)
+    }
+
+    @Test
+    fun registeredActionMissingFieldDegradesToUnknownAction() {
+        val action = blueprint().json.decodeFromString(SduiAction.serializer(), """{"type":"navigation_action"}""")
+        val unknown = action as UnknownAction
+        assertEquals("navigation_action", unknown.type)
+        assertNotNull(unknown.error)
+    }
+
+    @Test
     fun actionsDecodeAndUnknownActionsFallBack() {
         val json = blueprint().json
         val known = json.decodeFromString(SduiAction.serializer(), """{"type":"navigation_action","destination":"home"}""")
@@ -77,7 +138,6 @@ class BlueprintDecodeTest {
 
     @Test
     fun realStudentDeskHomePayloadSurvivesWithUaiTypesAsUnknown() {
-        // Only "column" is registered, so every UAI-specific child must fall back to Unknown.
         val bp = Blueprint(sduiRegistry { component<TestColumn>("column") { _, _, _ -> } })
         val json = javaClass.classLoader!!.getResource("home_dashboard.json")!!.readText()
         val screen = bp.decodeScreen(json)
@@ -121,7 +181,6 @@ class SduiRegistryTest {
             component<TestColumn>("column") { _, _, _ -> }
         }
         assertEquals(setOf("text", "column"), merged.componentTypes)
-        // Replacing a type with the same class is allowed.
         val replaced = sduiRegistry {
             include(base)
             component<TestText>("text", replace = true) { _, _, _ -> }
@@ -152,5 +211,77 @@ class SduiModifierTest {
         assertNull(parseColorArgb("#12"))
         assertNull(parseColorArgb("#zzzzzz"))
         assertNull(parseColorArgb(null))
+    }
+}
+
+class DecodeScreenEnvelopeTest {
+    private fun UnknownComponent.assertBroken() {
+        assertNull(type)
+        assertNotNull("the reason must be kept", error)
+    }
+
+    @Test
+    fun missingBodyDegradesInsteadOfThrowing() {
+        val screen = blueprint().decodeScreen("""{"screen_id":"s","toolbar":{"type":"app_bar"}}""")
+        assertEquals("s", screen.id)
+        val body = screen.body as UnknownComponent
+        body.assertBroken()
+        // The whole envelope is kept as raw, so logging and fallbacks can still see what arrived.
+        assertEquals("s", (body.raw["screen_id"] as JsonPrimitive).content)
+        assertNotNull(body.raw["toolbar"])
+    }
+
+    @Test
+    fun nullAndNonObjectBodiesDegrade() {
+        for (payload in listOf("""{"body":null}""", """{"body":5}""", """{"body":"text"}""", """{"body":[1]}""")) {
+            (blueprint().decodeScreen(payload).body as UnknownComponent).assertBroken()
+        }
+    }
+
+    @Test
+    fun rootThatIsNotAnObjectDegrades() {
+        for (payload in listOf("[1,2]", "42", "\"hello\"", "null")) {
+            (blueprint().decodeScreen(payload).body as UnknownComponent).assertBroken()
+        }
+    }
+
+    @Test
+    fun malformedJsonDegrades() {
+        for (payload in listOf("", "not json", """{"body":""", """{"body":{"type":"text",""")) {
+            (blueprint().decodeScreen(payload).body as UnknownComponent).assertBroken()
+        }
+    }
+
+    @Test
+    fun elementOverloadNeverThrowsEither() {
+        (blueprint().decodeScreen(JsonNull).body as UnknownComponent).assertBroken()
+        (blueprint().decodeScreen(JsonPrimitive("x")).body as UnknownComponent).assertBroken()
+    }
+
+    @Test
+    fun badMetadataDoesNotThrowAwayAGoodBody() {
+        val screen = blueprint().decodeScreen(
+            """{"screen_id":{"nested":1},"version":"abc","body":{"type":"text","text":"hi"}}""",
+        )
+        assertEquals(TestText("hi"), screen.body)
+        assertNull(screen.id)
+        assertNull(screen.version)
+    }
+
+    @Test
+    fun goodMetadataSurvivesWhenOnlyOneFieldIsBad() {
+        val screen = blueprint().decodeScreen(
+            """{"screen_id":"s","version":"abc","body":{"type":"text","text":"hi"}}""",
+        )
+        assertEquals("s", screen.id)
+        assertEquals(TestText("hi"), screen.body)
+    }
+
+    @Test
+    fun validPayloadStillDecodesWithItsMetadata() {
+        val screen = blueprint().decodeScreen("""{"screen_id":"s","version":3,"body":{"type":"text","text":"hi"}}""")
+        assertEquals("s", screen.id)
+        assertEquals(3, screen.version)
+        assertEquals(TestText("hi"), screen.body)
     }
 }

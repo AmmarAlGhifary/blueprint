@@ -1,5 +1,6 @@
-package io.github.ammaralghifary.blueprint
+package io.github.ammaralghifary.blueprint.model
 
+import io.github.ammaralghifary.blueprint.registry.SduiRegistry
 import kotlinx.serialization.Serializable
 
 /**

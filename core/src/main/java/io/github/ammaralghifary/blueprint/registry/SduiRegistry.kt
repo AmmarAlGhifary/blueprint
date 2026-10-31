@@ -1,7 +1,12 @@
-package io.github.ammaralghifary.blueprint
+package io.github.ammaralghifary.blueprint.registry
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import io.github.ammaralghifary.blueprint.model.SduiAction
+import io.github.ammaralghifary.blueprint.model.SduiComponent
+import io.github.ammaralghifary.blueprint.model.UnknownComponent
+import io.github.ammaralghifary.blueprint.render.DefaultFallback
+import io.github.ammaralghifary.blueprint.render.SduiScope
 import kotlin.reflect.KClass
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.serializer
@@ -53,14 +58,13 @@ public class SduiRegistry internal constructor(
 
     /** Registered component type strings. */
     public val componentTypes: Set<String> get() = components.keys
-
-    /** Registered action type strings. */
-    public val actionTypes: Set<String> get() = actions.keys
 }
 
+/** Builds a [SduiRegistry] from [block]. */
 public fun sduiRegistry(block: SduiRegistryBuilder.() -> Unit): SduiRegistry =
     SduiRegistryBuilder().apply(block).build()
 
+/** Receiver of [sduiRegistry]: register components, actions and a fallback. */
 public class SduiRegistryBuilder internal constructor() {
     private val components = LinkedHashMap<String, ComponentRegistration<*>>()
     private val actions = LinkedHashMap<String, ActionRegistration<*>>()
@@ -78,6 +82,7 @@ public class SduiRegistryBuilder internal constructor() {
         component(type, T::class, serializer<T>(), replace, render)
     }
 
+    /** Same as the reified [component], for when you already hold the [kClass] and [serializer]. */
     public fun <T : SduiComponent> component(
         type: String,
         kClass: KClass<T>,
@@ -93,6 +98,7 @@ public class SduiRegistryBuilder internal constructor() {
         action(type, T::class, serializer<T>(), replace)
     }
 
+    /** Same as the reified [action], for when you already hold the [kClass] and [serializer]. */
     public fun <T : SduiAction> action(type: String, kClass: KClass<T>, serializer: KSerializer<T>, replace: Boolean = false) {
         register(actions, type, replace, kClass, ActionRegistration(type, kClass, serializer)) { it.kClass }
     }
