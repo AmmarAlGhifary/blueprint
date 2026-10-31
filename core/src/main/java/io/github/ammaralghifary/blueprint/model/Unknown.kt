@@ -109,7 +109,7 @@ internal class LenientComponentSerializer(
             input.json.decodeFromJsonElement(delegate, raw)
         } catch (e: IllegalArgumentException) { // SerializationException extends it
             sink?.rollback(mark)
-            val message = e.message ?: e::class.simpleName
+            val message = describeFailure(e, sink?.fieldNames.orEmpty())
             withoutModifier(input.json, raw)?.also {
                 sink?.report(DecodeError(DecodeErrorKind.ModifierIgnored, raw.typeName(), message, raw))
             } ?: run {
@@ -147,7 +147,7 @@ internal class LenientActionSerializer(
         return try {
             input.json.decodeFromJsonElement(delegate, raw)
         } catch (e: IllegalArgumentException) {
-            val message = e.message ?: e::class.simpleName
+            val message = describeFailure(e, sink?.fieldNames.orEmpty())
             sink?.report(DecodeError(DecodeErrorKind.InvalidAction, raw.typeName(), message, raw))
             UnknownAction(raw.typeName(), raw, message)
         }

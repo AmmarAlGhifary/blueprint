@@ -12,6 +12,7 @@ import io.github.ammaralghifary.blueprint.model.UnknownAction
 import io.github.ammaralghifary.blueprint.model.UnknownActionSerializer
 import io.github.ammaralghifary.blueprint.model.UnknownComponent
 import io.github.ammaralghifary.blueprint.model.UnknownComponentSerializer
+import io.github.ammaralghifary.blueprint.model.describeFailure
 import io.github.ammaralghifary.blueprint.registry.SduiRegistry
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
@@ -44,7 +45,7 @@ public class Blueprint(
     json: Json = Json,
     private val onDecodeError: ((DecodeError) -> Unit)? = null,
 ) {
-    private val sink = DecodeErrorSink()
+    private val sink = DecodeErrorSink(registry)
 
     /** The [Json] used for decoding, derived from the one passed in. */
     public val json: Json = Json(from = json) {
@@ -67,7 +68,7 @@ public class Blueprint(
     /**
      * Decodes [jsonString] into a screen. Never throws on bad input: a payload that cannot be read
      * as a screen (malformed JSON, a root that is not an object, a missing, null or non-object
-     * `body`, or nesting deeper than [MAX_DEPTH]) comes back as a screen whose body is an
+     * `body`, or nesting deeper than 100 JSON levels) comes back as a screen whose body is an
      * [UnknownComponent] carrying the reason in [UnknownComponent.error]. Render it like any other
      * unknown node, or check `screen.body is UnknownComponent` first to show your own error state.
      */
@@ -77,7 +78,7 @@ public class Blueprint(
         val element = try {
             if (tooDeep) null else json.parseToJsonElement(jsonString)
         } catch (e: IllegalArgumentException) { // SerializationException extends it
-            return unreadable(e.message ?: e::class.simpleName)
+            return unreadable(describeFailure(e, sink.fieldNames))
         } catch (e: StackOverflowError) {
             return unreadable("Payload exhausted the stack while parsing")
         }
@@ -115,7 +116,7 @@ public class Blueprint(
      * must not throw away a perfectly good body.
      */
     private fun salvageScreen(root: JsonObject, error: IllegalArgumentException): SduiScreen {
-        val message = error.message ?: error::class.simpleName
+        val message = describeFailure(error, sink.fieldNames)
         val body = (root["body"] as? JsonObject)?.let {
             val mark = sink.mark()
             try {
@@ -159,9 +160,9 @@ public class Blueprint(
         }
     }
 
-    public companion object {
+    internal companion object {
         /** JSON levels (objects and arrays) a payload may nest; a component takes two. About 6x real screens. */
-        public const val MAX_DEPTH: Int = 100
+        internal const val MAX_DEPTH: Int = 100
     }
 }
 
