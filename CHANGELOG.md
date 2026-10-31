@@ -20,6 +20,9 @@ Read from `gradle/libs.versions.toml`, `core/build.gradle.kts` and `defaults/bui
 - **Android:** `minSdk` **23**, `compileSdk` **36**, bytecode for **Java 11**.
 - **Serialization:** `kotlinx-serialization-json` **1.7.3** is an `api` dependency of `:core`, and
   Coil **2.4.0** is used by `:defaults`.
+- **Artifacts:** `io.github.ammaralghifary:blueprint-core` and `blueprint-defaults`, both at the version in
+  `gradle.properties`. Their POMs depend on `kotlin-stdlib` **2.0.21**. Verified with a consumer on
+  Kotlin 2.0.21 and Compose BOM 2024.09.00, and with one on Kotlin 2.4.21 and Compose BOM 2026.06.01.
 
 ### Added
 
@@ -36,6 +39,11 @@ Read from `gradle/libs.versions.toml`, `core/build.gradle.kts` and `defaults/bui
   `column`, `row`, `box`, `list`, `spacer`, `divider` and the `navigate` action. See
   `docs/components.md`.
 - **Decode error reporting**: an optional `onDecodeError` callback on `Blueprint` reports every node or
-  payload that degraded, so a bad server response shows up in the host app's logs.
+  payload that degraded, so a bad server response shows up in the host app's logs. An optional
+  `onDecoded` callback receives the screen and all of one `decodeScreen` call's errors, once.
+- **Action source**: `BlueprintRenderer(onActionEvent = …)` receives an `ActionEvent(action, source)` that
+  says which component fired the action. `onAction` still works.
+- **Publishing setup**: both libraries are configured for Maven Central (sources and Dokka javadoc jars,
+  POM, optional signing); nothing has been published yet.
 - **API compatibility check**: `./gradlew apiCheck` compares the public API against the committed
   `api/*.api` dumps (`apiDump` refreshes them).
