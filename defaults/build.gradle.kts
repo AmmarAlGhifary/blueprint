@@ -30,6 +30,8 @@ android {
 
 kotlin {
     explicitApi()
+    // The published POM depends on this stdlib, not on the 2.2.10 compiler's own (see libs.versions.toml).
+    coreLibrariesVersion = libs.versions.kotlinStdlibFloor.get()
     compilerOptions {
         jvmTarget.set(JvmTarget.JVM_11)
         // Keep the published metadata readable by consumers on older Kotlin compilers.
