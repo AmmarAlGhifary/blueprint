@@ -4,12 +4,12 @@ Blueprint is an Android library for **server-driven UI**: your backend sends a J
 screen, and Blueprint turns it into native Jetpack Compose. It does no networking. You fetch the JSON,
 call `Blueprint.decodeScreen`, and render the result.
 
-> **Status: 0.1.0, not yet released.** The artifacts below are not on Maven Central yet, and the API may
-> still change before the first release. See [CHANGELOG.md](CHANGELOG.md).
+> **Status: 0.1.0, first release, on Maven Central.** The API may still change before 1.0.
+> See [CHANGELOG.md](CHANGELOG.md).
 
 ## Install
 
-Once released, both libraries come from Maven Central:
+Both libraries come from Maven Central:
 
 ```kotlin
 // settings.gradle.kts
