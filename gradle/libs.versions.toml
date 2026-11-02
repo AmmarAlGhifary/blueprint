@@ -5,7 +5,7 @@ kotlin = "2.2.10"
 # language/API level (2.0) so a consumer on a Kotlin 2.0 compiler can read it; the stdlib the compiler
 # would otherwise add (2.2.10) has newer metadata that a 2.0 compiler rejects. Not a compiler version.
 kotlinStdlibFloor = "2.0.21"
-binaryCompatibilityValidator = "0.18.1"
+binaryCompatibilityValidator = "0.18.2"
 # The Compose floor (runtime 1.7.0): consumers must meet it, so raise it only on purpose.
 composeBom = "2024.09.00"
 # Tests only, so the render tests exercise current Compose.
