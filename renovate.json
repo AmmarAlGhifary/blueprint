@@ -2,5 +2,20 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended"
+  ],
+  "packageRules": [
+    {
+      "description": "Version floors: consumers must meet these, so they change by hand, never by bot.",
+      "matchPackageNames": [
+        "androidx.compose:compose-bom",
+        "org.jetbrains.kotlin:{/,}**",
+        "org.jetbrains.kotlin.android",
+        "org.jetbrains.kotlin.plugin.{/,}**",
+        "com.android.tools.build:gradle",
+        "com.android.application",
+        "com.android.library"
+      ],
+      "enabled": false
+    }
   ]
 }
