@@ -8,3 +8,8 @@ build/
 /captures
 .externalNativeBuild
 .cxx
+
+# Claude and agent coordination files (local only)
+/CLAUDE.md
+/.claude/
+/docs/coordination.md
