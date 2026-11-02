@@ -1,5 +1,6 @@
 package io.github.ammaralghifary.blueprint.sample
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -19,6 +20,7 @@ import io.github.ammaralghifary.blueprint.render.BlueprintRenderer
 import kotlinx.serialization.Serializable
 
 /** A host-specific component, to show the stock pack and custom types living side by side. */
+@SuppressLint("UnsafeOptInUsageError")
 @Serializable
 data class ScheduleCard(
     val title: String,
