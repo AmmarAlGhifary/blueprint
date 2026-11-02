@@ -7,7 +7,7 @@ kotlin = "2.4.21"
 kotlinStdlibFloor = "2.0.21"
 binaryCompatibilityValidator = "0.18.2"
 # The Compose floor (runtime 1.7.0): consumers must meet it, so raise it only on purpose.
-composeBom = "2024.09.00"
+composeBom = "2024.12.01"
 # Tests only, so the render tests exercise current Compose.
 composeBomLatest = "2026.06.01"
 kotlinxSerialization = "1.7.3"
