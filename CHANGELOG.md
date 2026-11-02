@@ -5,7 +5,7 @@ All notable changes to Blueprint are recorded here. The format follows
 [Semantic Versioning](https://semver.org/) once 0.1.0 is published. The version number lives in
 `gradle.properties` (`VERSION_NAME`).
 
-## [0.1.0] - Unreleased
+## [0.1.0] - 2026-11-02
 
 ### Requirements for consumers
 
