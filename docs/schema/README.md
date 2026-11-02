@@ -94,7 +94,13 @@ Keys are `snake_case` in JSON and `camelCase` in Kotlin (`corner_radius` is `cor
 
 ## Keeping them in step
 
-`SchemaDriftTest` (in `:core`) compares the schema with the serializers of the screen, `modifier`,
-`padding`, `size` and `navigate` models, so adding or renaming a field there without updating the schema
-fails the build. The ten stock components live in `:defaults`, which `:core` tests cannot see, so they are
-not covered automatically: when you change one, update `blueprint.schema.json` and `blueprint.d.ts` by hand.
+Two tests compare the schema with the code, so changing a model without updating the schema fails the build.
+`SchemaDriftTest` (in `:core`) covers the screen, `modifier`, `padding`, `size` and `navigate` models.
+`DefaultsSchemaDriftTest` (in `:defaults`) covers the ten stock components: their field names, which are
+required, each field's JSON type, that the registry and the schema list the same types, that `navigate`
+decodes to a real action, and the enum values of `text.style`, `text.align`, `image.scale`, `column` and `row`
+`arrangement` and `modifier.alignment` against what the token mappers recognise.
+
+Not checked automatically: the values of `button.variant` and `list.orientation` (their branching is inline
+in the renderers), and `blueprint.d.ts`. When you change either, or add a stock component, update
+`blueprint.schema.json` and `blueprint.d.ts` by hand.
