@@ -3,6 +3,9 @@
   "extends": [
     "config:recommended"
   ],
+  "baseBranches": [
+    "develop"
+  ],
   "packageRules": [
     {
       "description": "Version floors: consumers must meet these, so they change by hand, never by bot.",
