@@ -1,5 +1,6 @@
 package io.github.ammaralghifary.blueprint.defaults
 
+import android.annotation.SuppressLint
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -12,6 +13,7 @@ import io.github.ammaralghifary.blueprint.modifier.toTextStyle
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+@SuppressLint("UnsafeOptInUsageError")
 /**
  * `text`: a run of text. [style] is `display|headline|title|body|label` (unknown → body), [align] is
  * `start|center|end`, and [maxLines] truncates with an ellipsis.
@@ -25,6 +27,7 @@ public data class SduiText(
     override val modifier: SduiModifier? = null,
 ) : SduiComponent()
 
+@SuppressLint("UnsafeOptInUsageError")
 /**
  * `image`: a remote image. [scale] is `fit|crop|fill` (unknown → fit); a null [contentDescription]
  * marks it decorative.
