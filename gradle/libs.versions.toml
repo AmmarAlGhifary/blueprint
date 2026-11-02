@@ -1,6 +1,6 @@
 [versions]
 agp = "8.13.2"
-kotlin = "2.4.21"
+kotlin = "2.2.10"
 # The kotlin-stdlib the published POMs declare, which is what a consumer's build resolves. It matches the
 # language/API level (2.0) so a consumer on a Kotlin 2.0 compiler can read it; the stdlib the compiler
 # would otherwise add (2.2.10) has newer metadata that a 2.0 compiler rejects. Not a compiler version.
