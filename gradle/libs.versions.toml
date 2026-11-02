@@ -15,7 +15,7 @@ activityCompose = "1.9.3"
 coil = "2.4.0"
 junit = "4.13.2"
 robolectric = "4.16.1"
-androidxTestCore = "1.6.1"
+androidxTestCore = "1.7.0"
 sonarqube = "7.5.0.8588"
 # Publishing only; they never reach a consumer. 0.37.0 is the latest stable and needs Gradle 9.0, AGP 8.13
 # and Kotlin 2.2 or newer, all of which this build already meets (Gradle 9.3.1, AGP 8.13.2, Kotlin 2.2.10).
