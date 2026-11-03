@@ -137,7 +137,7 @@ class BlueprintDecodeTest {
     }
 
     @Test
-    fun realStudentDeskHomePayloadSurvivesWithUaiTypesAsUnknown() {
+    fun realWorldHomePayloadSurvivesWithHostSpecificTypesAsUnknown() {
         val bp = Blueprint(sduiRegistry { component<TestColumn>("column") { _, _, _ -> } })
         val json = javaClass.classLoader!!.getResource("home_dashboard.json")!!.readText()
         val screen = bp.decodeScreen(json)

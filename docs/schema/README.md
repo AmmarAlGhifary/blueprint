@@ -52,7 +52,7 @@ while the schema exists to catch mistakes.
 - unknown fields anywhere (ignored), for example an `app_bar` next to `body`;
 - a component or action `type` they do not know. An app that has not registered it shows a placeholder
   in debug builds and nothing in release, and the rest of the screen still renders. This covers custom
-  components, and StudentDesk's `carousel`, `accordion` or form types, which the stock pack does not provide.
+  components, and host-specific `carousel`, `accordion` or form types, which the stock pack does not provide.
 
 **The schema rejects, the library accepts** (so a validator flags what the decoder would absorb)
 - an enum-like string it does not recognise (`style`, `align`, `scale`, `variant`, `arrangement`,
@@ -84,9 +84,9 @@ Keys are `snake_case` in JSON and `camelCase` in Kotlin (`corner_radius` is `cor
 
 - `defaults/src/test/resources/stock_screen.json` **validates**.
 - `core/src/test/resources/home_dashboard.json` **fails at one place on purpose**: `body/children/0/size`.
-  It is a StudentDesk payload, and its `spacer` sends the token `"medium"`, where the neutral stock
+  It is a real-world server payload, and its `spacer` sends the token `"medium"`, where the neutral stock
   `spacer` takes a dp number. The library degrades only that spacer and renders the rest. Every other
-  StudentDesk type in the file is an unknown `type` and is accepted.
+  host-specific type in the file is an unknown `type` and is accepted.
 - About 80 hand-written payloads were run through both the schema and the real decoder. No payload the
   schema accepts was degraded by the decoder (apart from the `1.0` gap above), and the decoder never threw.
 - `blueprint.d.ts` compiles under `tsc --strict` (TypeScript 5.9): the stock fixture type-checks, and
