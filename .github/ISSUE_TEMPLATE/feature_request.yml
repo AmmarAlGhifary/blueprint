@@ -1,0 +1,19 @@
+name: Feature request
+description: Suggest a component, field or API
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to do?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What would you like Blueprint to do?
+      description: A sample JSON payload helps if this is about a component or field.
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives you considered

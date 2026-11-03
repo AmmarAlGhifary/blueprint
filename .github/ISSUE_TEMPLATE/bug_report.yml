@@ -1,0 +1,28 @@
+name: Bug report
+description: Something does not decode or render as documented
+labels: [bug]
+body:
+  - type: input
+    id: version
+    attributes:
+      label: Blueprint version
+      placeholder: 0.1.0
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: payload
+    attributes:
+      label: Minimal JSON payload
+      description: Remove anything private. The smallest payload that reproduces the problem is best.
+      render: json
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Android version or device, Compose BOM, Kotlin version.

@@ -1,7 +1,7 @@
 # Plan: `:defaults` stock component pack (neutral schema)
 
-Status: **approved by the owner, not started.** Work on branch `feature/defaults-primitives`
-(Step 0 is done: this file and the CLAUDE.md pointer are committed there). Pick up at "Changes".
+Status: **implemented** in the `:defaults` module. Kept as a design record; the code and
+`docs/components.md` are the source of truth.
 
 > Superseded in part: `:core` was later split into folder-matching packages (`model`, `modifier`,
 > `registry`, `render`). The three "flat package" mentions below describe the state when this plan
@@ -22,13 +22,13 @@ val blueprint = Blueprint(sduiRegistry {                              // stock +
 })
 ```
 
-Decisions already made with the owner:
+Design decisions:
 
-1. **Neutral schema, not StudentDesk's.** Blueprint is going public; it must read naturally to any
-   serverless/BFF developer. StudentDesk/CineStream are coverage references only — do not copy their
+1. **Neutral schema, not a host-specific one.** Blueprint is going public; it must read naturally to any
+   serverless/BFF developer. Real-world server payloads are coverage references only — do not copy their
    type names (`navigation_action`, `image_url`, `section_header`, spacer `"medium"` tokens).
 2. **Styling via the modifier, optional.** Typography rides in `SduiModifier` like the box model does
-   (StudentDesk's approach), every field nullable, so a server that sends none of it still works.
+   (the common server-side approach), every field nullable, so a server that sends none of it still works.
 3. **Small scope** so it stays maintainable: no icons, no forms/state, no codegen.
 
 "Map all of Compose automatically" was considered and rejected: callbacks, `@Composable` slots,
@@ -113,12 +113,12 @@ keep the two deliberate failures (unregistered `hologram`, `text` missing `text`
 ### Docs and agent guidance
 
 - `docs/components.md` — the vocabulary table above with a JSON example per type. This is the
-  public reference BFF developers write against, and the seed for Week 4's JSON Schema/`.d.ts`.
+  public reference BFF developers write against, and the seed for the JSON Schema/`.d.ts`.
 - `CLAUDE.md` — `:defaults` now has sources; the modifier typography fields; pointer to the docs.
 - `.claude/skills/add-sdui-component` — switch recipe names to the neutral vocabulary and state that
   `:defaults` tests live in `defaults/src/test` (`:core` tests cannot see `:defaults`).
 - `.claude/skills/payload-fixture` — note that stock-pack fixtures use the neutral schema; the
-  StudentDesk fixture stays as the tolerance/regression payload.
+  real-world fixture stays as the tolerance/regression payload.
 
 ## Tests
 
@@ -152,7 +152,7 @@ weight split, both placeholders, `schedule_card`, and no `FATAL` in logcat. Run 
 ## Out of scope (record in `docs/components.md` as non-goals)
 
 Icons, forms/inputs/state, grids, tabs, app bars, theming tokens, KSP codegen for custom
-components (candidate for v0.2), migrating the StudentDesk middleware to the neutral schema
+components (candidate for v0.2), migrating existing server middleware to the neutral schema
 (separate repo).
 
 ## Process
