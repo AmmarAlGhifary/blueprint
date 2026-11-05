@@ -19,6 +19,8 @@ import kotlinx.serialization.json.contentOrNull
  * the registry (or is missing), or the type is registered but the payload does not fit the model
  * (missing required field, wrong value type). A fallback renderer can inspect [raw]. [error] is null
  * for an unregistered type; for a registered type that failed it is a message safe to log.
+ *
+ * @author Ammar Al Ghifary
  */
 public class UnknownComponent(
     /** The payload's `type` string, or null when it is missing. */
@@ -30,7 +32,11 @@ public class UnknownComponent(
     public val error: String? = null,
 ) : SduiComponent()
 
-/** Action counterpart of [UnknownComponent]: unregistered type, or a registered one that failed to decode. */
+/**
+ * Action counterpart of [UnknownComponent]: unregistered type, or a registered one that failed to decode.
+ *
+ * @author Ammar Al Ghifary
+ */
 public class UnknownAction(
     /** The payload's `type` string, or null when it is missing. */
     public val type: String?,
@@ -40,6 +46,7 @@ public class UnknownAction(
     public val error: String? = null,
 ) : SduiAction()
 
+/** @author Ammar Al Ghifary */
 private object UnknownDescriptors {
     val component: SerialDescriptor = buildClassSerialDescriptor("io.github.ammaralghifary.blueprint.UnknownComponent")
     val action: SerialDescriptor = buildClassSerialDescriptor("io.github.ammaralghifary.blueprint.UnknownAction")
@@ -53,6 +60,7 @@ private fun unknownComponent(json: Json, raw: JsonObject, error: String?): Unkno
     return UnknownComponent(raw.typeName(), raw, modifier, error)
 }
 
+/** @author Ammar Al Ghifary */
 internal class UnknownComponentSerializer(
     private val sink: DecodeErrorSink? = null,
 ) : KSerializer<UnknownComponent> {
@@ -71,6 +79,7 @@ internal class UnknownComponentSerializer(
     }
 }
 
+/** @author Ammar Al Ghifary */
 internal class UnknownActionSerializer(
     private val sink: DecodeErrorSink? = null,
 ) : KSerializer<UnknownAction> {
@@ -93,6 +102,8 @@ internal class UnknownActionSerializer(
  * [UnknownComponent] (keeping the error) instead of failing the whole screen. Nested children are
  * decoded through the same Json, so each child degrades on its own. A malformed `modifier` alone
  * only costs the modifier, not the component.
+ *
+ * @author Ammar Al Ghifary
  */
 internal class LenientComponentSerializer(
     private val delegate: KSerializer<out SduiComponent>,
@@ -133,7 +144,11 @@ internal class LenientComponentSerializer(
         throw SerializationException("Blueprint only decodes payloads")
 }
 
-/** Action counterpart of [LenientComponentSerializer]. */
+/**
+ * Action counterpart of [LenientComponentSerializer].
+ *
+ * @author Ammar Al Ghifary
+ */
 internal class LenientActionSerializer(
     private val delegate: KSerializer<out SduiAction>,
     private val sink: DecodeErrorSink? = null,

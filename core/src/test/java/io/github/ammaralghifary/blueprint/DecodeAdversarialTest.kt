@@ -26,6 +26,7 @@ private val advBlueprint = Blueprint(
 )
 
 // Hostile payloads: decodeScreen promises never to throw, so every case must come back as a screen.
+/** @author Ammar Al Ghifary */
 class DecodeAdversarialTest {
 
     private fun nested(depth: Int): String =
@@ -114,7 +115,7 @@ class DecodeAdversarialTest {
 
     @Test
     fun malformedModifierOnARegisteredComponentKeepsTheComponent() {
-        // CLAUDE.md: a malformed modifier degrades to null on an UNKNOWN node. For a registered
+        // A malformed modifier only degrades to null on an UNKNOWN node. For a registered
         // component the style is optional decoration, so losing the whole text is a heavy penalty.
         val screen = assertNeverThrows("bad modifier", """{"body":{"type":"text","text":"keep me","modifier":{"padding":"oops"}}}""")
         val body = screen.body

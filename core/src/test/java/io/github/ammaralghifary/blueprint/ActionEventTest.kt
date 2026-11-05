@@ -44,6 +44,7 @@ data class EvCard(
 @Serializable
 data class EvStack(val children: List<SduiComponent> = emptyList(), override val modifier: SduiModifier? = null) : SduiComponent()
 
+/** @author Ammar Al Ghifary */
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [35])
 class ActionEventTest {

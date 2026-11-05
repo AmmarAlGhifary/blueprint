@@ -12,6 +12,7 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
+/** @author Ammar Al Ghifary */
 class DefaultsDecodeTest {
     private val blueprint = Blueprint(DefaultSduiRegistry)
 

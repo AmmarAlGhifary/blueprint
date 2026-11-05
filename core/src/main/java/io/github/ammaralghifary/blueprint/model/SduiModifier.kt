@@ -16,6 +16,8 @@ import kotlinx.serialization.Serializable
  * [textColor], [fontSize] (sp) and [fontWeight] (100-900, clamped) are optional typography hints.
  * Like [weight] and [alignment], [toComposeModifier] does not apply them; text-bearing components
  * read them via [toTextStyle].
+ *
+ * @author Ammar Al Ghifary
  */
 @Serializable
 public data class SduiModifier(
@@ -35,7 +37,11 @@ public data class SduiModifier(
     @SerialName("font_weight") val fontWeight: Int? = null,
 )
 
-/** Spacing in dp. Specific sides win over [horizontal]/[vertical], which win over [all]. */
+/**
+ * Spacing in dp. Specific sides win over [horizontal]/[vertical], which win over [all].
+ *
+ * @author Ammar Al Ghifary
+ */
 @Serializable
 public data class SduiPadding(
     val all: Int? = null,
@@ -52,7 +58,11 @@ public data class SduiPadding(
     val resolvedBottom: Int get() = bottom ?: vertical ?: all ?: 0
 }
 
-/** [type] is one of `fill`, `wrap`, `exact` (needs [value] in dp). Anything else is ignored. */
+/**
+ * [type] is one of `fill`, `wrap`, `exact` (needs [value] in dp). Anything else is ignored.
+ *
+ * @author Ammar Al Ghifary
+ */
 @Serializable
 public data class SduiSize(
     val type: String,

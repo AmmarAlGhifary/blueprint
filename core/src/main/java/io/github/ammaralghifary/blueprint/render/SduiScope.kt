@@ -5,7 +5,11 @@ import androidx.compose.ui.Modifier
 import io.github.ammaralghifary.blueprint.model.SduiAction
 import io.github.ammaralghifary.blueprint.model.SduiComponent
 
-/** Handed to every renderer so containers can recurse and components can fire actions. */
+/**
+ * Handed to every renderer so containers can recurse and components can fire actions.
+ *
+ * @author Ammar Al Ghifary
+ */
 public interface SduiScope {
     /** Renders [component] through the registry (server modifier applied, fallback if unknown). */
     @Composable
