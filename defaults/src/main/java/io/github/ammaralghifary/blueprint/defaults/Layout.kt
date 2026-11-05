@@ -26,6 +26,8 @@ import kotlinx.serialization.Serializable
 /**
  * `column`: vertical stack. [arrangement] is `start|center|end|space_between|space_around|space_evenly`;
  * [scrollable] makes it scroll vertically.
+ *
+ * @author Ammar Al Ghifary
  */
 @Serializable
 public data class SduiColumn(
@@ -35,7 +37,11 @@ public data class SduiColumn(
     override val modifier: SduiModifier? = null,
 ) : SduiComponent()
 
-/** `row`: horizontal stack; [arrangement] takes the same names as [SduiColumn]. */
+/**
+ * `row`: horizontal stack; [arrangement] takes the same names as [SduiColumn].
+ *
+ * @author Ammar Al Ghifary
+ */
 @Serializable
 public data class SduiRow(
     val children: List<SduiComponent> = emptyList(),
@@ -43,7 +49,11 @@ public data class SduiRow(
     override val modifier: SduiModifier? = null,
 ) : SduiComponent()
 
-/** `box`: overlapping children, placed by each child's `modifier.alignment`. */
+/**
+ * `box`: overlapping children, placed by each child's `modifier.alignment`.
+ *
+ * @author Ammar Al Ghifary
+ */
 @Serializable
 public data class SduiBox(
     val children: List<SduiComponent> = emptyList(),
@@ -53,6 +63,8 @@ public data class SduiBox(
 /**
  * `list`: lazy list, [orientation] `vertical|horizontal` (default vertical), [spacing] is the gap in dp.
  * With no bounded room on its scroll axis (e.g. inside a scrollable column) it is a plain stack.
+ *
+ * @author Ammar Al Ghifary
  */
 @Serializable
 public data class SduiList(
@@ -62,14 +74,22 @@ public data class SduiList(
     override val modifier: SduiModifier? = null,
 ) : SduiComponent()
 
-/** `spacer`: empty space of [size] dp (default 8). */
+/**
+ * `spacer`: empty space of [size] dp (default 8).
+ *
+ * @author Ammar Al Ghifary
+ */
 @Serializable
 public data class SduiSpacer(
     val size: Int? = null,
     override val modifier: SduiModifier? = null,
 ) : SduiComponent()
 
-/** `divider`: a hairline; [thickness] in dp (default 1), [color] as hex. */
+/**
+ * `divider`: a hairline; [thickness] in dp (default 1), [color] as hex.
+ *
+ * @author Ammar Al Ghifary
+ */
 @Serializable
 public data class SduiDivider(
     val thickness: Int? = null,

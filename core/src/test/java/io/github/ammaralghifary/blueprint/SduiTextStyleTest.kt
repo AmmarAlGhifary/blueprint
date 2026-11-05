@@ -11,6 +11,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
 
+/** @author Ammar Al Ghifary */
 class SduiTextStyleTest {
     private val json = Json { ignoreUnknownKeys = true }
     private val base = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.Normal, color = Color.Black)

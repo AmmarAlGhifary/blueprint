@@ -56,7 +56,11 @@ public fun BlueprintRenderer(
     scope.renderNode(component, modifier)
 }
 
-/** The tree-wide half: registry lookup and the host callbacks. Renderers only ever see a [NodeScope]. */
+/**
+ * The tree-wide half: registry lookup and the host callbacks. Renderers only ever see a [NodeScope].
+ *
+ * @author Ammar Al Ghifary
+ */
 private class RegistryScope(
     private val registry: SduiRegistry,
     private val onAction: (SduiAction) -> Unit,
@@ -87,7 +91,6 @@ private class RegistryScope(
     @Composable
     fun renderChildren(children: List<SduiComponent>, childModifier: (SduiComponent) -> Modifier) {
         children.forEachIndexed { index, child ->
-            // Position + class, see SduiScope.RenderAll
             key(index, child::class) { renderNode(child, childModifier(child)) }
         }
     }
@@ -98,7 +101,11 @@ private class RegistryScope(
     }
 }
 
-/** The [SduiScope] one registered component sees: rendering goes to the tree, dispatch is tagged with [source]. */
+/**
+ * The [SduiScope] one registered component sees: rendering goes to the tree, dispatch is tagged with [source].
+ *
+ * @author Ammar Al Ghifary
+ */
 private class NodeScope(private val tree: RegistryScope) : SduiScope {
     lateinit var source: SduiComponent
 

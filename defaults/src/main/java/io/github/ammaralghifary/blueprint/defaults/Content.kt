@@ -17,6 +17,8 @@ import kotlinx.serialization.Serializable
 /**
  * `text`: a run of text. [style] is `display|headline|title|body|label` (unknown → body), [align] is
  * `start|center|end`, and [maxLines] truncates with an ellipsis.
+ *
+ * @author Ammar Al Ghifary
  */
 @Serializable
 public data class SduiText(
@@ -31,6 +33,8 @@ public data class SduiText(
 /**
  * `image`: a remote image. [scale] is `fit|crop|fill` (unknown → fit); a null [contentDescription]
  * marks it decorative.
+ *
+ * @author Ammar Al Ghifary
  */
 @Serializable
 public data class SduiImage(

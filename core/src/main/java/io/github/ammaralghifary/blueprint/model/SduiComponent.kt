@@ -8,6 +8,8 @@ import kotlinx.serialization.Serializable
  *
  * Intentionally *not* sealed: components are registered by type string in a [SduiRegistry], so
  * host apps and libraries can add their own subclasses. Subclasses should be `@Serializable`.
+ *
+ * @author Ammar Al Ghifary
  */
 @Serializable
 public abstract class SduiComponent {

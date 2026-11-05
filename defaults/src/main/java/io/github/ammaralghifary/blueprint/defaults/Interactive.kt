@@ -17,7 +17,11 @@ import io.github.ammaralghifary.blueprint.modifier.toTextStyle
 import io.github.ammaralghifary.blueprint.render.SduiScope
 import kotlinx.serialization.Serializable
 
-/** `button`: [variant] is `filled|outlined|text` (unknown → filled); disabled when [action] is null. */
+/**
+ * `button`: [variant] is `filled|outlined|text` (unknown → filled); disabled when [action] is null.
+ *
+ * @author Ammar Al Ghifary
+ */
 @Serializable
 public data class SduiButton(
     val text: String,
@@ -26,7 +30,11 @@ public data class SduiButton(
     override val modifier: SduiModifier? = null,
 ) : SduiComponent()
 
-/** `card`: a container that dispatches [action] when tapped. */
+/**
+ * `card`: a container that dispatches [action] when tapped.
+ *
+ * @author Ammar Al Ghifary
+ */
 @Serializable
 public data class SduiCard(
     val children: List<SduiComponent> = emptyList(),

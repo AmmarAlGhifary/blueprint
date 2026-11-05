@@ -35,6 +35,7 @@ private val testRegistry = sduiRegistry {
 
 private fun blueprint() = Blueprint(testRegistry)
 
+/** @author Ammar Al Ghifary */
 class BlueprintDecodeTest {
 
     @Test
@@ -152,6 +153,7 @@ class BlueprintDecodeTest {
     }
 }
 
+/** @author Ammar Al Ghifary */
 class SduiRegistryTest {
     @Test
     fun duplicateTypeThrows() {
@@ -192,6 +194,7 @@ class SduiRegistryTest {
     }
 }
 
+/** @author Ammar Al Ghifary */
 class SduiModifierTest {
     @Test
     fun paddingResolutionOrder() {
@@ -214,6 +217,7 @@ class SduiModifierTest {
     }
 }
 
+/** @author Ammar Al Ghifary */
 class DecodeScreenEnvelopeTest {
     private fun UnknownComponent.assertBroken() {
         assertNull(type)

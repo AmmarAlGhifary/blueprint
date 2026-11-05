@@ -17,6 +17,7 @@ public typealias SduiComponentRenderer<T> = @Composable (component: T, modifier:
 /** Draws a component whose type is not registered. */
 public typealias SduiFallback = @Composable (component: UnknownComponent, modifier: Modifier) -> Unit
 
+/** @author Ammar Al Ghifary */
 internal class ComponentRegistration<T : SduiComponent>(
     val type: String,
     val kClass: KClass<T>,
@@ -35,6 +36,7 @@ internal class ComponentRegistration<T : SduiComponent>(
     }
 }
 
+/** @author Ammar Al Ghifary */
 internal class ActionRegistration<T : SduiAction>(
     val type: String,
     val kClass: KClass<T>,
@@ -44,6 +46,8 @@ internal class ActionRegistration<T : SduiAction>(
 /**
  * Immutable mapping from JSON `type` strings to model classes, serializers and composables.
  * Build one with [sduiRegistry].
+ *
+ * @author Ammar Al Ghifary
  */
 public class SduiRegistry internal constructor(
     internal val components: Map<String, ComponentRegistration<*>>,
@@ -64,7 +68,11 @@ public class SduiRegistry internal constructor(
 public fun sduiRegistry(block: SduiRegistryBuilder.() -> Unit): SduiRegistry =
     SduiRegistryBuilder().apply(block).build()
 
-/** Receiver of [sduiRegistry]: register components, actions and a fallback. */
+/**
+ * Receiver of [sduiRegistry]: register components, actions and a fallback.
+ *
+ * @author Ammar Al Ghifary
+ */
 public class SduiRegistryBuilder internal constructor() {
     private val components = LinkedHashMap<String, ComponentRegistration<*>>()
     private val actions = LinkedHashMap<String, ActionRegistration<*>>()

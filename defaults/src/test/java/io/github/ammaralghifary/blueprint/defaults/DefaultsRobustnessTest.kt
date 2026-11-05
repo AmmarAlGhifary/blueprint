@@ -19,6 +19,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
 // Server payloads the stock pack must survive: a bad payload should degrade, never crash the host.
+/** @author Ammar Al Ghifary */
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [35])
 class DefaultsRobustnessTest {

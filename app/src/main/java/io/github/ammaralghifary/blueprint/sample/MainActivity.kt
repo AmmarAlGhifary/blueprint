@@ -19,7 +19,11 @@ import io.github.ammaralghifary.blueprint.registry.sduiRegistry
 import io.github.ammaralghifary.blueprint.render.BlueprintRenderer
 import kotlinx.serialization.Serializable
 
-/** A host-specific component, to show the stock pack and custom types living side by side. */
+/**
+ * A host-specific component, to show the stock pack and custom types living side by side.
+ *
+ * @author Ammar Al Ghifary
+ */
 @SuppressLint("UnsafeOptInUsageError")
 @Serializable
 data class ScheduleCard(
@@ -43,47 +47,11 @@ private val blueprint = Blueprint(
     onDecoded = { screen, errors -> Log.i("Blueprint", "decoded ${screen.id}: ${errors.size} problem(s)") },
 )
 
-// Two deliberate failures, each of which must stay local:
-// - "hologram" is not a registered type
-// - the "text" in the middle is missing its required `text` field
-// Everything around them still renders.
-private const val PAYLOAD = """
-{
-  "screen_id": "smoke",
-  "body": {
-    "type": "column",
-    "modifier": { "padding": { "all": 16 } },
-    "children": [
-      { "type": "text", "text": "Hello from JSON", "style": "headline" },
-      { "type": "text", "text": "Styled by the server", "modifier": { "text_color": "#00695C", "font_weight": 700 } },
-      { "type": "hologram", "modifier": { "padding": { "vertical": 8 } } },
-      { "type": "text", "modifier": { "padding": { "bottom": 8 } } },
-      { "type": "divider" },
-      {
-        "type": "row",
-        "modifier": { "width": { "type": "fill" }, "padding": { "vertical": 8 } },
-        "children": [
-          { "type": "text", "text": "weight 1",
-            "modifier": { "weight": 1, "background_color": "#C8E6C9", "padding": { "all": 8 } } },
-          { "type": "text", "text": "weight 2",
-            "modifier": { "weight": 2, "background_color": "#BBDEFB", "padding": { "all": 8 } } }
-        ]
-      },
-      { "type": "schedule_card", "title": "Standup", "time": "09:30" },
-      { "type": "card", "action": { "type": "navigate", "destination": "details" },
-        "children": [ { "type": "text", "text": "Tap this card", "modifier": { "padding": { "all": 12 } } } ] },
-      { "type": "spacer", "size": 12 },
-      { "type": "button", "text": "Filled", "action": { "type": "navigate", "destination": "home" } },
-      { "type": "button", "text": "Disabled (no action)", "variant": "outlined" }
-    ]
-  }
-}
-"""
-
+/** @author Ammar Al Ghifary */
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val screen = blueprint.decodeScreen(PAYLOAD)
+        val screen = blueprint.decodeScreen(SamplePayload.read(this))
         setContent {
             BlueprintRenderer(
                 screen,

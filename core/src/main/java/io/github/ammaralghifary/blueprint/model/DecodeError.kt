@@ -9,7 +9,11 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.descriptors.StructureKind
 import kotlinx.serialization.json.JsonObject
 
-/** What [Blueprint] tolerated instead of failing the screen. */
+/**
+ * What [Blueprint] tolerated instead of failing the screen.
+ *
+ * @author Ammar Al Ghifary
+ */
 public enum class DecodeErrorKind {
     /** The node's `type` is not in the registry, or is missing. Expected on an older app. */
     UnregisteredType,
@@ -32,6 +36,8 @@ public enum class DecodeErrorKind {
  *
  * [message] and [toString] never contain payload values, so they are safe to log. [raw] is the
  * offending node itself and does carry payload text: do not forward it to analytics or a crash reporter.
+ *
+ * @author Ammar Al Ghifary
  */
 public class DecodeError(
     /** What kind of problem was tolerated. */
@@ -125,7 +131,11 @@ private fun schemaFieldNames(registry: SduiRegistry): Set<String> {
     return names
 }
 
-/** Collects [DecodeError]s for the [Blueprint.decodeScreen] call running on this thread. */
+/**
+ * Collects [DecodeError]s for the [Blueprint.decodeScreen] call running on this thread.
+ *
+ * @author Ammar Al Ghifary
+ */
 internal class DecodeErrorSink(registry: SduiRegistry) {
     private val current = ThreadLocal<ArrayList<DecodeError>?>()
 

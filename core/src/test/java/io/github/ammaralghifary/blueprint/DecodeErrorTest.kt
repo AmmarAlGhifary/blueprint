@@ -35,6 +35,7 @@ private val hookRegistry = sduiRegistry {
     action<HookAction>("go")
 }
 
+/** @author Ammar Al Ghifary */
 class DecodeErrorTest {
     private val seen = mutableListOf<DecodeError>()
     private val blueprint = Blueprint(hookRegistry, onDecodeError = { seen += it })
