@@ -16,6 +16,7 @@ private val summaryRegistry = sduiRegistry {
     component<HookColumn>("column") { _, _, _ -> }
 }
 
+/** @author Ammar Al Ghifary */
 class DecodedSummaryTest {
     private class Call(val screen: SduiScreen, val errors: List<DecodeError>)
 

@@ -13,6 +13,8 @@ import io.github.ammaralghifary.blueprint.render.BlueprintRenderer
  * Both [action] and [source] carry payload text (destinations, params, labels). [toString] names only
  * their classes and is safe to log; do not forward the objects themselves to analytics or a crash
  * reporter.
+ *
+ * @author Ammar Al Ghifary
  */
 public class ActionEvent(
     /** The action that was dispatched. It carries payload text. */

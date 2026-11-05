@@ -18,7 +18,11 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
-/** The stock components report themselves as the source without any change to their renderers. */
+/**
+ * The stock components report themselves as the source without any change to their renderers.
+ *
+ * @author Ammar Al Ghifary
+ */
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [35])
 class DefaultsActionEventTest {

@@ -25,6 +25,7 @@ import org.junit.Test
 // :core's SchemaDriftTest covers the envelope, modifier, padding and size; this covers the ten stock
 // components and the navigate action. The `button.variant` and `list.orientation` values are not checked:
 // their branching is inline in the renderers, not in a mapper a test can call.
+/** @author Ammar Al Ghifary */
 @OptIn(ExperimentalSerializationApi::class)
 class DefaultsSchemaDriftTest {
     private val schema: JsonObject = run {
@@ -134,7 +135,7 @@ class DefaultsSchemaDriftTest {
         assertEquals("schema requires", setOf("type", "destination"), strings(def("NavigateAction"), "required"))
     }
 
-    // ---- enum-like strings: the schema's lists against what the token mappers recognise ----
+    // Enum-like strings: the schema's lists against what the token mappers recognise.
 
     private val unknown = "\u0000not-a-value"
 

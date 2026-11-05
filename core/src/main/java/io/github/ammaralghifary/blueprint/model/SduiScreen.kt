@@ -6,6 +6,8 @@ import kotlinx.serialization.Serializable
 /**
  * Root of a payload. A plain holder for [body]: Blueprint draws no Scaffold, app bar or dialogs,
  * those belong to the host app (or to components you register).
+ *
+ * @author Ammar Al Ghifary
  */
 @Serializable
 public data class SduiScreen(

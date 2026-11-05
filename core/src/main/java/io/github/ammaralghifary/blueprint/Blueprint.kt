@@ -44,6 +44,8 @@ import kotlinx.serialization.modules.polymorphic
  * log "screen X decoded with N problems" or to decide on an error state. A throwing callback is
  * swallowed; it can never make [decodeScreen] throw. The screen and [DecodeError.raw] carry payload
  * text: keep them out of analytics and crash reporters, and log [DecodeError.message] instead.
+ *
+ * @author Ammar Al Ghifary
  */
 public class Blueprint(
     /** Type strings this instance decodes and renders. */

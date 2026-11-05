@@ -39,6 +39,7 @@ private const val SECRET = "hunter2"
 
 // DecodeError.message, its toString and UnknownComponent.error are meant to be loggable, so a
 // payload value must never appear in them, wherever in the payload it sits.
+/** @author Ammar Al Ghifary */
 class DecodeErrorPrivacyTest {
     private val seen = mutableListOf<DecodeError>()
     private val blueprint = Blueprint(

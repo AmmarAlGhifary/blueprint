@@ -20,6 +20,7 @@ import org.junit.Test
 // renamed or made required in :core and the schema (and blueprint.d.ts) is not updated, a server team
 // validating against it would be told something false. The :defaults stock components are not covered
 // here because :core tests cannot see them.
+/** @author Ammar Al Ghifary */
 @OptIn(ExperimentalSerializationApi::class)
 class SchemaDriftTest {
     private val schema: JsonObject = run {

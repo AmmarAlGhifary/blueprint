@@ -59,6 +59,8 @@ data class Go(val destination: String) : SduiAction()
 /**
  * Renders through a real Compose runtime (Robolectric, JVM). Decoding tests cannot catch render-time
  * failures such as invoking a registered composable lambda (the ComposableLambdaImpl arity cast crash).
+ *
+ * @author Ammar Al Ghifary
  */
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [35])

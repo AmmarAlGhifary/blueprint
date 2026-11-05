@@ -19,7 +19,11 @@ import io.github.ammaralghifary.blueprint.registry.sduiRegistry
 import io.github.ammaralghifary.blueprint.render.BlueprintRenderer
 import kotlinx.serialization.Serializable
 
-/** A host-specific component, to show the stock pack and custom types living side by side. */
+/**
+ * A host-specific component, to show the stock pack and custom types living side by side.
+ *
+ * @author Ammar Al Ghifary
+ */
 @SuppressLint("UnsafeOptInUsageError")
 @Serializable
 data class ScheduleCard(
@@ -43,6 +47,7 @@ private val blueprint = Blueprint(
     onDecoded = { screen, errors -> Log.i("Blueprint", "decoded ${screen.id}: ${errors.size} problem(s)") },
 )
 
+/** @author Ammar Al Ghifary */
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
