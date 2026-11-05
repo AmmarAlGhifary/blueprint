@@ -5,6 +5,20 @@ All notable changes to Blueprint are recorded here. The format follows
 [Semantic Versioning](https://semver.org/) once 0.1.0 is published. The version number lives in
 `gradle.properties` (`VERSION_NAME`).
 
+## [Unreleased]
+
+### Changed
+
+- **Breaking:** `SduiScope.Render` and `SduiScope.RenderAll` no longer declare default parameters on
+  their abstract members. Kotlin 2.4 rejects defaults on abstract `@Composable` functions when
+  `languageVersion` is below 2.1, which Blueprint pins to 2.0 for consumers. The defaults moved into
+  one-argument overloads, `Render(component)` and `RenderAll(children)`, so `scope.Render(child)` and
+  `scope.RenderAll(children) { ... }` call sites compile unchanged. What changes:
+  - A class that implements `SduiScope` (a test fake, for example) must now implement the two-argument
+    `Render(component, modifier)` and `RenderAll(children, childModifier)`, and must be recompiled.
+  - A call that relied on the default by name or position with a lambda, such as
+    `scope.Render(child, modifier = m)`, is unaffected.
+
 ## [0.1.0] - 2026-11-02
 
 ### Requirements for consumers

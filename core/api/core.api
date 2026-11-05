@@ -331,13 +331,15 @@ public final class io/github/ammaralghifary/blueprint/render/ComposableSingleton
 }
 
 public abstract interface class io/github/ammaralghifary/blueprint/render/SduiScope {
+	public abstract fun Render (Lio/github/ammaralghifary/blueprint/model/SduiComponent;Landroidx/compose/runtime/Composer;I)V
 	public abstract fun Render (Lio/github/ammaralghifary/blueprint/model/SduiComponent;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;I)V
+	public abstract fun RenderAll (Ljava/util/List;Landroidx/compose/runtime/Composer;I)V
 	public abstract fun RenderAll (Ljava/util/List;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;I)V
 	public abstract fun dispatch (Lio/github/ammaralghifary/blueprint/model/SduiAction;)V
 }
 
-public final class io/github/ammaralghifary/blueprint/render/SduiScope$ComposeDefaultImpls {
-	public static final fun Render$default (Lio/github/ammaralghifary/blueprint/model/SduiComponent;Landroidx/compose/ui/Modifier;Lio/github/ammaralghifary/blueprint/render/SduiScope;Landroidx/compose/runtime/Composer;II)V
-	public static final fun RenderAll$default (Ljava/util/List;Lkotlin/jvm/functions/Function1;Lio/github/ammaralghifary/blueprint/render/SduiScope;Landroidx/compose/runtime/Composer;II)V
+public final class io/github/ammaralghifary/blueprint/render/SduiScope$DefaultImpls {
+	public static fun Render (Lio/github/ammaralghifary/blueprint/render/SduiScope;Lio/github/ammaralghifary/blueprint/model/SduiComponent;Landroidx/compose/runtime/Composer;I)V
+	public static fun RenderAll (Lio/github/ammaralghifary/blueprint/render/SduiScope;Ljava/util/List;Landroidx/compose/runtime/Composer;I)V
 }
 
