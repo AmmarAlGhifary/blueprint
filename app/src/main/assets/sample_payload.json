@@ -1,0 +1,30 @@
+{
+  "screen_id": "smoke",
+  "body": {
+    "type": "column",
+    "modifier": { "padding": { "all": 16 } },
+    "children": [
+      { "type": "text", "text": "Hello from JSON", "style": "headline" },
+      { "type": "text", "text": "Styled by the server", "modifier": { "text_color": "#00695C", "font_weight": 700 } },
+      { "type": "hologram", "modifier": { "padding": { "vertical": 8 } } },
+      { "type": "text", "modifier": { "padding": { "bottom": 8 } } },
+      { "type": "divider" },
+      {
+        "type": "row",
+        "modifier": { "width": { "type": "fill" }, "padding": { "vertical": 8 } },
+        "children": [
+          { "type": "text", "text": "weight 1",
+            "modifier": { "weight": 1, "background_color": "#C8E6C9", "padding": { "all": 8 } } },
+          { "type": "text", "text": "weight 2",
+            "modifier": { "weight": 2, "background_color": "#BBDEFB", "padding": { "all": 8 } } }
+        ]
+      },
+      { "type": "schedule_card", "title": "Standup", "time": "09:30" },
+      { "type": "card", "action": { "type": "navigate", "destination": "details" },
+        "children": [ { "type": "text", "text": "Tap this card", "modifier": { "padding": { "all": 12 } } } ] },
+      { "type": "spacer", "size": 12 },
+      { "type": "button", "text": "Filled", "action": { "type": "navigate", "destination": "home" } },
+      { "type": "button", "text": "Disabled (no action)", "variant": "outlined" }
+    ]
+  }
+}
