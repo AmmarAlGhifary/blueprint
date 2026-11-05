@@ -21,7 +21,7 @@ sonarqube = "7.5.0.8588"
 # and Kotlin 2.2 or newer, all of which this build already meets (Gradle 9.3.1, AGP 8.13.2, Kotlin 2.2.10).
 mavenPublish = "0.37.0"
 # Builds the javadoc jar Maven Central requires. The plugin uses it automatically when it is applied.
-dokka = "2.2.0"
+dokka = "2.3.0"
 
 [libraries]
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
