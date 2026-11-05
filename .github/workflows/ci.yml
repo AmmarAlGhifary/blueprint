@@ -51,3 +51,41 @@ jobs:
             core/build/reports/tests
             defaults/build/reports/tests
           if-no-files-found: ignore
+
+  # A tiny app outside the main build compiles against the *published* libraries on several Kotlin versions,
+  # to catch what the library's own build cannot: a POM that pulls a newer stdlib, or a signature an older
+  # compiler cannot read. Every row gates. See consumer-test/README.md.
+  consumer:
+    name: consumer, ${{ matrix.name }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # The floor: the published POMs pin kotlin-stdlib to 2.0.21, the oldest Kotlin tested here.
+          - name: Kotlin 2.0.21
+            props: -Pkotlin=2.0.21
+          - name: Kotlin 2.2.10
+            props: -Pkotlin=2.2.10
+          # What the library itself is built with: Kotlin 2.2.10 at language and API level 2.0.
+          - name: Kotlin 2.2.10, language 2.0
+            props: -Pkotlin=2.2.10 -Planguage=2.0
+          # A newer Kotlin, pinned to language 2.0 as many apps are.
+          - name: Kotlin 2.4.21, language 2.0
+            props: -Pkotlin=2.4.21 -Planguage=2.0
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: 25
+
+      - uses: gradle/actions/setup-gradle@v6
+
+      - name: Publish the libraries to Maven Local
+        run: ./gradlew :core:publishToMavenLocal :defaults:publishToMavenLocal
+
+      - name: Compile the consumer (${{ matrix.name }})
+        run: ./gradlew -p consumer-test :app:compileDebugKotlin ${{ matrix.props }} -Pandroid.useAndroidX=true
