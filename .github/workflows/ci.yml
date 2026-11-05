@@ -54,34 +54,26 @@ jobs:
 
   # A tiny app outside the main build compiles against the *published* libraries on several Kotlin versions,
   # to catch what the library's own build cannot: a POM that pulls a newer stdlib, or a signature an older
-  # compiler cannot read. See consumer-test/README.md.
+  # compiler cannot read. Every row gates. See consumer-test/README.md.
   consumer:
     name: consumer, ${{ matrix.name }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    # A row marked experimental may fail without failing the workflow; its failure still shows in the job list.
-    continue-on-error: ${{ matrix.experimental }}
     strategy:
       fail-fast: false
       matrix:
         include:
-          # Fails on develop today: Kotlin 2.0.21's Compose compiler crashes ("Unknown file") on any consumer
-          # call to an abstract @Composable member of SduiScope (Render, RenderAll). Set experimental: false
-          # once the SduiScope fix (feature/sduiscope-no-defaults) has merged.
+          # The floor: the published POMs pin kotlin-stdlib to 2.0.21, the oldest Kotlin tested here.
           - name: Kotlin 2.0.21
             props: -Pkotlin=2.0.21
-            experimental: true
           - name: Kotlin 2.2.10
             props: -Pkotlin=2.2.10
-            experimental: false
           # What the library itself is built with: Kotlin 2.2.10 at language and API level 2.0.
           - name: Kotlin 2.2.10, language 2.0
             props: -Pkotlin=2.2.10 -Planguage=2.0
-            experimental: false
-          # Passes today. Kept non-blocking until the SduiScope fix has merged; then set experimental: false.
+          # A newer Kotlin, pinned to language 2.0 as many apps are.
           - name: Kotlin 2.4.21, language 2.0
             props: -Pkotlin=2.4.21 -Planguage=2.0
-            experimental: true
     steps:
       - uses: actions/checkout@v7
 

@@ -9,10 +9,12 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        // The libraries under test come from Maven Local only, so a copy on Maven Central can never
-        // satisfy this build by accident.
-        mavenLocal {
-            content { includeGroup("io.github.ammaralghifary") }
+        // The libraries under test come from Maven Local and nowhere else. exclusiveContent matters: a plain
+        // content filter would still let Maven Central serve this group, so a publish that silently failed
+        // would be hidden by the released artifact, and the build would test the wrong thing.
+        exclusiveContent {
+            forRepository { mavenLocal() }
+            filter { includeGroup("io.github.ammaralghifary") }
         }
         google()
         mavenCentral()

@@ -32,6 +32,10 @@ consumer against them.
 Re-run step 1 after you change the library; the consumer reads the copy in Maven Local, never your sources.
 To keep your real `~/.m2` clean, add `-Dmaven.repo.local=/some/dir` to **both** commands.
 
+The consumer resolves the Blueprint libraries from Maven Local **only**. Maven Central also hosts a released
+`0.1.0`, so without that rule a skipped or failed step 1 would quietly test the release instead of your
+change. As it is, step 2 then fails with `Could not find io.github.ammaralghifary:blueprint-core`.
+
 The consumer needs an Android SDK, as the main build does (`ANDROID_HOME`, or `sdk.dir` in a
 `local.properties`).
 
@@ -53,8 +57,10 @@ compilers can run out of Metaspace; a fresh daemon, as in CI, does not.
 ## In CI
 
 The `consumer` job in `.github/workflows/ci.yml` publishes the libraries and runs the compile above for a
-matrix of Kotlin versions. A row marked `experimental` may fail without failing the workflow; its failure
-still shows in the job list. To add a Kotlin version, add a row to the matrix.
+matrix of Kotlin versions: 2.0.21, 2.2.10, 2.2.10 at language 2.0, and 2.4.21 at language 2.0. Every row
+gates. To add a Kotlin version, add a row to the matrix.
 
 A failing row is a real finding about what a consumer on that Kotlin version will hit, not a flaky test:
-read the compiler message first.
+read the compiler message first. If you add a row you expect to fail for a while, give it
+`experimental: true` in the matrix and add `continue-on-error: ${{ matrix.experimental || false }}` to the
+job, so it is reported without failing the workflow; remove both when it is fixed.
