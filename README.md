@@ -4,7 +4,7 @@ Blueprint is an Android library for **server-driven UI**: your backend sends a J
 screen, and Blueprint turns it into native Jetpack Compose. It does no networking. You fetch the JSON,
 call `Blueprint.decodeScreen`, and render the result.
 
-> **Status: 0.1.0, first release, on Maven Central.** The API may still change before 1.0.
+> **Status: 0.2.0, on Maven Central.** The API may still change before 1.0.
 > See [CHANGELOG.md](CHANGELOG.md).
 
 ## Install
@@ -22,9 +22,9 @@ dependencyResolutionManagement {
 
 // app/build.gradle.kts
 dependencies {
-    implementation("io.github.ammaralghifary:blueprint-core:0.1.0")
+    implementation("io.github.ammaralghifary:blueprint-core:0.2.0")
     // Optional: ready-made text, image, button, card, row, column, ... (Material 3 and Coil)
-    implementation("io.github.ammaralghifary:blueprint-defaults:0.1.0")
+    implementation("io.github.ammaralghifary:blueprint-defaults:0.2.0")
 }
 ```
 
@@ -125,15 +125,16 @@ From the build files (details in [CHANGELOG.md](CHANGELOG.md)):
 - Compiled against Compose BOM 2024.09.00 (runtime, ui and foundation 1.7.0); the render tests also run
   against BOM 2026.06.01. Older Compose is untested.
 - Built with Kotlin 2.2.10 and `languageVersion`/`apiVersion` 2.0. The published POMs depend on
-  `kotlin-stdlib` 2.0.21. Verified with a consumer on Kotlin 2.0.21 and Compose BOM 2024.09.00, and with
-  one on Kotlin 2.4.21 and Compose BOM 2026.06.01.
+  `kotlin-stdlib` 2.0.21. Every pull request compiles a consumer app against the freshly built libraries on
+  Kotlin 2.0.21, 2.2.10 and 2.4.21. Use 0.2.0 or later: on 0.1.0, a consumer on Kotlin 2.0.21 crashed the
+  Compose compiler whenever a component called `scope.Render` or `scope.RenderAll`.
 - `minSdk` 23, `compileSdk` 36, Java 11 bytecode.
 - Kotlin only; the public API is pinned by `./gradlew apiCheck`.
 
 ## Documentation
 
 - [docs/components.md](docs/components.md): the JSON schema of the stock components, and the callbacks.
-- [CHANGELOG.md](CHANGELOG.md): what 0.1.0 contains and what it requires.
+- [CHANGELOG.md](CHANGELOG.md): what each release contains and what it requires.
 - [CONTRIBUTING.md](CONTRIBUTING.md): branches, commits and pull requests.
 
 ## License

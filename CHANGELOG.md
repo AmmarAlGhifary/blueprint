@@ -5,7 +5,12 @@ All notable changes to Blueprint are recorded here. The format follows
 [Semantic Versioning](https://semver.org/) once 0.1.0 is published. The version number lives in
 `gradle.properties` (`VERSION_NAME`).
 
-## [Unreleased]
+## [0.2.0] - 2026-11-05
+
+### Fixed
+
+- Consumers on Kotlin 2.0.21 no longer crash the Compose compiler ("Unknown file") when a component calls
+  `scope.Render` or `scope.RenderAll`. The fix is the `SduiScope` change listed below.
 
 ### Changed
 
