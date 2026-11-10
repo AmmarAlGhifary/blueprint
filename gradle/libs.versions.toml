@@ -16,7 +16,6 @@ coil = "2.7.0"
 junit = "4.13.2"
 robolectric = "4.17"
 androidxTestCore = "1.7.0"
-sonarqube = "7.5.0.8588"
 # Publishing only; they never reach a consumer. 0.37.0 is the latest stable and needs Gradle 9.0, AGP 8.13
 # and Kotlin 2.2 or newer, all of which this build already meets (Gradle 9.3.1, AGP 8.13.2, Kotlin 2.2.10).
 mavenPublish = "0.37.0"
@@ -45,7 +44,6 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" }
 binary-compatibility-validator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version.ref = "binaryCompatibilityValidator" }
 maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "mavenPublish" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
