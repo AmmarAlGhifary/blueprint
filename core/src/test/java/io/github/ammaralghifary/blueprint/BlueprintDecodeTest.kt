@@ -8,6 +8,7 @@ import io.github.ammaralghifary.blueprint.model.UnknownAction
 import io.github.ammaralghifary.blueprint.model.UnknownComponent
 import io.github.ammaralghifary.blueprint.modifier.parseColorArgb
 import io.github.ammaralghifary.blueprint.registry.sduiRegistry
+import kotlinx.serialization.PolymorphicSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.json.JsonPrimitive
@@ -19,13 +20,14 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 @Serializable
-data class TestText(val text: String, override val modifier: SduiModifier? = null) : SduiComponent()
+data class TestText(val text: String, override val modifier: SduiModifier? = null) : SduiComponent
 
 @Serializable
-data class TestColumn(val children: List<SduiComponent>, override val modifier: SduiModifier? = null) : SduiComponent()
+data class TestColumn(val children: List<SduiComponent>, override val modifier: SduiModifier? = null) :
+    SduiComponent
 
 @Serializable
-data class TestAction(val destination: String) : SduiAction()
+data class TestAction(val destination: String) : SduiAction
 
 private val testRegistry = sduiRegistry {
     component<TestText>("text") { _, _, _ -> }
@@ -122,7 +124,7 @@ class BlueprintDecodeTest {
 
     @Test
     fun registeredActionMissingFieldDegradesToUnknownAction() {
-        val action = blueprint().json.decodeFromString(SduiAction.serializer(), """{"type":"navigation_action"}""")
+        val action = blueprint().json.decodeFromString(PolymorphicSerializer(SduiAction::class), """{"type":"navigation_action"}""")
         val unknown = action as UnknownAction
         assertEquals("navigation_action", unknown.type)
         assertNotNull(unknown.error)
@@ -131,9 +133,9 @@ class BlueprintDecodeTest {
     @Test
     fun actionsDecodeAndUnknownActionsFallBack() {
         val json = blueprint().json
-        val known = json.decodeFromString(SduiAction.serializer(), """{"type":"navigation_action","destination":"home"}""")
+        val known = json.decodeFromString(PolymorphicSerializer(SduiAction::class), """{"type":"navigation_action","destination":"home"}""")
         assertEquals(TestAction("home"), known)
-        val unknown = json.decodeFromString(SduiAction.serializer(), """{"type":"teleport"}""")
+        val unknown = json.decodeFromString(PolymorphicSerializer(SduiAction::class), """{"type":"teleport"}""")
         assertEquals("teleport", (unknown as UnknownAction).type)
     }
 

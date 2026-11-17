@@ -16,7 +16,19 @@ android {
         minSdk = 23
         targetSdk = 36
         versionCode = 1
-        versionName = "0.2.0"
+        versionName = "0.3.0"
+    }
+
+    buildTypes {
+        release {
+            // R8 shrinks, optimizes and obfuscates release builds.
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+            )
+        }
     }
 
     compileOptions {

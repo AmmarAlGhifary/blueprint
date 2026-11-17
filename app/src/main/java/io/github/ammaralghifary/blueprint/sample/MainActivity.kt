@@ -30,7 +30,7 @@ data class ScheduleCard(
     val title: String,
     val time: String,
     override val modifier: SduiModifier? = null,
-) : SduiComponent()
+) : SduiComponent
 
 private val blueprint = Blueprint(
     sduiRegistry {
@@ -43,7 +43,6 @@ private val blueprint = Blueprint(
         }
     },
     onDecodeError = { Log.w("Blueprint", "${it.kind} type=${it.type}: ${it.message}") },
-    // One summary per decodeScreen call. The screen carries payload text, so log only its id and the count.
     onDecoded = { screen, errors -> Log.i("Blueprint", "decoded ${screen.id}: ${errors.size} problem(s)") },
 )
 
@@ -57,7 +56,6 @@ class MainActivity : ComponentActivity() {
                 screen,
                 blueprint,
                 Modifier.safeDrawingPadding(),
-                // Says which component fired the action; toString names classes only, so it is safe to log.
                 onActionEvent = { Log.i("Blueprint", "action from $it") },
             )
         }

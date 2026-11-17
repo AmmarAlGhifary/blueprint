@@ -26,7 +26,7 @@ import kotlinx.serialization.Serializable
 
 /** A component of the app's own: a model for the JSON... */
 @Serializable
-data class Banner(val text: String, override val modifier: SduiModifier? = null) : SduiComponent()
+data class Banner(val text: String, override val modifier: SduiModifier? = null) : SduiComponent
 
 /** ...and a container, which has to render its children through the scope. */
 @Serializable
@@ -35,7 +35,7 @@ data class Panel(
     val children: List<SduiComponent> = emptyList(),
     val horizontal: Boolean = false,
     override val modifier: SduiModifier? = null,
-) : SduiComponent()
+) : SduiComponent
 
 val blueprint = Blueprint(
     sduiRegistry {

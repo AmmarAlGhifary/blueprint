@@ -31,7 +31,7 @@ data class EvTap(
     val text: String,
     val action: SduiAction? = null,
     override val modifier: SduiModifier? = null,
-) : SduiComponent()
+) : SduiComponent
 
 @Serializable
 data class EvCard(
@@ -39,10 +39,11 @@ data class EvCard(
     val action: SduiAction? = null,
     val children: List<SduiComponent> = emptyList(),
     override val modifier: SduiModifier? = null,
-) : SduiComponent()
+) : SduiComponent
 
 @Serializable
-data class EvStack(val children: List<SduiComponent> = emptyList(), override val modifier: SduiModifier? = null) : SduiComponent()
+data class EvStack(val children: List<SduiComponent> = emptyList(), override val modifier: SduiModifier? = null) :
+    SduiComponent
 
 /** @author Ammar Al Ghifary */
 @RunWith(RobolectricTestRunner::class)
