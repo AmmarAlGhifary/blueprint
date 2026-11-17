@@ -4,7 +4,7 @@ Blueprint is an Android library for **server-driven UI**: your backend sends a J
 screen, and Blueprint turns it into native Jetpack Compose. It does no networking. You fetch the JSON,
 call `Blueprint.decodeScreen`, and render the result.
 
-> **Status: 0.2.0, on Maven Central.** The API may still change before 1.0.
+> **Status: 0.3.0, on Maven Central.** The API may still change before 1.0.
 > See [CHANGELOG.md](CHANGELOG.md).
 
 ## Install
@@ -22,9 +22,9 @@ dependencyResolutionManagement {
 
 // app/build.gradle.kts
 dependencies {
-    implementation("io.github.ammaralghifary:blueprint-core:0.2.0")
+    implementation("io.github.ammaralghifary:blueprint-core:0.3.0")
     // Optional: ready-made text, image, button, card, row, column, ... (Material 3 and Coil)
-    implementation("io.github.ammaralghifary:blueprint-defaults:0.2.0")
+    implementation("io.github.ammaralghifary:blueprint-defaults:0.3.0")
 }
 ```
 
