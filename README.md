@@ -50,7 +50,7 @@ import kotlinx.serialization.Serializable
 
 // A component of your own: a model for the JSON, and a renderer for it.
 @Serializable
-data class Banner(val text: String, override val modifier: SduiModifier? = null) : SduiComponent()
+data class Banner(val text: String, override val modifier: SduiModifier? = null) : SduiComponent
 
 val blueprint = Blueprint(
     sduiRegistry {

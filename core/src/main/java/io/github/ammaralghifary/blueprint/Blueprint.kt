@@ -14,6 +14,7 @@ import io.github.ammaralghifary.blueprint.model.UnknownComponent
 import io.github.ammaralghifary.blueprint.model.UnknownComponentSerializer
 import io.github.ammaralghifary.blueprint.model.describeFailure
 import io.github.ammaralghifary.blueprint.registry.SduiRegistry
+import kotlinx.serialization.PolymorphicSerializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
@@ -128,14 +129,14 @@ public class Blueprint(
         val body = (root["body"] as? JsonObject)?.let {
             val mark = sink.mark()
             try {
-                json.decodeFromJsonElement(SduiComponent.serializer(), it)
-            } catch (e: IllegalArgumentException) {
+                json.decodeFromJsonElement(PolymorphicSerializer(SduiComponent::class), it)
+            } catch (_: IllegalArgumentException) {
                 sink.rollback(mark)
                 null
             }
         }
-        if (body == null) sink.report(DecodeError(DecodeErrorKind.InvalidPayload, null, message, root))
-        else sink.report(DecodeError(DecodeErrorKind.InvalidPayload, null, "Ignored invalid screen metadata: $message", root))
+        val reported = if (body == null) message else "Ignored invalid screen metadata: $message"
+        sink.report(DecodeError(DecodeErrorKind.InvalidPayload, null, reported, root))
         return SduiScreen(
             id = (root["screen_id"] as? JsonPrimitive)?.contentOrNull,
             body = body ?: UnknownComponent(null, root, error = message),

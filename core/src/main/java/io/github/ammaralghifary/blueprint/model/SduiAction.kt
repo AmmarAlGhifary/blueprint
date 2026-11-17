@@ -1,5 +1,6 @@
 package io.github.ammaralghifary.blueprint.model
 
+import android.annotation.SuppressLint
 import kotlinx.serialization.Serializable
 
 /**
@@ -7,18 +8,18 @@ import kotlinx.serialization.Serializable
  *
  * @author Ammar Al Ghifary
  */
-@Serializable
-public abstract class SduiAction
+public interface SduiAction
 
 /**
  * A simple navigation request. Register it under whatever `type` string your server sends.
  *
  * @author Ammar Al Ghifary
  */
+@SuppressLint("UnsafeOptInUsageError")
 @Serializable
 public data class NavigateAction(
     /** Where to go. Blueprint never interprets it: your `onAction` does. */
     val destination: String,
     /** String arguments for [destination]. */
     val params: Map<String, String> = emptyMap(),
-) : SduiAction()
+) : SduiAction

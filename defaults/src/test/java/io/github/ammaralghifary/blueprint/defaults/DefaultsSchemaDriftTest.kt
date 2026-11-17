@@ -20,11 +20,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-// docs/schema/blueprint.schema.json (and blueprint.d.ts) tell a server team what the stock components
-// accept. If a stock model or token mapper changes and the schema does not, they are told something false.
-// :core's SchemaDriftTest covers the envelope, modifier, padding and size; this covers the ten stock
-// components and the navigate action. The `button.variant` and `list.orientation` values are not checked:
-// their branching is inline in the renderers, not in a mapper a test can call.
 /** @author Ammar Al Ghifary */
 @OptIn(ExperimentalSerializationApi::class)
 class DefaultsSchemaDriftTest {

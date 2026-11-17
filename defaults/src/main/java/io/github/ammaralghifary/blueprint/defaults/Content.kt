@@ -13,13 +13,13 @@ import io.github.ammaralghifary.blueprint.modifier.toTextStyle
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-@SuppressLint("UnsafeOptInUsageError")
 /**
  * `text`: a run of text. [style] is `display|headline|title|body|label` (unknown → body), [align] is
  * `start|center|end`, and [maxLines] truncates with an ellipsis.
  *
  * @author Ammar Al Ghifary
  */
+@SuppressLint("UnsafeOptInUsageError")
 @Serializable
 public data class SduiText(
     val text: String,
@@ -27,22 +27,22 @@ public data class SduiText(
     @SerialName("max_lines") val maxLines: Int? = null,
     val align: String? = null,
     override val modifier: SduiModifier? = null,
-) : SduiComponent()
+) : SduiComponent
 
-@SuppressLint("UnsafeOptInUsageError")
 /**
  * `image`: a remote image. [scale] is `fit|crop|fill` (unknown → fit); a null [contentDescription]
  * marks it decorative.
  *
  * @author Ammar Al Ghifary
  */
+@SuppressLint("UnsafeOptInUsageError")
 @Serializable
 public data class SduiImage(
     val url: String,
     @SerialName("content_description") val contentDescription: String? = null,
     val scale: String? = null,
     override val modifier: SduiModifier? = null,
-) : SduiComponent()
+) : SduiComponent
 
 @Composable
 internal fun RenderText(c: SduiText, mod: Modifier) {

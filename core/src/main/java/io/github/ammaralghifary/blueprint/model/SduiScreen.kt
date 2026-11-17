@@ -1,5 +1,6 @@
 package io.github.ammaralghifary.blueprint.model
 
+import android.annotation.SuppressLint
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -9,6 +10,7 @@ import kotlinx.serialization.Serializable
  *
  * @author Ammar Al Ghifary
  */
+@SuppressLint("UnsafeOptInUsageError")
 @Serializable
 public data class SduiScreen(
     /** The `screen_id` the server sent, if any. */

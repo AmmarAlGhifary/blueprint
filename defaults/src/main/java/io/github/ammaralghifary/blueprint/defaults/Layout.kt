@@ -1,5 +1,6 @@
 package io.github.ammaralghifary.blueprint.defaults
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -29,36 +30,39 @@ import kotlinx.serialization.Serializable
  *
  * @author Ammar Al Ghifary
  */
+@SuppressLint("UnsafeOptInUsageError")
 @Serializable
 public data class SduiColumn(
     val children: List<SduiComponent> = emptyList(),
     val arrangement: String? = null,
     val scrollable: Boolean = false,
     override val modifier: SduiModifier? = null,
-) : SduiComponent()
+) : SduiComponent
 
 /**
  * `row`: horizontal stack; [arrangement] takes the same names as [SduiColumn].
  *
  * @author Ammar Al Ghifary
  */
+@SuppressLint("UnsafeOptInUsageError")
 @Serializable
 public data class SduiRow(
     val children: List<SduiComponent> = emptyList(),
     val arrangement: String? = null,
     override val modifier: SduiModifier? = null,
-) : SduiComponent()
+) : SduiComponent
 
 /**
  * `box`: overlapping children, placed by each child's `modifier.alignment`.
  *
  * @author Ammar Al Ghifary
  */
+@SuppressLint("UnsafeOptInUsageError")
 @Serializable
 public data class SduiBox(
     val children: List<SduiComponent> = emptyList(),
     override val modifier: SduiModifier? = null,
-) : SduiComponent()
+) : SduiComponent
 
 /**
  * `list`: lazy list, [orientation] `vertical|horizontal` (default vertical), [spacing] is the gap in dp.
@@ -66,36 +70,39 @@ public data class SduiBox(
  *
  * @author Ammar Al Ghifary
  */
+@SuppressLint("UnsafeOptInUsageError")
 @Serializable
 public data class SduiList(
     val children: List<SduiComponent> = emptyList(),
     val orientation: String? = null,
     val spacing: Int? = null,
     override val modifier: SduiModifier? = null,
-) : SduiComponent()
+) : SduiComponent
 
 /**
  * `spacer`: empty space of [size] dp (default 8).
  *
  * @author Ammar Al Ghifary
  */
+@SuppressLint("UnsafeOptInUsageError")
 @Serializable
 public data class SduiSpacer(
     val size: Int? = null,
     override val modifier: SduiModifier? = null,
-) : SduiComponent()
+) : SduiComponent
 
 /**
  * `divider`: a hairline; [thickness] in dp (default 1), [color] as hex.
  *
  * @author Ammar Al Ghifary
  */
+@SuppressLint("UnsafeOptInUsageError")
 @Serializable
 public data class SduiDivider(
     val thickness: Int? = null,
     val color: String? = null,
     override val modifier: SduiModifier? = null,
-) : SduiComponent()
+) : SduiComponent
 
 @Composable
 internal fun RenderColumn(c: SduiColumn, mod: Modifier, scope: SduiScope) {
@@ -131,6 +138,7 @@ internal fun RenderBox(c: SduiBox, mod: Modifier, scope: SduiScope) {
     }
 }
 
+@SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
 internal fun RenderList(c: SduiList, mod: Modifier, scope: SduiScope) {
     val gap = (c.spacing ?: 0).coerceAtLeast(0).dp

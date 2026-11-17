@@ -10,6 +10,7 @@ import io.github.ammaralghifary.blueprint.registry.sduiRegistry
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.atomic.AtomicInteger
+import kotlinx.serialization.PolymorphicSerializer
 import kotlinx.serialization.Serializable
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -17,16 +18,16 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 @Serializable
-data class HookText(val text: String, override val modifier: SduiModifier? = null) : SduiComponent()
+data class HookText(val text: String, override val modifier: SduiModifier? = null) : SduiComponent
 
 @Serializable
-data class HookColumn(val children: List<SduiComponent> = emptyList(), override val modifier: SduiModifier? = null) : SduiComponent()
+data class HookColumn(val children: List<SduiComponent> = emptyList(), override val modifier: SduiModifier? = null) : SduiComponent
 
 @Serializable
-data class HookAction(val destination: String) : SduiAction()
+data class HookAction(val destination: String) : SduiAction
 
 @Serializable
-data class HookTap(val action: SduiAction? = null, override val modifier: SduiModifier? = null) : SduiComponent()
+data class HookTap(val action: SduiAction? = null, override val modifier: SduiModifier? = null) : SduiComponent
 
 private val hookRegistry = sduiRegistry {
     component<HookText>("text") { _, _, _ -> }
@@ -166,7 +167,7 @@ class DecodeErrorTest {
 
     @Test
     fun decodingDirectlyThroughJsonNeitherReportsNorThrows() {
-        val component = blueprint.json.decodeFromString(SduiComponent.serializer(), """{"type":"hologram"}""")
+        val component = blueprint.json.decodeFromString(PolymorphicSerializer(SduiComponent::class), """{"type":"hologram"}""")
         assertTrue(component is UnknownComponent)
         assertTrue(seen.isEmpty())
     }

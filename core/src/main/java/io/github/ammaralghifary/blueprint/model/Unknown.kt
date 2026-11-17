@@ -30,7 +30,9 @@ public class UnknownComponent(
     override val modifier: SduiModifier? = null,
     /** Why this node degraded (never contains payload values), or null when its type is simply unregistered. */
     public val error: String? = null,
-) : SduiComponent()
+) : SduiComponent
+
+private const val JSON_ONLY_MESSAGE = "Blueprint only supports JSON"
 
 /**
  * Action counterpart of [UnknownComponent]: unregistered type, or a registered one that failed to decode.
@@ -44,7 +46,7 @@ public class UnknownAction(
     public val raw: JsonObject,
     /** Why this action degraded (never contains payload values), or null when its type is simply unregistered. */
     public val error: String? = null,
-) : SduiAction()
+) : SduiAction
 
 /** @author Ammar Al Ghifary */
 private object UnknownDescriptors {
@@ -74,7 +76,7 @@ internal class UnknownComponentSerializer(
     }
 
     override fun serialize(encoder: Encoder, value: UnknownComponent) {
-        (encoder as? JsonEncoder ?: throw SerializationException("Blueprint only supports JSON"))
+        (encoder as? JsonEncoder ?: throw SerializationException(JSON_ONLY_MESSAGE))
             .encodeJsonElement(value.raw)
     }
 }
@@ -92,7 +94,7 @@ internal class UnknownActionSerializer(
     }
 
     override fun serialize(encoder: Encoder, value: UnknownAction) {
-        (encoder as? JsonEncoder ?: throw SerializationException("Blueprint only supports JSON"))
+        (encoder as? JsonEncoder ?: throw SerializationException(JSON_ONLY_MESSAGE))
             .encodeJsonElement(value.raw)
     }
 }
@@ -172,7 +174,7 @@ internal class LenientActionSerializer(
 }
 
 private fun Decoder.asJsonDecoder(): JsonDecoder =
-    this as? JsonDecoder ?: throw SerializationException("Blueprint only supports JSON")
+    this as? JsonDecoder ?: throw SerializationException(JSON_ONLY_MESSAGE)
 
 private fun JsonDecoder.decodeJsonObject(): JsonObject {
     val element: JsonElement = decodeJsonElement()
