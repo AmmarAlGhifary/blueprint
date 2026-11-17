@@ -5,6 +5,15 @@ All notable changes to Blueprint are recorded here. The format follows
 [Semantic Versioning](https://semver.org/) once 0.1.0 is published. The version number lives in
 `gradle.properties` (`VERSION_NAME`).
 
+## [0.3.0] - 2026-11-17
+
+### Changed
+
+- **Breaking:** `SduiComponent` and `SduiAction` are now interfaces instead of `@Serializable` abstract
+  classes. A host subclass drops the constructor call (`: SduiComponent` instead of `: SduiComponent()`)
+  and must be recompiled. `SduiComponent.serializer()` and `SduiAction.serializer()` no longer exist;
+  decode a base type directly with `PolymorphicSerializer(SduiComponent::class)`.
+
 ## [0.2.0] - 2026-11-05
 
 ### Fixed

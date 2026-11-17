@@ -15,7 +15,6 @@ import android.util.Log
 object SamplePayload {
     const val FILE_NAME = "sample_payload.json"
 
-    /** The file's text, or an empty object if it cannot be read, so `decodeScreen` shows its error screen instead of crashing. */
     fun read(context: Context): String =
         try {
             context.assets.open(FILE_NAME).bufferedReader().use { it.readText() }

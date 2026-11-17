@@ -73,29 +73,11 @@ public final class io/github/ammaralghifary/blueprint/model/NavigateAction$Compa
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public abstract class io/github/ammaralghifary/blueprint/model/SduiAction {
-	public static final field $stable I
-	public static final field Companion Lio/github/ammaralghifary/blueprint/model/SduiAction$Companion;
-	public fun <init> ()V
-	public synthetic fun <init> (ILkotlinx/serialization/internal/SerializationConstructorMarker;)V
-	public static final synthetic fun write$Self (Lio/github/ammaralghifary/blueprint/model/SduiAction;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+public abstract interface class io/github/ammaralghifary/blueprint/model/SduiAction {
 }
 
-public final class io/github/ammaralghifary/blueprint/model/SduiAction$Companion {
-	public final fun serializer ()Lkotlinx/serialization/KSerializer;
-}
-
-public abstract class io/github/ammaralghifary/blueprint/model/SduiComponent {
-	public static final field $stable I
-	public static final field Companion Lio/github/ammaralghifary/blueprint/model/SduiComponent$Companion;
-	public fun <init> ()V
-	public synthetic fun <init> (ILkotlinx/serialization/internal/SerializationConstructorMarker;)V
+public abstract interface class io/github/ammaralghifary/blueprint/model/SduiComponent {
 	public abstract fun getModifier ()Lio/github/ammaralghifary/blueprint/model/SduiModifier;
-	public static final synthetic fun write$Self (Lio/github/ammaralghifary/blueprint/model/SduiComponent;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
-}
-
-public final class io/github/ammaralghifary/blueprint/model/SduiComponent$Companion {
-	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
 public final class io/github/ammaralghifary/blueprint/model/SduiModifier {

@@ -35,26 +35,28 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
 @Serializable
-data class Label(val text: String, override val modifier: SduiModifier? = null) : SduiComponent()
+data class Label(val text: String, override val modifier: SduiModifier? = null) : SduiComponent
 
 @Serializable
-data class Stack(val children: List<SduiComponent>, override val modifier: SduiModifier? = null) : SduiComponent()
+data class Stack(val children: List<SduiComponent>, override val modifier: SduiModifier? = null) :
+    SduiComponent
 
 @Serializable
-data class Bar(val children: List<SduiComponent>, override val modifier: SduiModifier? = null) : SduiComponent()
+data class Bar(val children: List<SduiComponent>, override val modifier: SduiModifier? = null) :
+    SduiComponent
 
 @Serializable
-data class Counter(val label: String, override val modifier: SduiModifier? = null) : SduiComponent()
+data class Counter(val label: String, override val modifier: SduiModifier? = null) : SduiComponent
 
 @Serializable
 data class Tap(
     val text: String,
     val action: SduiAction? = null,
     override val modifier: SduiModifier? = null,
-) : SduiComponent()
+) : SduiComponent
 
 @Serializable
-data class Go(val destination: String) : SduiAction()
+data class Go(val destination: String) : SduiAction
 
 /**
  * Renders through a real Compose runtime (Robolectric, JVM). Decoding tests cannot catch render-time

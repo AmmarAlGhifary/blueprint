@@ -13,10 +13,11 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 @Serializable
-data class AdvText(val text: String, override val modifier: SduiModifier? = null) : SduiComponent()
+data class AdvText(val text: String, override val modifier: SduiModifier? = null) : SduiComponent
 
 @Serializable
-data class AdvColumn(val children: List<SduiComponent> = emptyList(), override val modifier: SduiModifier? = null) : SduiComponent()
+data class AdvColumn(val children: List<SduiComponent> = emptyList(), override val modifier: SduiModifier? = null) :
+    SduiComponent
 
 private val advBlueprint = Blueprint(
     sduiRegistry {
@@ -115,8 +116,6 @@ class DecodeAdversarialTest {
 
     @Test
     fun malformedModifierOnARegisteredComponentKeepsTheComponent() {
-        // A malformed modifier only degrades to null on an UNKNOWN node. For a registered
-        // component the style is optional decoration, so losing the whole text is a heavy penalty.
         val screen = assertNeverThrows("bad modifier", """{"body":{"type":"text","text":"keep me","modifier":{"padding":"oops"}}}""")
         val body = screen.body
         assertTrue("registered text should survive a bad modifier, got $body", body is AdvText)

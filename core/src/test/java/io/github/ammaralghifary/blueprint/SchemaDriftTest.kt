@@ -16,15 +16,10 @@ import kotlinx.serialization.json.jsonPrimitive
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-// docs/schema/blueprint.schema.json describes what the models below accept. If a field is added,
-// renamed or made required in :core and the schema (and blueprint.d.ts) is not updated, a server team
-// validating against it would be told something false. The :defaults stock components are not covered
-// here because :core tests cannot see them.
 /** @author Ammar Al Ghifary */
 @OptIn(ExperimentalSerializationApi::class)
 class SchemaDriftTest {
     private val schema: JsonObject = run {
-        // Unit tests run with the module directory as the working directory.
         val file = File("../docs/schema/blueprint.schema.json")
         check(file.isFile) { "schema not found at ${file.absoluteFile}" }
         Json.parseToJsonElement(file.readText()).jsonObject
@@ -76,7 +71,6 @@ class SchemaDriftTest {
 
     @Test
     fun everyDefinitionACoreModelPointsAtExists() {
-        // A $ref that names a missing definition would make every validator fail on load.
         val refs = Regex("\"#/\\\$defs/(\\w+)\"").findAll(schema.toString()).map { it.groupValues[1] }.toSet()
         val defined = schema["\$defs"]!!.jsonObject.keys
         assertEquals("dangling \$ref targets", emptySet<String>(), refs - defined)

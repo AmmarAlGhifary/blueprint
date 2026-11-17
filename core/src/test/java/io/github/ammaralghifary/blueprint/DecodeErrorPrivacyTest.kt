@@ -16,20 +16,21 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 @Serializable
-data class PvText(val text: String, override val modifier: SduiModifier? = null) : SduiComponent()
+data class PvText(val text: String, override val modifier: SduiModifier? = null) : SduiComponent
 
 @Serializable
-data class PvColumn(val children: List<SduiComponent> = emptyList(), override val modifier: SduiModifier? = null) : SduiComponent()
+data class PvColumn(val children: List<SduiComponent> = emptyList(), override val modifier: SduiModifier? = null) :
+    SduiComponent
 
 @Serializable
-data class PvGo(val destination: String, val params: Map<String, String> = emptyMap()) : SduiAction()
+data class PvGo(val destination: String, val params: Map<String, String> = emptyMap()) : SduiAction
 
 @Serializable
-data class PvTap(val action: SduiAction? = null, override val modifier: SduiModifier? = null) : SduiComponent()
+data class PvTap(val action: SduiAction? = null, override val modifier: SduiModifier? = null) :
+    SduiComponent
 
-// A host model with its own validation: its message may carry anything, so it must never be echoed.
 @Serializable
-data class PvStrict(val n: Int, override val modifier: SduiModifier? = null) : SduiComponent() {
+data class PvStrict(val n: Int, override val modifier: SduiModifier? = null) : SduiComponent {
     init {
         require(n > 0) { "n was $n, password=hunter2" }
     }
@@ -178,7 +179,6 @@ class DecodeErrorPrivacyTest {
         assertNotEquals(missing, unregistered)
         assertNotEquals(missing, wrongShape)
         assertEquals(DecodeErrorKind.InvalidComponent, withNote.kind)
-        // same kind, type and message as `missing`, but a different raw node
         assertEquals(missing.message, withNote.message)
         assertNotEquals(missing, withNote)
     }

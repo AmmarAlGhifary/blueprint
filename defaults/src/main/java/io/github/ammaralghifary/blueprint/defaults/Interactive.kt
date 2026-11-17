@@ -1,5 +1,6 @@
 package io.github.ammaralghifary.blueprint.defaults
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Button
@@ -22,25 +23,27 @@ import kotlinx.serialization.Serializable
  *
  * @author Ammar Al Ghifary
  */
+@SuppressLint("UnsafeOptInUsageError")
 @Serializable
 public data class SduiButton(
     val text: String,
     val action: SduiAction? = null,
     val variant: String? = null,
     override val modifier: SduiModifier? = null,
-) : SduiComponent()
+) : SduiComponent
 
 /**
  * `card`: a container that dispatches [action] when tapped.
  *
  * @author Ammar Al Ghifary
  */
+@SuppressLint("UnsafeOptInUsageError")
 @Serializable
 public data class SduiCard(
     val children: List<SduiComponent> = emptyList(),
     val action: SduiAction? = null,
     override val modifier: SduiModifier? = null,
-) : SduiComponent()
+) : SduiComponent
 
 @Composable
 internal fun RenderButton(c: SduiButton, mod: Modifier, scope: SduiScope) {

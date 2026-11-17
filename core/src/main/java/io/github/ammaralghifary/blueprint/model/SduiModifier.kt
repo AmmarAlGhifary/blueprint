@@ -1,5 +1,6 @@
 package io.github.ammaralghifary.blueprint.model
 
+import android.annotation.SuppressLint
 import io.github.ammaralghifary.blueprint.modifier.toComposeModifier
 import io.github.ammaralghifary.blueprint.modifier.toTextStyle
 import kotlinx.serialization.SerialName
@@ -19,6 +20,7 @@ import kotlinx.serialization.Serializable
  *
  * @author Ammar Al Ghifary
  */
+@SuppressLint("UnsafeOptInUsageError")
 @Serializable
 public data class SduiModifier(
     val margin: SduiPadding? = null,
@@ -42,6 +44,7 @@ public data class SduiModifier(
  *
  * @author Ammar Al Ghifary
  */
+@SuppressLint("UnsafeOptInUsageError")
 @Serializable
 public data class SduiPadding(
     val all: Int? = null,
@@ -63,6 +66,7 @@ public data class SduiPadding(
  *
  * @author Ammar Al Ghifary
  */
+@SuppressLint("UnsafeOptInUsageError")
 @Serializable
 public data class SduiSize(
     val type: String,
