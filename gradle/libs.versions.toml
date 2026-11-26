@@ -1,6 +1,6 @@
 [versions]
 # The newest AGP and Gradle inside the range Kotlin 2.4.21 documents as tested (AGP up to 9.3.1, Gradle up to 9.7.0).
-agp = "9.3.1"
+agp = "9.5.3"
 kotlin = "2.4.21"
 # The consumer floor: the previous Kotlin minor. kotlinLanguage is the languageVersion/apiVersion the
 # libraries compile at, and kotlinStdlibFloor the kotlin-stdlib their published POMs declare. Move both
