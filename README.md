@@ -1,10 +1,10 @@
 # Blueprint
 
-Blueprint is an Android library for **server-driven UI**: your backend sends a JSON description of a
-screen, and Blueprint turns it into native Jetpack Compose. It does no networking. You fetch the JSON,
-call `Blueprint.decodeScreen`, and render the result.
+Blueprint is a Kotlin Multiplatform library for **server-driven UI** on Android, desktop and iOS: your
+backend sends a JSON description of a screen, and Blueprint turns it into Compose UI. It does not fetch
+screens. You fetch the JSON, call `Blueprint.decodeScreen`, and render the result.
 
-> **Status: 0.3.0, on Maven Central.** The API may still change before 1.0.
+> **Status: 0.4.0, on Maven Central.** The API may still change before 1.0.
 > See [CHANGELOG.md](CHANGELOG.md).
 
 ## Install
@@ -22,19 +22,25 @@ dependencyResolutionManagement {
 
 // app/build.gradle.kts
 dependencies {
-    implementation("io.github.ammaralghifary:blueprint-core:0.3.0")
+    implementation("io.github.ammaralghifary:blueprint-core:0.4.0")
     // Optional: ready-made text, image, button, card, row, column, ... (Material 3 and Coil)
-    implementation("io.github.ammaralghifary:blueprint-defaults:0.3.0")
+    implementation("io.github.ammaralghifary:blueprint-defaults:0.4.0")
 }
 ```
 
 `blueprint-core` is the engine and needs only Compose and kotlinx.serialization. `blueprint-defaults`
 is the opt-in stock component pack and already includes `blueprint-core`.
 
-Until then you can try it locally: run `./gradlew publishToMavenLocal` in this repository and add
+Both libraries are multiplatform: Android, desktop (JVM), `iosArm64` and `iosSimulatorArm64`. The
+coordinates are the same everywhere, in `commonMain` too; Gradle module metadata picks the artifact for each
+platform.
+
+To try unreleased changes locally, run `./gradlew publishToMavenLocal` in this repository and add
 `mavenLocal()` to your repositories.
 
 ## Use it
+
+An Android example; everything except `Log` and `setContent` is the same on every platform.
 
 ```kotlin
 import android.util.Log
@@ -101,8 +107,8 @@ Decoding is tolerant by contract, so a newer server can talk to an older app:
 - Unknown fields are ignored.
 - A node whose `type` is not registered, or whose fields do not fit its model, becomes an
   `UnknownComponent` (or `UnknownAction`) holding its raw JSON. Only that node degrades; its siblings and
-  parents still decode and render. In debug builds the default fallback draws a labelled placeholder, in
-  release builds it draws nothing.
+  parents still decode and render. In debug builds on Android and iOS the default fallback draws a labelled
+  placeholder; in release builds, and always on desktop, it draws nothing.
 - `decodeScreen` never throws, whatever the input: malformed JSON, a non-object root, a missing `body` or
   extreme nesting all return a screen whose body is an `UnknownComponent` with `error` set.
 
@@ -122,13 +128,16 @@ The screen, `DecodeError.raw`, `ActionEvent.action` and `ActionEvent.source` car
 
 From the build files (details in [CHANGELOG.md](CHANGELOG.md)):
 
-- Compiled against Compose BOM 2024.09.00 (runtime, ui and foundation 1.7.0); the render tests also run
-  against BOM 2026.06.01. Older Compose is untested.
-- Built with Kotlin 2.2.10 and `languageVersion`/`apiVersion` 2.0. The published POMs depend on
-  `kotlin-stdlib` 2.0.21. Every pull request compiles a consumer app against the freshly built libraries on
-  Kotlin 2.0.21, 2.2.10 and 2.4.21. Use 0.2.0 or later: on 0.1.0, a consumer on Kotlin 2.0.21 crashed the
-  Compose compiler whenever a component called `scope.Render` or `scope.RenderAll`.
-- `minSdk` 23, `compileSdk` 36, Java 11 bytecode.
+- Targets: Android, desktop (JVM), `iosArm64` and `iosSimulatorArm64`. There is no `iosX64`.
+- Kotlin **2.3** or newer. The libraries are built with Kotlin 2.4.21 at `languageVersion`/`apiVersion`
+  2.3, and their POMs depend on `kotlin-stdlib` 2.3.21. Every pull request compiles an Android consumer app
+  against the freshly built libraries on Kotlin 2.3.21 and 2.4.21.
+- Compose Multiplatform 1.11.1, which on Android is androidx Compose **1.11.2** or newer (BOM 2026.05.01,
+  `material3` 1.4.0). The Android render tests also run against BOM 2026.06.01.
+- Android: `minSdk` 23, `compileSdk` **35** or newer, Android Gradle Plugin 8.6 or newer. Android and
+  desktop bytecode is Java 11.
+- `blueprint-defaults` loads images with Coil **3.4.0**. If your app configures Coil, declare that version
+  yourself; see the [0.4.0 notes](CHANGELOG.md#040---2026-11-26).
 - Kotlin only; the public API is pinned by `./gradlew apiCheck`.
 
 ## Documentation

@@ -100,7 +100,7 @@ Keys are `snake_case` in JSON and `camelCase` in Kotlin (`corner_radius` is `cor
 
 ## Checked against
 
-- `defaults/src/test/resources/stock_screen.json` **validates**.
+- `defaults/src/jvmSharedTest/resources/stock_screen.json` **validates**.
 - `core/src/jvmSharedTest/resources/home_dashboard.json` **fails at one place on purpose**: `body/children/0/size`.
   It is a real-world server payload, and its `spacer` sends the token `"medium"`, where the neutral stock
   `spacer` takes a dp number. The library degrades only that spacer and renders the rest. Every other
