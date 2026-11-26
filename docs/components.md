@@ -77,7 +77,7 @@ composed, not just the visible ones), so prefer `column` for short content and `
 { "type": "divider", "thickness": 1, "color": "#CFD8DC" }
 ```
 
-A complete payload: `defaults/src/test/resources/stock_screen.json`.
+A complete payload: `defaults/src/jvmSharedTest/resources/stock_screen.json`.
 
 ## Schema
 

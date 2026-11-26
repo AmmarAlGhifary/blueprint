@@ -1,6 +1,5 @@
 package io.github.ammaralghifary.blueprint.defaults
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -30,7 +29,6 @@ import kotlinx.serialization.Serializable
  *
  * @author Ammar Al Ghifary
  */
-@SuppressLint("UnsafeOptInUsageError")
 @Serializable
 public data class SduiColumn(
     val children: List<SduiComponent> = emptyList(),
@@ -44,7 +42,6 @@ public data class SduiColumn(
  *
  * @author Ammar Al Ghifary
  */
-@SuppressLint("UnsafeOptInUsageError")
 @Serializable
 public data class SduiRow(
     val children: List<SduiComponent> = emptyList(),
@@ -57,7 +54,6 @@ public data class SduiRow(
  *
  * @author Ammar Al Ghifary
  */
-@SuppressLint("UnsafeOptInUsageError")
 @Serializable
 public data class SduiBox(
     val children: List<SduiComponent> = emptyList(),
@@ -70,7 +66,6 @@ public data class SduiBox(
  *
  * @author Ammar Al Ghifary
  */
-@SuppressLint("UnsafeOptInUsageError")
 @Serializable
 public data class SduiList(
     val children: List<SduiComponent> = emptyList(),
@@ -84,7 +79,6 @@ public data class SduiList(
  *
  * @author Ammar Al Ghifary
  */
-@SuppressLint("UnsafeOptInUsageError")
 @Serializable
 public data class SduiSpacer(
     val size: Int? = null,
@@ -96,7 +90,6 @@ public data class SduiSpacer(
  *
  * @author Ammar Al Ghifary
  */
-@SuppressLint("UnsafeOptInUsageError")
 @Serializable
 public data class SduiDivider(
     val thickness: Int? = null,
@@ -138,7 +131,6 @@ internal fun RenderBox(c: SduiBox, mod: Modifier, scope: SduiScope) {
     }
 }
 
-@SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
 internal fun RenderList(c: SduiList, mod: Modifier, scope: SduiScope) {
     val gap = (c.spacing ?: 0).coerceAtLeast(0).dp

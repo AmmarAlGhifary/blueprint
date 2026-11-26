@@ -29,14 +29,13 @@ apiValidation {
     }
 }
 
-// The validator only finds Android classes through the pre-AGP 9 Android Kotlin plugin and the old KMP
-// Android target, so on its own it would pass without looking at either library's Android API. These wire its
-// own tasks to the compiled classes and hang them on apiCheck and apiDump.
-fun Project.validateAndroidApi(compileTask: String, dumpPath: String) {
-    // The validator adds this itself only when it sees a Kotlin plugin id, which built-in Kotlin does not use.
-    dependencies.add("bcv-rt-jvm-cp", "org.jetbrains.kotlin:kotlin-metadata-jvm:${libs.versions.kotlin.get()}")
+// The validator does not see the Android target of the KMP library plugin, so on its own it would pass
+// without looking at either library's Android API. These wire its own tasks to the compiled classes and hang
+// them on apiCheck and apiDump.
+fun Project.validateAndroidApi() {
+    val dumpPath = "api/android/$name.api"
     val build = tasks.register<KotlinApiBuildTask>("androidReleaseApiBuild") {
-        inputClassesDirs.from(tasks.named<KotlinJvmCompile>(compileTask).flatMap { it.destinationDirectory })
+        inputClassesDirs.from(tasks.named<KotlinJvmCompile>("compileAndroidMain").flatMap { it.destinationDirectory })
         outputApiFile.set(layout.buildDirectory.file("androidApi/${project.name}.api"))
         runtimeClasspath.from(configurations.named("bcv-rt-jvm-cp-resolver"))
     }
@@ -53,25 +52,14 @@ fun Project.validateAndroidApi(compileTask: String, dumpPath: String) {
         from(build.flatMap { it.outputApiFile })
         into(dumpFile.asFile.parentFile)
     }
-    // :core gets these two from the validator (for its desktop and iOS targets); :defaults gets none.
-    listOf("apiCheck" to check, "apiDump" to dump).forEach { (name, task) ->
-        if (name !in tasks.names) tasks.register(name)
-        tasks.named(name) { dependsOn(task) }
-    }
+    tasks.named("apiCheck") { dependsOn(check) }
+    tasks.named("apiDump") { dependsOn(dump) }
 }
 
-project(":core") {
+subprojects {
     plugins.withId("com.android.kotlin.multiplatform.library") {
-        // After evaluation, so the validator has registered its own apiCheck and apiDump first.
-        afterEvaluate { validateAndroidApi("compileAndroidMain", "api/android/core.api") }
-    }
-}
-project(":defaults") {
-    plugins.withId("com.android.library") {
-        afterEvaluate {
-            validateAndroidApi("compileReleaseKotlin", "api/defaults.api")
-            tasks.named("check") { dependsOn("apiCheck") }
-        }
+        // After evaluation, so the validator has registered apiCheck and apiDump first.
+        afterEvaluate { validateAndroidApi() }
     }
 }
 
