@@ -6,10 +6,17 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import io.github.ammaralghifary.blueprint.Blueprint
+import io.github.ammaralghifary.blueprint.actions.ActionResult
+import io.github.ammaralghifary.blueprint.actions.ProvideSduiActions
+import io.github.ammaralghifary.blueprint.actions.SduiActionController
+import io.github.ammaralghifary.blueprint.actions.SubmitAction
+import io.github.ammaralghifary.blueprint.actions.sduiActions
 import io.github.ammaralghifary.blueprint.defaults.DefaultSduiRegistry
 import io.github.ammaralghifary.blueprint.model.ActionEvent
+import io.github.ammaralghifary.blueprint.model.ActionStatus
 import io.github.ammaralghifary.blueprint.model.NavigateAction
 import io.github.ammaralghifary.blueprint.model.SduiComponent
 import io.github.ammaralghifary.blueprint.model.SduiModifier
@@ -17,6 +24,7 @@ import io.github.ammaralghifary.blueprint.model.SduiScreen
 import io.github.ammaralghifary.blueprint.model.UnknownComponent
 import io.github.ammaralghifary.blueprint.registry.sduiRegistry
 import io.github.ammaralghifary.blueprint.render.BlueprintRenderer
+import io.github.ammaralghifary.blueprint.render.LocalSduiActionContext
 import kotlinx.serialization.Serializable
 
 // This file only has to compile. It is what a host app writes, so it touches every part of the public
@@ -40,6 +48,7 @@ data class Panel(
 val blueprint = Blueprint(
     sduiRegistry {
         include(DefaultSduiRegistry)
+        sduiActions()
 
         component<Banner>("banner") { c, mod, scope ->
             Text(c.text, mod.clickable { scope.dispatch(NavigateAction(destination = "banner")) })
@@ -91,6 +100,34 @@ fun isReadable(screen: SduiScreen): Boolean = screen.body !is UnknownComponent
 fun ConsumerScreen(json: String = SAMPLE_PAYLOAD, onEvent: (ActionEvent) -> Unit = {}) {
     val screen = remember(json) { decodeSample(json) }
     BlueprintRenderer(screen, blueprint, onActionEvent = onEvent)
+}
+
+/** The optional actions: a controller, a handler of the app's own, and a component that reads state. */
+@Composable
+fun ConsumerActions(screen: SduiScreen, send: suspend (SubmitAction) -> Boolean) {
+    val scope = rememberCoroutineScope()
+    val controller = remember {
+        SduiActionController(
+            scope,
+            handler = { event ->
+                when (val action = event.action) {
+                    is SubmitAction -> if (send(action)) ActionResult.Done else ActionResult.Failed
+                    else -> ActionResult.NotHandled
+                }
+            },
+            onHandlerError = { _, error -> println(error::class.simpleName) },
+        )
+    }
+    ProvideSduiActions(controller) {
+        BlueprintRenderer(screen, blueprint, onActionEvent = controller::onActionEvent)
+        ConsumerState("tab")
+    }
+}
+
+@Composable
+fun ConsumerState(key: String) {
+    val context = LocalSduiActionContext.current
+    Text("${context?.stateValue(key)?.content} ${context?.statusOf(NavigateAction("home")) == ActionStatus.Running}")
 }
 
 @Composable
