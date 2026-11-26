@@ -26,7 +26,7 @@ consumer against them.
 ```bash
 ./gradlew :core:publishToMavenLocal :defaults:publishToMavenLocal
 
-./gradlew -p consumer-test :app:compileDebugKotlin -Pkotlin=2.2.10 -Pandroid.useAndroidX=true
+./gradlew -p consumer-test :app:compileDebugKotlin -Pkotlin=2.3.21 -Pandroid.useAndroidX=true
 ```
 
 Re-run step 1 after you change the library; the consumer reads the copy in Maven Local, never your sources.
@@ -43,11 +43,13 @@ The consumer needs an Android SDK, as the main build does (`ANDROID_HOME`, or `s
 
 | Property | Meaning | Default |
 |---|---|---|
-| `-Pkotlin=` | Kotlin compiler and its Gradle plugins | `2.0.21` |
+| `-Pkotlin=` | Kotlin compiler and its Gradle plugins | `2.3.21` (the oldest the library supports) |
 | `-Planguage=` | pins `languageVersion` and `apiVersion`, as many apps do | the compiler's own |
-| `-Pcompose=` | Compose BOM the consumer uses | `2024.09.00` (the oldest the library supports) |
-| `-Pagp=` | Android Gradle Plugin | `8.13.2` |
+| `-Pcompose=` | Compose BOM the consumer uses | `2026.05.01` (the oldest the library supports) |
+| `-Pagp=` | Android Gradle Plugin; 8.x also needs a Gradle older than 9.6 | `9.3.1` |
 | `-Pblueprint=` | library version to consume | `VERSION_NAME` in the root `gradle.properties` |
+
+The app compiles against `compileSdk` 35, the oldest the library supports.
 
 `-Pandroid.useAndroidX=true` is always needed: this project has no `gradle.properties` of its own.
 
@@ -57,7 +59,7 @@ compilers can run out of Metaspace; a fresh daemon, as in CI, does not.
 ## In CI
 
 The `consumer` job in `.github/workflows/ci.yml` publishes the libraries and runs the compile above for a
-matrix of Kotlin versions: 2.0.21, 2.2.10, 2.2.10 at language 2.0, and 2.4.21 at language 2.0. Every row
+matrix of Kotlin versions: 2.3.21 (the floor) and 2.4.21 (the latest stable). Every row
 gates. To add a Kotlin version, add a row to the matrix.
 
 A failing row is a real finding about what a consumer on that Kotlin version will hit, not a flaky test:

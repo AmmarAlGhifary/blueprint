@@ -1,0 +1,369 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <blueprint:core>
+final enum class io.github.ammaralghifary.blueprint.model/DecodeErrorKind : kotlin/Enum<io.github.ammaralghifary.blueprint.model/DecodeErrorKind> { // io.github.ammaralghifary.blueprint.model/DecodeErrorKind|null[0]
+    enum entry InvalidAction // io.github.ammaralghifary.blueprint.model/DecodeErrorKind.InvalidAction|null[0]
+    enum entry InvalidComponent // io.github.ammaralghifary.blueprint.model/DecodeErrorKind.InvalidComponent|null[0]
+    enum entry InvalidPayload // io.github.ammaralghifary.blueprint.model/DecodeErrorKind.InvalidPayload|null[0]
+    enum entry ModifierIgnored // io.github.ammaralghifary.blueprint.model/DecodeErrorKind.ModifierIgnored|null[0]
+    enum entry UnregisteredType // io.github.ammaralghifary.blueprint.model/DecodeErrorKind.UnregisteredType|null[0]
+
+    final val entries // io.github.ammaralghifary.blueprint.model/DecodeErrorKind.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.ammaralghifary.blueprint.model/DecodeErrorKind> // io.github.ammaralghifary.blueprint.model/DecodeErrorKind.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): io.github.ammaralghifary.blueprint.model/DecodeErrorKind // io.github.ammaralghifary.blueprint.model/DecodeErrorKind.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<io.github.ammaralghifary.blueprint.model/DecodeErrorKind> // io.github.ammaralghifary.blueprint.model/DecodeErrorKind.values|values#static(){}[0]
+}
+
+abstract interface io.github.ammaralghifary.blueprint.model/SduiAction // io.github.ammaralghifary.blueprint.model/SduiAction|null[0]
+
+abstract interface io.github.ammaralghifary.blueprint.model/SduiComponent { // io.github.ammaralghifary.blueprint.model/SduiComponent|null[0]
+    abstract val modifier // io.github.ammaralghifary.blueprint.model/SduiComponent.modifier|{}modifier[0]
+        abstract fun <get-modifier>(): io.github.ammaralghifary.blueprint.model/SduiModifier? // io.github.ammaralghifary.blueprint.model/SduiComponent.modifier.<get-modifier>|<get-modifier>(){}[0]
+}
+
+abstract interface io.github.ammaralghifary.blueprint.render/SduiScope { // io.github.ammaralghifary.blueprint.render/SduiScope|null[0]
+    abstract fun Render(io.github.ammaralghifary.blueprint.model/SduiComponent, androidx.compose.ui/Modifier, androidx.compose.runtime/Composer?, kotlin/Int) // io.github.ammaralghifary.blueprint.render/SduiScope.Render|Render(io.github.ammaralghifary.blueprint.model.SduiComponent;androidx.compose.ui.Modifier;androidx.compose.runtime.Composer?;kotlin.Int){}[0]
+    abstract fun RenderAll(kotlin.collections/List<io.github.ammaralghifary.blueprint.model/SduiComponent>, kotlin/Function1<io.github.ammaralghifary.blueprint.model/SduiComponent, androidx.compose.ui/Modifier>, androidx.compose.runtime/Composer?, kotlin/Int) // io.github.ammaralghifary.blueprint.render/SduiScope.RenderAll|RenderAll(kotlin.collections.List<io.github.ammaralghifary.blueprint.model.SduiComponent>;kotlin.Function1<io.github.ammaralghifary.blueprint.model.SduiComponent,androidx.compose.ui.Modifier>;androidx.compose.runtime.Composer?;kotlin.Int){}[0]
+    abstract fun dispatch(io.github.ammaralghifary.blueprint.model/SduiAction) // io.github.ammaralghifary.blueprint.render/SduiScope.dispatch|dispatch(io.github.ammaralghifary.blueprint.model.SduiAction){}[0]
+    open fun Render(io.github.ammaralghifary.blueprint.model/SduiComponent, androidx.compose.runtime/Composer?, kotlin/Int) // io.github.ammaralghifary.blueprint.render/SduiScope.Render|Render(io.github.ammaralghifary.blueprint.model.SduiComponent;androidx.compose.runtime.Composer?;kotlin.Int){}[0]
+    open fun RenderAll(kotlin.collections/List<io.github.ammaralghifary.blueprint.model/SduiComponent>, androidx.compose.runtime/Composer?, kotlin/Int) // io.github.ammaralghifary.blueprint.render/SduiScope.RenderAll|RenderAll(kotlin.collections.List<io.github.ammaralghifary.blueprint.model.SduiComponent>;androidx.compose.runtime.Composer?;kotlin.Int){}[0]
+}
+
+final class io.github.ammaralghifary.blueprint.model/ActionEvent { // io.github.ammaralghifary.blueprint.model/ActionEvent|null[0]
+    constructor <init>(io.github.ammaralghifary.blueprint.model/SduiAction, io.github.ammaralghifary.blueprint.model/SduiComponent) // io.github.ammaralghifary.blueprint.model/ActionEvent.<init>|<init>(io.github.ammaralghifary.blueprint.model.SduiAction;io.github.ammaralghifary.blueprint.model.SduiComponent){}[0]
+
+    final val action // io.github.ammaralghifary.blueprint.model/ActionEvent.action|{}action[0]
+        final fun <get-action>(): io.github.ammaralghifary.blueprint.model/SduiAction // io.github.ammaralghifary.blueprint.model/ActionEvent.action.<get-action>|<get-action>(){}[0]
+    final val source // io.github.ammaralghifary.blueprint.model/ActionEvent.source|{}source[0]
+        final fun <get-source>(): io.github.ammaralghifary.blueprint.model/SduiComponent // io.github.ammaralghifary.blueprint.model/ActionEvent.source.<get-source>|<get-source>(){}[0]
+
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.ammaralghifary.blueprint.model/ActionEvent.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.ammaralghifary.blueprint.model/ActionEvent.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.ammaralghifary.blueprint.model/ActionEvent.toString|toString(){}[0]
+}
+
+final class io.github.ammaralghifary.blueprint.model/DecodeError { // io.github.ammaralghifary.blueprint.model/DecodeError|null[0]
+    constructor <init>(io.github.ammaralghifary.blueprint.model/DecodeErrorKind, kotlin/String?, kotlin/String?, kotlinx.serialization.json/JsonObject?) // io.github.ammaralghifary.blueprint.model/DecodeError.<init>|<init>(io.github.ammaralghifary.blueprint.model.DecodeErrorKind;kotlin.String?;kotlin.String?;kotlinx.serialization.json.JsonObject?){}[0]
+
+    final val kind // io.github.ammaralghifary.blueprint.model/DecodeError.kind|{}kind[0]
+        final fun <get-kind>(): io.github.ammaralghifary.blueprint.model/DecodeErrorKind // io.github.ammaralghifary.blueprint.model/DecodeError.kind.<get-kind>|<get-kind>(){}[0]
+    final val message // io.github.ammaralghifary.blueprint.model/DecodeError.message|{}message[0]
+        final fun <get-message>(): kotlin/String? // io.github.ammaralghifary.blueprint.model/DecodeError.message.<get-message>|<get-message>(){}[0]
+    final val raw // io.github.ammaralghifary.blueprint.model/DecodeError.raw|{}raw[0]
+        final fun <get-raw>(): kotlinx.serialization.json/JsonObject? // io.github.ammaralghifary.blueprint.model/DecodeError.raw.<get-raw>|<get-raw>(){}[0]
+    final val type // io.github.ammaralghifary.blueprint.model/DecodeError.type|{}type[0]
+        final fun <get-type>(): kotlin/String? // io.github.ammaralghifary.blueprint.model/DecodeError.type.<get-type>|<get-type>(){}[0]
+
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.ammaralghifary.blueprint.model/DecodeError.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.ammaralghifary.blueprint.model/DecodeError.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.ammaralghifary.blueprint.model/DecodeError.toString|toString(){}[0]
+}
+
+final class io.github.ammaralghifary.blueprint.model/NavigateAction : io.github.ammaralghifary.blueprint.model/SduiAction { // io.github.ammaralghifary.blueprint.model/NavigateAction|null[0]
+    constructor <init>(kotlin/String, kotlin.collections/Map<kotlin/String, kotlin/String> = ...) // io.github.ammaralghifary.blueprint.model/NavigateAction.<init>|<init>(kotlin.String;kotlin.collections.Map<kotlin.String,kotlin.String>){}[0]
+
+    final val destination // io.github.ammaralghifary.blueprint.model/NavigateAction.destination|{}destination[0]
+        final fun <get-destination>(): kotlin/String // io.github.ammaralghifary.blueprint.model/NavigateAction.destination.<get-destination>|<get-destination>(){}[0]
+    final val params // io.github.ammaralghifary.blueprint.model/NavigateAction.params|{}params[0]
+        final fun <get-params>(): kotlin.collections/Map<kotlin/String, kotlin/String> // io.github.ammaralghifary.blueprint.model/NavigateAction.params.<get-params>|<get-params>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.ammaralghifary.blueprint.model/NavigateAction.component1|component1(){}[0]
+    final fun component2(): kotlin.collections/Map<kotlin/String, kotlin/String> // io.github.ammaralghifary.blueprint.model/NavigateAction.component2|component2(){}[0]
+    final fun copy(kotlin/String = ..., kotlin.collections/Map<kotlin/String, kotlin/String> = ...): io.github.ammaralghifary.blueprint.model/NavigateAction // io.github.ammaralghifary.blueprint.model/NavigateAction.copy|copy(kotlin.String;kotlin.collections.Map<kotlin.String,kotlin.String>){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.ammaralghifary.blueprint.model/NavigateAction.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.ammaralghifary.blueprint.model/NavigateAction.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.ammaralghifary.blueprint.model/NavigateAction.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.ammaralghifary.blueprint.model/NavigateAction> { // io.github.ammaralghifary.blueprint.model/NavigateAction.$serializer|null[0]
+        final val descriptor // io.github.ammaralghifary.blueprint.model/NavigateAction.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.ammaralghifary.blueprint.model/NavigateAction.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.ammaralghifary.blueprint.model/NavigateAction.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.ammaralghifary.blueprint.model/NavigateAction // io.github.ammaralghifary.blueprint.model/NavigateAction.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.ammaralghifary.blueprint.model/NavigateAction) // io.github.ammaralghifary.blueprint.model/NavigateAction.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.ammaralghifary.blueprint.model.NavigateAction){}[0]
+    }
+
+    final object Companion { // io.github.ammaralghifary.blueprint.model/NavigateAction.Companion|null[0]
+        final val $childSerializers // io.github.ammaralghifary.blueprint.model/NavigateAction.Companion.$childSerializers|{}$childSerializers[0]
+
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.ammaralghifary.blueprint.model/NavigateAction> // io.github.ammaralghifary.blueprint.model/NavigateAction.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final class io.github.ammaralghifary.blueprint.model/SduiModifier { // io.github.ammaralghifary.blueprint.model/SduiModifier|null[0]
+    constructor <init>(io.github.ammaralghifary.blueprint.model/SduiPadding? = ..., io.github.ammaralghifary.blueprint.model/SduiPadding? = ..., io.github.ammaralghifary.blueprint.model/SduiSize? = ..., io.github.ammaralghifary.blueprint.model/SduiSize? = ..., kotlin/String? = ..., kotlin/Float? = ..., kotlin/Int? = ..., kotlin/String? = ..., kotlin/Int? = ..., kotlin/Int? = ..., kotlin/String? = ..., kotlin/String? = ..., kotlin/Int? = ..., kotlin/Int? = ...) // io.github.ammaralghifary.blueprint.model/SduiModifier.<init>|<init>(io.github.ammaralghifary.blueprint.model.SduiPadding?;io.github.ammaralghifary.blueprint.model.SduiPadding?;io.github.ammaralghifary.blueprint.model.SduiSize?;io.github.ammaralghifary.blueprint.model.SduiSize?;kotlin.String?;kotlin.Float?;kotlin.Int?;kotlin.String?;kotlin.Int?;kotlin.Int?;kotlin.String?;kotlin.String?;kotlin.Int?;kotlin.Int?){}[0]
+
+    final val alignment // io.github.ammaralghifary.blueprint.model/SduiModifier.alignment|{}alignment[0]
+        final fun <get-alignment>(): kotlin/String? // io.github.ammaralghifary.blueprint.model/SduiModifier.alignment.<get-alignment>|<get-alignment>(){}[0]
+    final val backgroundColor // io.github.ammaralghifary.blueprint.model/SduiModifier.backgroundColor|{}backgroundColor[0]
+        final fun <get-backgroundColor>(): kotlin/String? // io.github.ammaralghifary.blueprint.model/SduiModifier.backgroundColor.<get-backgroundColor>|<get-backgroundColor>(){}[0]
+    final val borderColor // io.github.ammaralghifary.blueprint.model/SduiModifier.borderColor|{}borderColor[0]
+        final fun <get-borderColor>(): kotlin/String? // io.github.ammaralghifary.blueprint.model/SduiModifier.borderColor.<get-borderColor>|<get-borderColor>(){}[0]
+    final val borderWidth // io.github.ammaralghifary.blueprint.model/SduiModifier.borderWidth|{}borderWidth[0]
+        final fun <get-borderWidth>(): kotlin/Int? // io.github.ammaralghifary.blueprint.model/SduiModifier.borderWidth.<get-borderWidth>|<get-borderWidth>(){}[0]
+    final val cornerRadius // io.github.ammaralghifary.blueprint.model/SduiModifier.cornerRadius|{}cornerRadius[0]
+        final fun <get-cornerRadius>(): kotlin/Int? // io.github.ammaralghifary.blueprint.model/SduiModifier.cornerRadius.<get-cornerRadius>|<get-cornerRadius>(){}[0]
+    final val elevation // io.github.ammaralghifary.blueprint.model/SduiModifier.elevation|{}elevation[0]
+        final fun <get-elevation>(): kotlin/Int? // io.github.ammaralghifary.blueprint.model/SduiModifier.elevation.<get-elevation>|<get-elevation>(){}[0]
+    final val fontSize // io.github.ammaralghifary.blueprint.model/SduiModifier.fontSize|{}fontSize[0]
+        final fun <get-fontSize>(): kotlin/Int? // io.github.ammaralghifary.blueprint.model/SduiModifier.fontSize.<get-fontSize>|<get-fontSize>(){}[0]
+    final val fontWeight // io.github.ammaralghifary.blueprint.model/SduiModifier.fontWeight|{}fontWeight[0]
+        final fun <get-fontWeight>(): kotlin/Int? // io.github.ammaralghifary.blueprint.model/SduiModifier.fontWeight.<get-fontWeight>|<get-fontWeight>(){}[0]
+    final val height // io.github.ammaralghifary.blueprint.model/SduiModifier.height|{}height[0]
+        final fun <get-height>(): io.github.ammaralghifary.blueprint.model/SduiSize? // io.github.ammaralghifary.blueprint.model/SduiModifier.height.<get-height>|<get-height>(){}[0]
+    final val margin // io.github.ammaralghifary.blueprint.model/SduiModifier.margin|{}margin[0]
+        final fun <get-margin>(): io.github.ammaralghifary.blueprint.model/SduiPadding? // io.github.ammaralghifary.blueprint.model/SduiModifier.margin.<get-margin>|<get-margin>(){}[0]
+    final val padding // io.github.ammaralghifary.blueprint.model/SduiModifier.padding|{}padding[0]
+        final fun <get-padding>(): io.github.ammaralghifary.blueprint.model/SduiPadding? // io.github.ammaralghifary.blueprint.model/SduiModifier.padding.<get-padding>|<get-padding>(){}[0]
+    final val textColor // io.github.ammaralghifary.blueprint.model/SduiModifier.textColor|{}textColor[0]
+        final fun <get-textColor>(): kotlin/String? // io.github.ammaralghifary.blueprint.model/SduiModifier.textColor.<get-textColor>|<get-textColor>(){}[0]
+    final val weight // io.github.ammaralghifary.blueprint.model/SduiModifier.weight|{}weight[0]
+        final fun <get-weight>(): kotlin/Float? // io.github.ammaralghifary.blueprint.model/SduiModifier.weight.<get-weight>|<get-weight>(){}[0]
+    final val width // io.github.ammaralghifary.blueprint.model/SduiModifier.width|{}width[0]
+        final fun <get-width>(): io.github.ammaralghifary.blueprint.model/SduiSize? // io.github.ammaralghifary.blueprint.model/SduiModifier.width.<get-width>|<get-width>(){}[0]
+
+    final fun component1(): io.github.ammaralghifary.blueprint.model/SduiPadding? // io.github.ammaralghifary.blueprint.model/SduiModifier.component1|component1(){}[0]
+    final fun component10(): kotlin/Int? // io.github.ammaralghifary.blueprint.model/SduiModifier.component10|component10(){}[0]
+    final fun component11(): kotlin/String? // io.github.ammaralghifary.blueprint.model/SduiModifier.component11|component11(){}[0]
+    final fun component12(): kotlin/String? // io.github.ammaralghifary.blueprint.model/SduiModifier.component12|component12(){}[0]
+    final fun component13(): kotlin/Int? // io.github.ammaralghifary.blueprint.model/SduiModifier.component13|component13(){}[0]
+    final fun component14(): kotlin/Int? // io.github.ammaralghifary.blueprint.model/SduiModifier.component14|component14(){}[0]
+    final fun component2(): io.github.ammaralghifary.blueprint.model/SduiPadding? // io.github.ammaralghifary.blueprint.model/SduiModifier.component2|component2(){}[0]
+    final fun component3(): io.github.ammaralghifary.blueprint.model/SduiSize? // io.github.ammaralghifary.blueprint.model/SduiModifier.component3|component3(){}[0]
+    final fun component4(): io.github.ammaralghifary.blueprint.model/SduiSize? // io.github.ammaralghifary.blueprint.model/SduiModifier.component4|component4(){}[0]
+    final fun component5(): kotlin/String? // io.github.ammaralghifary.blueprint.model/SduiModifier.component5|component5(){}[0]
+    final fun component6(): kotlin/Float? // io.github.ammaralghifary.blueprint.model/SduiModifier.component6|component6(){}[0]
+    final fun component7(): kotlin/Int? // io.github.ammaralghifary.blueprint.model/SduiModifier.component7|component7(){}[0]
+    final fun component8(): kotlin/String? // io.github.ammaralghifary.blueprint.model/SduiModifier.component8|component8(){}[0]
+    final fun component9(): kotlin/Int? // io.github.ammaralghifary.blueprint.model/SduiModifier.component9|component9(){}[0]
+    final fun copy(io.github.ammaralghifary.blueprint.model/SduiPadding? = ..., io.github.ammaralghifary.blueprint.model/SduiPadding? = ..., io.github.ammaralghifary.blueprint.model/SduiSize? = ..., io.github.ammaralghifary.blueprint.model/SduiSize? = ..., kotlin/String? = ..., kotlin/Float? = ..., kotlin/Int? = ..., kotlin/String? = ..., kotlin/Int? = ..., kotlin/Int? = ..., kotlin/String? = ..., kotlin/String? = ..., kotlin/Int? = ..., kotlin/Int? = ...): io.github.ammaralghifary.blueprint.model/SduiModifier // io.github.ammaralghifary.blueprint.model/SduiModifier.copy|copy(io.github.ammaralghifary.blueprint.model.SduiPadding?;io.github.ammaralghifary.blueprint.model.SduiPadding?;io.github.ammaralghifary.blueprint.model.SduiSize?;io.github.ammaralghifary.blueprint.model.SduiSize?;kotlin.String?;kotlin.Float?;kotlin.Int?;kotlin.String?;kotlin.Int?;kotlin.Int?;kotlin.String?;kotlin.String?;kotlin.Int?;kotlin.Int?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.ammaralghifary.blueprint.model/SduiModifier.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.ammaralghifary.blueprint.model/SduiModifier.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.ammaralghifary.blueprint.model/SduiModifier.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.ammaralghifary.blueprint.model/SduiModifier> { // io.github.ammaralghifary.blueprint.model/SduiModifier.$serializer|null[0]
+        final val descriptor // io.github.ammaralghifary.blueprint.model/SduiModifier.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.ammaralghifary.blueprint.model/SduiModifier.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.ammaralghifary.blueprint.model/SduiModifier.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.ammaralghifary.blueprint.model/SduiModifier // io.github.ammaralghifary.blueprint.model/SduiModifier.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.ammaralghifary.blueprint.model/SduiModifier) // io.github.ammaralghifary.blueprint.model/SduiModifier.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.ammaralghifary.blueprint.model.SduiModifier){}[0]
+    }
+
+    final object Companion { // io.github.ammaralghifary.blueprint.model/SduiModifier.Companion|null[0]
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.ammaralghifary.blueprint.model/SduiModifier> // io.github.ammaralghifary.blueprint.model/SduiModifier.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final class io.github.ammaralghifary.blueprint.model/SduiPadding { // io.github.ammaralghifary.blueprint.model/SduiPadding|null[0]
+    constructor <init>(kotlin/Int? = ..., kotlin/Int? = ..., kotlin/Int? = ..., kotlin/Int? = ..., kotlin/Int? = ..., kotlin/Int? = ..., kotlin/Int? = ...) // io.github.ammaralghifary.blueprint.model/SduiPadding.<init>|<init>(kotlin.Int?;kotlin.Int?;kotlin.Int?;kotlin.Int?;kotlin.Int?;kotlin.Int?;kotlin.Int?){}[0]
+
+    final val all // io.github.ammaralghifary.blueprint.model/SduiPadding.all|{}all[0]
+        final fun <get-all>(): kotlin/Int? // io.github.ammaralghifary.blueprint.model/SduiPadding.all.<get-all>|<get-all>(){}[0]
+    final val bottom // io.github.ammaralghifary.blueprint.model/SduiPadding.bottom|{}bottom[0]
+        final fun <get-bottom>(): kotlin/Int? // io.github.ammaralghifary.blueprint.model/SduiPadding.bottom.<get-bottom>|<get-bottom>(){}[0]
+    final val end // io.github.ammaralghifary.blueprint.model/SduiPadding.end|{}end[0]
+        final fun <get-end>(): kotlin/Int? // io.github.ammaralghifary.blueprint.model/SduiPadding.end.<get-end>|<get-end>(){}[0]
+    final val horizontal // io.github.ammaralghifary.blueprint.model/SduiPadding.horizontal|{}horizontal[0]
+        final fun <get-horizontal>(): kotlin/Int? // io.github.ammaralghifary.blueprint.model/SduiPadding.horizontal.<get-horizontal>|<get-horizontal>(){}[0]
+    final val resolvedBottom // io.github.ammaralghifary.blueprint.model/SduiPadding.resolvedBottom|{}resolvedBottom[0]
+        final fun <get-resolvedBottom>(): kotlin/Int // io.github.ammaralghifary.blueprint.model/SduiPadding.resolvedBottom.<get-resolvedBottom>|<get-resolvedBottom>(){}[0]
+    final val resolvedEnd // io.github.ammaralghifary.blueprint.model/SduiPadding.resolvedEnd|{}resolvedEnd[0]
+        final fun <get-resolvedEnd>(): kotlin/Int // io.github.ammaralghifary.blueprint.model/SduiPadding.resolvedEnd.<get-resolvedEnd>|<get-resolvedEnd>(){}[0]
+    final val resolvedStart // io.github.ammaralghifary.blueprint.model/SduiPadding.resolvedStart|{}resolvedStart[0]
+        final fun <get-resolvedStart>(): kotlin/Int // io.github.ammaralghifary.blueprint.model/SduiPadding.resolvedStart.<get-resolvedStart>|<get-resolvedStart>(){}[0]
+    final val resolvedTop // io.github.ammaralghifary.blueprint.model/SduiPadding.resolvedTop|{}resolvedTop[0]
+        final fun <get-resolvedTop>(): kotlin/Int // io.github.ammaralghifary.blueprint.model/SduiPadding.resolvedTop.<get-resolvedTop>|<get-resolvedTop>(){}[0]
+    final val start // io.github.ammaralghifary.blueprint.model/SduiPadding.start|{}start[0]
+        final fun <get-start>(): kotlin/Int? // io.github.ammaralghifary.blueprint.model/SduiPadding.start.<get-start>|<get-start>(){}[0]
+    final val top // io.github.ammaralghifary.blueprint.model/SduiPadding.top|{}top[0]
+        final fun <get-top>(): kotlin/Int? // io.github.ammaralghifary.blueprint.model/SduiPadding.top.<get-top>|<get-top>(){}[0]
+    final val vertical // io.github.ammaralghifary.blueprint.model/SduiPadding.vertical|{}vertical[0]
+        final fun <get-vertical>(): kotlin/Int? // io.github.ammaralghifary.blueprint.model/SduiPadding.vertical.<get-vertical>|<get-vertical>(){}[0]
+
+    final fun component1(): kotlin/Int? // io.github.ammaralghifary.blueprint.model/SduiPadding.component1|component1(){}[0]
+    final fun component2(): kotlin/Int? // io.github.ammaralghifary.blueprint.model/SduiPadding.component2|component2(){}[0]
+    final fun component3(): kotlin/Int? // io.github.ammaralghifary.blueprint.model/SduiPadding.component3|component3(){}[0]
+    final fun component4(): kotlin/Int? // io.github.ammaralghifary.blueprint.model/SduiPadding.component4|component4(){}[0]
+    final fun component5(): kotlin/Int? // io.github.ammaralghifary.blueprint.model/SduiPadding.component5|component5(){}[0]
+    final fun component6(): kotlin/Int? // io.github.ammaralghifary.blueprint.model/SduiPadding.component6|component6(){}[0]
+    final fun component7(): kotlin/Int? // io.github.ammaralghifary.blueprint.model/SduiPadding.component7|component7(){}[0]
+    final fun copy(kotlin/Int? = ..., kotlin/Int? = ..., kotlin/Int? = ..., kotlin/Int? = ..., kotlin/Int? = ..., kotlin/Int? = ..., kotlin/Int? = ...): io.github.ammaralghifary.blueprint.model/SduiPadding // io.github.ammaralghifary.blueprint.model/SduiPadding.copy|copy(kotlin.Int?;kotlin.Int?;kotlin.Int?;kotlin.Int?;kotlin.Int?;kotlin.Int?;kotlin.Int?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.ammaralghifary.blueprint.model/SduiPadding.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.ammaralghifary.blueprint.model/SduiPadding.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.ammaralghifary.blueprint.model/SduiPadding.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.ammaralghifary.blueprint.model/SduiPadding> { // io.github.ammaralghifary.blueprint.model/SduiPadding.$serializer|null[0]
+        final val descriptor // io.github.ammaralghifary.blueprint.model/SduiPadding.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.ammaralghifary.blueprint.model/SduiPadding.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.ammaralghifary.blueprint.model/SduiPadding.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.ammaralghifary.blueprint.model/SduiPadding // io.github.ammaralghifary.blueprint.model/SduiPadding.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.ammaralghifary.blueprint.model/SduiPadding) // io.github.ammaralghifary.blueprint.model/SduiPadding.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.ammaralghifary.blueprint.model.SduiPadding){}[0]
+    }
+
+    final object Companion { // io.github.ammaralghifary.blueprint.model/SduiPadding.Companion|null[0]
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.ammaralghifary.blueprint.model/SduiPadding> // io.github.ammaralghifary.blueprint.model/SduiPadding.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final class io.github.ammaralghifary.blueprint.model/SduiScreen { // io.github.ammaralghifary.blueprint.model/SduiScreen|null[0]
+    constructor <init>(kotlin/String? = ..., io.github.ammaralghifary.blueprint.model/SduiComponent, kotlin/Int? = ...) // io.github.ammaralghifary.blueprint.model/SduiScreen.<init>|<init>(kotlin.String?;io.github.ammaralghifary.blueprint.model.SduiComponent;kotlin.Int?){}[0]
+
+    final val body // io.github.ammaralghifary.blueprint.model/SduiScreen.body|{}body[0]
+        final fun <get-body>(): io.github.ammaralghifary.blueprint.model/SduiComponent // io.github.ammaralghifary.blueprint.model/SduiScreen.body.<get-body>|<get-body>(){}[0]
+    final val id // io.github.ammaralghifary.blueprint.model/SduiScreen.id|{}id[0]
+        final fun <get-id>(): kotlin/String? // io.github.ammaralghifary.blueprint.model/SduiScreen.id.<get-id>|<get-id>(){}[0]
+    final val version // io.github.ammaralghifary.blueprint.model/SduiScreen.version|{}version[0]
+        final fun <get-version>(): kotlin/Int? // io.github.ammaralghifary.blueprint.model/SduiScreen.version.<get-version>|<get-version>(){}[0]
+
+    final fun component1(): kotlin/String? // io.github.ammaralghifary.blueprint.model/SduiScreen.component1|component1(){}[0]
+    final fun component2(): io.github.ammaralghifary.blueprint.model/SduiComponent // io.github.ammaralghifary.blueprint.model/SduiScreen.component2|component2(){}[0]
+    final fun component3(): kotlin/Int? // io.github.ammaralghifary.blueprint.model/SduiScreen.component3|component3(){}[0]
+    final fun copy(kotlin/String? = ..., io.github.ammaralghifary.blueprint.model/SduiComponent = ..., kotlin/Int? = ...): io.github.ammaralghifary.blueprint.model/SduiScreen // io.github.ammaralghifary.blueprint.model/SduiScreen.copy|copy(kotlin.String?;io.github.ammaralghifary.blueprint.model.SduiComponent;kotlin.Int?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.ammaralghifary.blueprint.model/SduiScreen.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.ammaralghifary.blueprint.model/SduiScreen.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.ammaralghifary.blueprint.model/SduiScreen.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.ammaralghifary.blueprint.model/SduiScreen> { // io.github.ammaralghifary.blueprint.model/SduiScreen.$serializer|null[0]
+        final val descriptor // io.github.ammaralghifary.blueprint.model/SduiScreen.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.ammaralghifary.blueprint.model/SduiScreen.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.ammaralghifary.blueprint.model/SduiScreen.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.ammaralghifary.blueprint.model/SduiScreen // io.github.ammaralghifary.blueprint.model/SduiScreen.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.ammaralghifary.blueprint.model/SduiScreen) // io.github.ammaralghifary.blueprint.model/SduiScreen.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.ammaralghifary.blueprint.model.SduiScreen){}[0]
+    }
+
+    final object Companion { // io.github.ammaralghifary.blueprint.model/SduiScreen.Companion|null[0]
+        final val $childSerializers // io.github.ammaralghifary.blueprint.model/SduiScreen.Companion.$childSerializers|{}$childSerializers[0]
+
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.ammaralghifary.blueprint.model/SduiScreen> // io.github.ammaralghifary.blueprint.model/SduiScreen.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final class io.github.ammaralghifary.blueprint.model/SduiSize { // io.github.ammaralghifary.blueprint.model/SduiSize|null[0]
+    constructor <init>(kotlin/String, kotlin/Int? = ...) // io.github.ammaralghifary.blueprint.model/SduiSize.<init>|<init>(kotlin.String;kotlin.Int?){}[0]
+
+    final val type // io.github.ammaralghifary.blueprint.model/SduiSize.type|{}type[0]
+        final fun <get-type>(): kotlin/String // io.github.ammaralghifary.blueprint.model/SduiSize.type.<get-type>|<get-type>(){}[0]
+    final val value // io.github.ammaralghifary.blueprint.model/SduiSize.value|{}value[0]
+        final fun <get-value>(): kotlin/Int? // io.github.ammaralghifary.blueprint.model/SduiSize.value.<get-value>|<get-value>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.ammaralghifary.blueprint.model/SduiSize.component1|component1(){}[0]
+    final fun component2(): kotlin/Int? // io.github.ammaralghifary.blueprint.model/SduiSize.component2|component2(){}[0]
+    final fun copy(kotlin/String = ..., kotlin/Int? = ...): io.github.ammaralghifary.blueprint.model/SduiSize // io.github.ammaralghifary.blueprint.model/SduiSize.copy|copy(kotlin.String;kotlin.Int?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.ammaralghifary.blueprint.model/SduiSize.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.ammaralghifary.blueprint.model/SduiSize.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.ammaralghifary.blueprint.model/SduiSize.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.ammaralghifary.blueprint.model/SduiSize> { // io.github.ammaralghifary.blueprint.model/SduiSize.$serializer|null[0]
+        final val descriptor // io.github.ammaralghifary.blueprint.model/SduiSize.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.ammaralghifary.blueprint.model/SduiSize.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.ammaralghifary.blueprint.model/SduiSize.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.ammaralghifary.blueprint.model/SduiSize // io.github.ammaralghifary.blueprint.model/SduiSize.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.ammaralghifary.blueprint.model/SduiSize) // io.github.ammaralghifary.blueprint.model/SduiSize.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.ammaralghifary.blueprint.model.SduiSize){}[0]
+    }
+
+    final object Companion { // io.github.ammaralghifary.blueprint.model/SduiSize.Companion|null[0]
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.ammaralghifary.blueprint.model/SduiSize> // io.github.ammaralghifary.blueprint.model/SduiSize.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final class io.github.ammaralghifary.blueprint.model/UnknownAction : io.github.ammaralghifary.blueprint.model/SduiAction { // io.github.ammaralghifary.blueprint.model/UnknownAction|null[0]
+    constructor <init>(kotlin/String?, kotlinx.serialization.json/JsonObject, kotlin/String? = ...) // io.github.ammaralghifary.blueprint.model/UnknownAction.<init>|<init>(kotlin.String?;kotlinx.serialization.json.JsonObject;kotlin.String?){}[0]
+
+    final val error // io.github.ammaralghifary.blueprint.model/UnknownAction.error|{}error[0]
+        final fun <get-error>(): kotlin/String? // io.github.ammaralghifary.blueprint.model/UnknownAction.error.<get-error>|<get-error>(){}[0]
+    final val raw // io.github.ammaralghifary.blueprint.model/UnknownAction.raw|{}raw[0]
+        final fun <get-raw>(): kotlinx.serialization.json/JsonObject // io.github.ammaralghifary.blueprint.model/UnknownAction.raw.<get-raw>|<get-raw>(){}[0]
+    final val type // io.github.ammaralghifary.blueprint.model/UnknownAction.type|{}type[0]
+        final fun <get-type>(): kotlin/String? // io.github.ammaralghifary.blueprint.model/UnknownAction.type.<get-type>|<get-type>(){}[0]
+}
+
+final class io.github.ammaralghifary.blueprint.model/UnknownComponent : io.github.ammaralghifary.blueprint.model/SduiComponent { // io.github.ammaralghifary.blueprint.model/UnknownComponent|null[0]
+    constructor <init>(kotlin/String?, kotlinx.serialization.json/JsonObject, io.github.ammaralghifary.blueprint.model/SduiModifier? = ..., kotlin/String? = ...) // io.github.ammaralghifary.blueprint.model/UnknownComponent.<init>|<init>(kotlin.String?;kotlinx.serialization.json.JsonObject;io.github.ammaralghifary.blueprint.model.SduiModifier?;kotlin.String?){}[0]
+
+    final val error // io.github.ammaralghifary.blueprint.model/UnknownComponent.error|{}error[0]
+        final fun <get-error>(): kotlin/String? // io.github.ammaralghifary.blueprint.model/UnknownComponent.error.<get-error>|<get-error>(){}[0]
+    final val modifier // io.github.ammaralghifary.blueprint.model/UnknownComponent.modifier|{}modifier[0]
+        final fun <get-modifier>(): io.github.ammaralghifary.blueprint.model/SduiModifier? // io.github.ammaralghifary.blueprint.model/UnknownComponent.modifier.<get-modifier>|<get-modifier>(){}[0]
+    final val raw // io.github.ammaralghifary.blueprint.model/UnknownComponent.raw|{}raw[0]
+        final fun <get-raw>(): kotlinx.serialization.json/JsonObject // io.github.ammaralghifary.blueprint.model/UnknownComponent.raw.<get-raw>|<get-raw>(){}[0]
+    final val type // io.github.ammaralghifary.blueprint.model/UnknownComponent.type|{}type[0]
+        final fun <get-type>(): kotlin/String? // io.github.ammaralghifary.blueprint.model/UnknownComponent.type.<get-type>|<get-type>(){}[0]
+}
+
+final class io.github.ammaralghifary.blueprint.registry/SduiRegistry { // io.github.ammaralghifary.blueprint.registry/SduiRegistry|null[0]
+    final val componentTypes // io.github.ammaralghifary.blueprint.registry/SduiRegistry.componentTypes|{}componentTypes[0]
+        final fun <get-componentTypes>(): kotlin.collections/Set<kotlin/String> // io.github.ammaralghifary.blueprint.registry/SduiRegistry.componentTypes.<get-componentTypes>|<get-componentTypes>(){}[0]
+}
+
+final class io.github.ammaralghifary.blueprint.registry/SduiRegistryBuilder { // io.github.ammaralghifary.blueprint.registry/SduiRegistryBuilder|null[0]
+    final fun <#A1: io.github.ammaralghifary.blueprint.model/SduiAction> action(kotlin/String, kotlin.reflect/KClass<#A1>, kotlinx.serialization/KSerializer<#A1>, kotlin/Boolean = ...) // io.github.ammaralghifary.blueprint.registry/SduiRegistryBuilder.action|action(kotlin.String;kotlin.reflect.KClass<0:0>;kotlinx.serialization.KSerializer<0:0>;kotlin.Boolean){0§<io.github.ammaralghifary.blueprint.model.SduiAction>}[0]
+    final fun <#A1: io.github.ammaralghifary.blueprint.model/SduiComponent> component(kotlin/String, kotlin.reflect/KClass<#A1>, kotlinx.serialization/KSerializer<#A1>, kotlin/Boolean = ..., kotlin/Function5<#A1, androidx.compose.ui/Modifier, io.github.ammaralghifary.blueprint.render/SduiScope, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>) // io.github.ammaralghifary.blueprint.registry/SduiRegistryBuilder.component|component(kotlin.String;kotlin.reflect.KClass<0:0>;kotlinx.serialization.KSerializer<0:0>;kotlin.Boolean;kotlin.Function5<0:0,androidx.compose.ui.Modifier,io.github.ammaralghifary.blueprint.render.SduiScope,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>){0§<io.github.ammaralghifary.blueprint.model.SduiComponent>}[0]
+    final fun fallback(kotlin/Function4<io.github.ammaralghifary.blueprint.model/UnknownComponent, androidx.compose.ui/Modifier, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>) // io.github.ammaralghifary.blueprint.registry/SduiRegistryBuilder.fallback|fallback(kotlin.Function4<io.github.ammaralghifary.blueprint.model.UnknownComponent,androidx.compose.ui.Modifier,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>){}[0]
+    final fun include(io.github.ammaralghifary.blueprint.registry/SduiRegistry) // io.github.ammaralghifary.blueprint.registry/SduiRegistryBuilder.include|include(io.github.ammaralghifary.blueprint.registry.SduiRegistry){}[0]
+    final inline fun <#A1: reified io.github.ammaralghifary.blueprint.model/SduiAction> action(kotlin/String, kotlin/Boolean = ...) // io.github.ammaralghifary.blueprint.registry/SduiRegistryBuilder.action|action(kotlin.String;kotlin.Boolean){0§<io.github.ammaralghifary.blueprint.model.SduiAction>}[0]
+    final inline fun <#A1: reified io.github.ammaralghifary.blueprint.model/SduiComponent> component(kotlin/String, kotlin/Boolean = ..., noinline kotlin/Function5<#A1, androidx.compose.ui/Modifier, io.github.ammaralghifary.blueprint.render/SduiScope, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>) // io.github.ammaralghifary.blueprint.registry/SduiRegistryBuilder.component|component(kotlin.String;kotlin.Boolean;kotlin.Function5<0:0,androidx.compose.ui.Modifier,io.github.ammaralghifary.blueprint.render.SduiScope,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>){0§<io.github.ammaralghifary.blueprint.model.SduiComponent>}[0]
+}
+
+final class io.github.ammaralghifary.blueprint/Blueprint { // io.github.ammaralghifary.blueprint/Blueprint|null[0]
+    constructor <init>(io.github.ammaralghifary.blueprint.registry/SduiRegistry, kotlinx.serialization.json/Json = ..., kotlin/Function1<io.github.ammaralghifary.blueprint.model/DecodeError, kotlin/Unit>? = ..., kotlin/Function2<io.github.ammaralghifary.blueprint.model/SduiScreen, kotlin.collections/List<io.github.ammaralghifary.blueprint.model/DecodeError>, kotlin/Unit>? = ...) // io.github.ammaralghifary.blueprint/Blueprint.<init>|<init>(io.github.ammaralghifary.blueprint.registry.SduiRegistry;kotlinx.serialization.json.Json;kotlin.Function1<io.github.ammaralghifary.blueprint.model.DecodeError,kotlin.Unit>?;kotlin.Function2<io.github.ammaralghifary.blueprint.model.SduiScreen,kotlin.collections.List<io.github.ammaralghifary.blueprint.model.DecodeError>,kotlin.Unit>?){}[0]
+
+    final val json // io.github.ammaralghifary.blueprint/Blueprint.json|{}json[0]
+        final fun <get-json>(): kotlinx.serialization.json/Json // io.github.ammaralghifary.blueprint/Blueprint.json.<get-json>|<get-json>(){}[0]
+    final val registry // io.github.ammaralghifary.blueprint/Blueprint.registry|{}registry[0]
+        final fun <get-registry>(): io.github.ammaralghifary.blueprint.registry/SduiRegistry // io.github.ammaralghifary.blueprint/Blueprint.registry.<get-registry>|<get-registry>(){}[0]
+
+    final fun decodeScreen(kotlin/String): io.github.ammaralghifary.blueprint.model/SduiScreen // io.github.ammaralghifary.blueprint/Blueprint.decodeScreen|decodeScreen(kotlin.String){}[0]
+    final fun decodeScreen(kotlinx.serialization.json/JsonElement): io.github.ammaralghifary.blueprint.model/SduiScreen // io.github.ammaralghifary.blueprint/Blueprint.decodeScreen|decodeScreen(kotlinx.serialization.json.JsonElement){}[0]
+}
+
+final val io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_ActionEvent$stableprop // io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_ActionEvent$stableprop|#static{}io_github_ammaralghifary_blueprint_model_ActionEvent$stableprop[0]
+final val io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_DecodeError$stableprop // io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_DecodeError$stableprop|#static{}io_github_ammaralghifary_blueprint_model_DecodeError$stableprop[0]
+final val io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_NavigateAction$stableprop // io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_NavigateAction$stableprop|#static{}io_github_ammaralghifary_blueprint_model_NavigateAction$stableprop[0]
+final val io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_NavigateAction_$serializer$stableprop // io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_NavigateAction_$serializer$stableprop|#static{}io_github_ammaralghifary_blueprint_model_NavigateAction_$serializer$stableprop[0]
+final val io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_SduiModifier$stableprop // io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_SduiModifier$stableprop|#static{}io_github_ammaralghifary_blueprint_model_SduiModifier$stableprop[0]
+final val io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_SduiModifier_$serializer$stableprop // io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_SduiModifier_$serializer$stableprop|#static{}io_github_ammaralghifary_blueprint_model_SduiModifier_$serializer$stableprop[0]
+final val io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_SduiPadding$stableprop // io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_SduiPadding$stableprop|#static{}io_github_ammaralghifary_blueprint_model_SduiPadding$stableprop[0]
+final val io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_SduiPadding_$serializer$stableprop // io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_SduiPadding_$serializer$stableprop|#static{}io_github_ammaralghifary_blueprint_model_SduiPadding_$serializer$stableprop[0]
+final val io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_SduiScreen$stableprop // io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_SduiScreen$stableprop|#static{}io_github_ammaralghifary_blueprint_model_SduiScreen$stableprop[0]
+final val io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_SduiScreen_$serializer$stableprop // io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_SduiScreen_$serializer$stableprop|#static{}io_github_ammaralghifary_blueprint_model_SduiScreen_$serializer$stableprop[0]
+final val io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_SduiSize$stableprop // io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_SduiSize$stableprop|#static{}io_github_ammaralghifary_blueprint_model_SduiSize$stableprop[0]
+final val io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_SduiSize_$serializer$stableprop // io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_SduiSize_$serializer$stableprop|#static{}io_github_ammaralghifary_blueprint_model_SduiSize_$serializer$stableprop[0]
+final val io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_UnknownAction$stableprop // io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_UnknownAction$stableprop|#static{}io_github_ammaralghifary_blueprint_model_UnknownAction$stableprop[0]
+final val io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_UnknownComponent$stableprop // io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_UnknownComponent$stableprop|#static{}io_github_ammaralghifary_blueprint_model_UnknownComponent$stableprop[0]
+final val io.github.ammaralghifary.blueprint.registry/io_github_ammaralghifary_blueprint_registry_SduiRegistry$stableprop // io.github.ammaralghifary.blueprint.registry/io_github_ammaralghifary_blueprint_registry_SduiRegistry$stableprop|#static{}io_github_ammaralghifary_blueprint_registry_SduiRegistry$stableprop[0]
+final val io.github.ammaralghifary.blueprint.registry/io_github_ammaralghifary_blueprint_registry_SduiRegistryBuilder$stableprop // io.github.ammaralghifary.blueprint.registry/io_github_ammaralghifary_blueprint_registry_SduiRegistryBuilder$stableprop|#static{}io_github_ammaralghifary_blueprint_registry_SduiRegistryBuilder$stableprop[0]
+final val io.github.ammaralghifary.blueprint/io_github_ammaralghifary_blueprint_Blueprint$stableprop // io.github.ammaralghifary.blueprint/io_github_ammaralghifary_blueprint_Blueprint$stableprop|#static{}io_github_ammaralghifary_blueprint_Blueprint$stableprop[0]
+
+final fun (io.github.ammaralghifary.blueprint.model/SduiModifier).io.github.ammaralghifary.blueprint.modifier/toComposeModifier(androidx.compose.ui/Modifier = ...): androidx.compose.ui/Modifier // io.github.ammaralghifary.blueprint.modifier/toComposeModifier|toComposeModifier@io.github.ammaralghifary.blueprint.model.SduiModifier(androidx.compose.ui.Modifier){}[0]
+final fun (io.github.ammaralghifary.blueprint.model/SduiModifier?).io.github.ammaralghifary.blueprint.modifier/toTextStyle(androidx.compose.ui.text/TextStyle): androidx.compose.ui.text/TextStyle // io.github.ammaralghifary.blueprint.modifier/toTextStyle|toTextStyle@io.github.ammaralghifary.blueprint.model.SduiModifier?(androidx.compose.ui.text.TextStyle){}[0]
+final fun (kotlin/String?).io.github.ammaralghifary.blueprint.modifier/toColorOrNull(): androidx.compose.ui.graphics/Color? // io.github.ammaralghifary.blueprint.modifier/toColorOrNull|toColorOrNull@kotlin.String?(){}[0]
+final fun io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_ActionEvent$stableprop_getter(): kotlin/Int // io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_ActionEvent$stableprop_getter|io_github_ammaralghifary_blueprint_model_ActionEvent$stableprop_getter(){}[0]
+final fun io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_DecodeError$stableprop_getter(): kotlin/Int // io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_DecodeError$stableprop_getter|io_github_ammaralghifary_blueprint_model_DecodeError$stableprop_getter(){}[0]
+final fun io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_NavigateAction$stableprop_getter(): kotlin/Int // io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_NavigateAction$stableprop_getter|io_github_ammaralghifary_blueprint_model_NavigateAction$stableprop_getter(){}[0]
+final fun io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_NavigateAction_$serializer$stableprop_getter(): kotlin/Int // io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_NavigateAction_$serializer$stableprop_getter|io_github_ammaralghifary_blueprint_model_NavigateAction_$serializer$stableprop_getter(){}[0]
+final fun io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_SduiModifier$stableprop_getter(): kotlin/Int // io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_SduiModifier$stableprop_getter|io_github_ammaralghifary_blueprint_model_SduiModifier$stableprop_getter(){}[0]
+final fun io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_SduiModifier_$serializer$stableprop_getter(): kotlin/Int // io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_SduiModifier_$serializer$stableprop_getter|io_github_ammaralghifary_blueprint_model_SduiModifier_$serializer$stableprop_getter(){}[0]
+final fun io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_SduiPadding$stableprop_getter(): kotlin/Int // io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_SduiPadding$stableprop_getter|io_github_ammaralghifary_blueprint_model_SduiPadding$stableprop_getter(){}[0]
+final fun io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_SduiPadding_$serializer$stableprop_getter(): kotlin/Int // io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_SduiPadding_$serializer$stableprop_getter|io_github_ammaralghifary_blueprint_model_SduiPadding_$serializer$stableprop_getter(){}[0]
+final fun io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_SduiScreen$stableprop_getter(): kotlin/Int // io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_SduiScreen$stableprop_getter|io_github_ammaralghifary_blueprint_model_SduiScreen$stableprop_getter(){}[0]
+final fun io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_SduiScreen_$serializer$stableprop_getter(): kotlin/Int // io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_SduiScreen_$serializer$stableprop_getter|io_github_ammaralghifary_blueprint_model_SduiScreen_$serializer$stableprop_getter(){}[0]
+final fun io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_SduiSize$stableprop_getter(): kotlin/Int // io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_SduiSize$stableprop_getter|io_github_ammaralghifary_blueprint_model_SduiSize$stableprop_getter(){}[0]
+final fun io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_SduiSize_$serializer$stableprop_getter(): kotlin/Int // io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_SduiSize_$serializer$stableprop_getter|io_github_ammaralghifary_blueprint_model_SduiSize_$serializer$stableprop_getter(){}[0]
+final fun io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_UnknownAction$stableprop_getter(): kotlin/Int // io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_UnknownAction$stableprop_getter|io_github_ammaralghifary_blueprint_model_UnknownAction$stableprop_getter(){}[0]
+final fun io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_UnknownComponent$stableprop_getter(): kotlin/Int // io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_UnknownComponent$stableprop_getter|io_github_ammaralghifary_blueprint_model_UnknownComponent$stableprop_getter(){}[0]
+final fun io.github.ammaralghifary.blueprint.registry/io_github_ammaralghifary_blueprint_registry_SduiRegistry$stableprop_getter(): kotlin/Int // io.github.ammaralghifary.blueprint.registry/io_github_ammaralghifary_blueprint_registry_SduiRegistry$stableprop_getter|io_github_ammaralghifary_blueprint_registry_SduiRegistry$stableprop_getter(){}[0]
+final fun io.github.ammaralghifary.blueprint.registry/io_github_ammaralghifary_blueprint_registry_SduiRegistryBuilder$stableprop_getter(): kotlin/Int // io.github.ammaralghifary.blueprint.registry/io_github_ammaralghifary_blueprint_registry_SduiRegistryBuilder$stableprop_getter|io_github_ammaralghifary_blueprint_registry_SduiRegistryBuilder$stableprop_getter(){}[0]
+final fun io.github.ammaralghifary.blueprint.registry/sduiRegistry(kotlin/Function1<io.github.ammaralghifary.blueprint.registry/SduiRegistryBuilder, kotlin/Unit>): io.github.ammaralghifary.blueprint.registry/SduiRegistry // io.github.ammaralghifary.blueprint.registry/sduiRegistry|sduiRegistry(kotlin.Function1<io.github.ammaralghifary.blueprint.registry.SduiRegistryBuilder,kotlin.Unit>){}[0]
+final fun io.github.ammaralghifary.blueprint.render/BlueprintRenderer(io.github.ammaralghifary.blueprint.model/SduiComponent, io.github.ammaralghifary.blueprint/Blueprint, androidx.compose.ui/Modifier?, kotlin/Function1<io.github.ammaralghifary.blueprint.model/ActionEvent, kotlin/Unit>?, kotlin/Function1<io.github.ammaralghifary.blueprint.model/SduiAction, kotlin/Unit>?, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int) // io.github.ammaralghifary.blueprint.render/BlueprintRenderer|BlueprintRenderer(io.github.ammaralghifary.blueprint.model.SduiComponent;io.github.ammaralghifary.blueprint.Blueprint;androidx.compose.ui.Modifier?;kotlin.Function1<io.github.ammaralghifary.blueprint.model.ActionEvent,kotlin.Unit>?;kotlin.Function1<io.github.ammaralghifary.blueprint.model.SduiAction,kotlin.Unit>?;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int){}[0]
+final fun io.github.ammaralghifary.blueprint.render/BlueprintRenderer(io.github.ammaralghifary.blueprint.model/SduiScreen, io.github.ammaralghifary.blueprint/Blueprint, androidx.compose.ui/Modifier?, kotlin/Function1<io.github.ammaralghifary.blueprint.model/ActionEvent, kotlin/Unit>?, kotlin/Function1<io.github.ammaralghifary.blueprint.model/SduiAction, kotlin/Unit>?, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int) // io.github.ammaralghifary.blueprint.render/BlueprintRenderer|BlueprintRenderer(io.github.ammaralghifary.blueprint.model.SduiScreen;io.github.ammaralghifary.blueprint.Blueprint;androidx.compose.ui.Modifier?;kotlin.Function1<io.github.ammaralghifary.blueprint.model.ActionEvent,kotlin.Unit>?;kotlin.Function1<io.github.ammaralghifary.blueprint.model.SduiAction,kotlin.Unit>?;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int){}[0]
+final fun io.github.ammaralghifary.blueprint/io_github_ammaralghifary_blueprint_Blueprint$stableprop_getter(): kotlin/Int // io.github.ammaralghifary.blueprint/io_github_ammaralghifary_blueprint_Blueprint$stableprop_getter|io_github_ammaralghifary_blueprint_Blueprint$stableprop_getter(){}[0]

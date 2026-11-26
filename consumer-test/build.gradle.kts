@@ -1,11 +1,11 @@
 // A tiny consumer of the published libraries, built on its own (it is not part of the main build).
 // What it is built with is a parameter, so one project covers a matrix:
-//   -Pkotlin=2.0.21   Kotlin compiler and plugins      (default 2.0.21)
-//   -Pagp=8.13.2      Android Gradle Plugin            (default 8.13.2)
+//   -Pkotlin=2.3.21   Kotlin compiler and plugins      (default 2.3.21)
+//   -Pagp=9.3.1       Android Gradle Plugin            (default 9.3.1)
 // See README.md.
 buildscript {
-    val kotlinVersion = (project.findProperty("kotlin") ?: "2.0.21") as String
-    val agpVersion = (project.findProperty("agp") ?: "8.13.2") as String
+    val kotlinVersion = (project.findProperty("kotlin") ?: "2.3.21") as String
+    val agpVersion = (project.findProperty("agp") ?: "9.3.1") as String
     repositories {
         google()
         mavenCentral()
