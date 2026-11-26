@@ -1,18 +1,23 @@
 import java.util.Properties
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 plugins {
     id("com.android.application")
-    id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
     id("org.jetbrains.kotlin.plugin.serialization")
 }
 
-// -Pcompose=2024.09.00 is the Compose BOM the consumer uses (default: the oldest the library supports).
-val composeBom = providers.gradleProperty("compose").getOrElse("2024.09.00")
+// AGP 9 compiles Kotlin itself and rejects this plugin; older AGPs (-Pagp=8.x) need it.
+if (providers.gradleProperty("agp").getOrElse("9").substringBefore('.').toInt() < 9) {
+    apply(plugin = "org.jetbrains.kotlin.android")
+}
 
-// -Planguage=2.0 pins languageVersion and apiVersion, as many apps do. Without it the consumer compiles at
+// -Pcompose=2026.05.01 is the Compose BOM the consumer uses (default: the oldest the library supports).
+val composeBom = providers.gradleProperty("compose").getOrElse("2026.05.01")
+
+// -Planguage=2.3 pins languageVersion and apiVersion, as many apps do. Without it the consumer compiles at
 // its Kotlin version's own default, which is a different (and less common) situation.
 val languageLevel = providers.gradleProperty("language").orNull
 
@@ -23,12 +28,13 @@ val blueprintVersion: String = providers.gradleProperty("blueprint").orNull
 
 android {
     namespace = "com.example.consumer"
-    compileSdk = 36
+    // The oldest compileSdk the library supports.
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.consumer"
         minSdk = 23
-        targetSdk = 36
+        targetSdk = 35
         versionCode = 1
         versionName = "1"
     }
@@ -39,7 +45,7 @@ android {
     }
 }
 
-kotlin {
+configure<KotlinAndroidProjectExtension> {
     compilerOptions {
         jvmTarget.set(JvmTarget.JVM_11)
         languageLevel?.let {

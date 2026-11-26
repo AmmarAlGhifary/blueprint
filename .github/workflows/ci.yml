@@ -33,11 +33,12 @@ jobs:
         run: ./gradlew apiCheck
 
       - name: Unit tests
-        run: ./gradlew :core:testDebugUnitTest :defaults:testDebugUnitTest
+        run: ./gradlew :core:testAndroidHostTest :core:desktopTest :defaults:testDebugUnitTest
 
-      # The old-Compose floor and explicitApi() are enforced by compiling the release libraries.
+      # The old-Compose floor and explicitApi() are enforced by compiling the release libraries. :core:assemble
+      # covers every target, the iOS klibs included (they cross-compile on Linux).
       - name: Release libraries
-        run: ./gradlew :core:assembleRelease :defaults:assembleRelease
+        run: ./gradlew :core:assemble :defaults:assembleRelease
 
       - name: Sample app
         run: ./gradlew :app:assembleDebug
@@ -63,17 +64,12 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # The floor: the published POMs pin kotlin-stdlib to 2.0.21, the oldest Kotlin tested here.
-          - name: Kotlin 2.0.21
-            props: -Pkotlin=2.0.21
-          - name: Kotlin 2.2.10
-            props: -Pkotlin=2.2.10
-          # What the library itself is built with: Kotlin 2.2.10 at language and API level 2.0.
-          - name: Kotlin 2.2.10, language 2.0
-            props: -Pkotlin=2.2.10 -Planguage=2.0
-          # A newer Kotlin, pinned to language 2.0 as many apps are.
-          - name: Kotlin 2.4.21, language 2.0
-            props: -Pkotlin=2.4.21 -Planguage=2.0
+          # The floor: the published POMs pin kotlin-stdlib to this minor, the oldest Kotlin supported.
+          - name: Kotlin 2.3.21
+            props: -Pkotlin=2.3.21
+          # The latest stable Kotlin, which the libraries themselves are built with.
+          - name: Kotlin 2.4.21
+            props: -Pkotlin=2.4.21
     steps:
       - uses: actions/checkout@v7
 
@@ -89,3 +85,29 @@ jobs:
 
       - name: Compile the consumer (${{ matrix.name }})
         run: ./gradlew -p consumer-test :app:compileDebugKotlin ${{ matrix.props }} -Pandroid.useAndroidX=true
+
+  # Linking and running iOS tests needs Xcode, so this is the one job that cannot run on Linux.
+  ios:
+    name: iOS simulator tests
+    runs-on: macos-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: 25
+
+      - uses: gradle/actions/setup-gradle@v6
+
+      - name: Core tests on the iOS simulator
+        run: ./gradlew :core:iosSimulatorArm64Test
+
+      - name: Upload test reports
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ios-test-reports
+          path: core/build/reports/tests
+          if-no-files-found: ignore
