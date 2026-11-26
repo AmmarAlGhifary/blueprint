@@ -5,6 +5,32 @@ All notable changes to Blueprint are recorded here. The format follows
 [Semantic Versioning](https://semver.org/) once 0.1.0 is published. The version number lives in
 `gradle.properties` (`VERSION_NAME`).
 
+## [Unreleased]
+
+### Added
+
+- `blueprint-core` is now a Kotlin Multiplatform library built on Compose Multiplatform, with targets for
+  Android, desktop (JVM), `iosArm64` and `iosSimulatorArm64`. Decoding, the registry, the renderer and the
+  server modifier are shared code. `iosX64` is not built: Compose Multiplatform no longer publishes it.
+  `blueprint-defaults` is still Android only.
+- On the new targets the default fallback follows the build type where there is one: a debug iOS binary
+  draws the labelled box. On desktop it draws nothing; use `fallback { ... }` to show a placeholder. On
+  iOS a stack overflow cannot be caught, so the payload depth limit is what keeps decoding safe there.
+
+### Changed
+
+- **Breaking:** the Kotlin floor is now **2.3** (was 2.0). The libraries are built with Kotlin 2.4.21 at
+  `languageVersion`/`apiVersion` 2.3, their POMs declare `kotlin-stdlib` **2.3.21**, and the iOS libraries
+  use klib ABI 2.3.
+- **Breaking:** the Android Compose floor is now **1.11.2** (BOM 2026.05.01, `material3` 1.4.0), was 1.7.0.
+  `blueprint-core` gets it through Compose Multiplatform **1.11.1**.
+- **Breaking:** apps need `compileSdk` **35** or later, and Android Gradle Plugin 8.6 or later, both of
+  which that Compose release requires. `minSdk` stays 23.
+- `kotlinx-serialization-json` is now 1.11.0.
+- Gradle users keep the `io.github.ammaralghifary:blueprint-core` coordinate; Gradle picks the artifact for
+  each target. A build that reads only POM files must depend on `blueprint-core-android` or
+  `blueprint-core-desktop`.
+
 ## [0.3.0] - 2026-11-17
 
 ### Changed

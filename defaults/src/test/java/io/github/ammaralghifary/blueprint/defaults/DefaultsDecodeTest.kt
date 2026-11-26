@@ -149,7 +149,7 @@ class DefaultsDecodeTest {
     @Test
     fun homeDashboardFixtureDecodesWithTheStockPackWithoutThrowing() {
         // Lives in :core's test resources, so it is not on this module's classpath.
-        val file = listOf("../core/src/test/resources/home_dashboard.json", "core/src/test/resources/home_dashboard.json")
+        val file = listOf("../core/src/jvmSharedTest/resources/home_dashboard.json", "core/src/jvmSharedTest/resources/home_dashboard.json")
             .map(::File).first { it.exists() }
         val screen = blueprint.decodeScreen(file.readText())
         assertEquals("home_dashboard", screen.id)

@@ -1,9 +1,10 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmDefaultMode
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
+import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.maven.publish)
@@ -16,6 +17,10 @@ android {
 
     defaultConfig {
         minSdk = 23
+        // AGP 9 would otherwise require this module's own compileSdk of every app. 35 is what Compose needs.
+        aarMetadata {
+            minCompileSdk = 35
+        }
     }
 
     testOptions {
@@ -30,14 +35,21 @@ android {
 
 kotlin {
     explicitApi()
-    // The published POM depends on this stdlib, not on the 2.2.10 compiler's own (see libs.versions.toml).
+    // The published POM depends on this stdlib, not on the compiler's own (see libs.versions.toml).
     coreLibrariesVersion = libs.versions.kotlinStdlibFloor.get()
     compilerOptions {
         jvmTarget.set(JvmTarget.JVM_11)
-        // Keep the published metadata readable by consumers on older Kotlin compilers.
-        languageVersion.set(KotlinVersion.KOTLIN_2_0)
-        apiVersion.set(KotlinVersion.KOTLIN_2_0)
+        jvmDefault.set(JvmDefaultMode.DISABLE)
+        // Keep the published metadata readable by consumers on the previous Kotlin minor.
+        val floor = KotlinVersion.fromVersion(libs.versions.kotlinLanguage.get())
+        languageVersion.set(floor)
+        apiVersion.set(floor)
     }
+}
+
+// The module name apps have seen since 0.1.0; it is part of generated JVM names, and AGP 9 dropped the suffix.
+tasks.withType<KotlinJvmCompile>().matching { it.name == "compileReleaseKotlin" }.configureEach {
+    compilerOptions.moduleName.set("defaults_release")
 }
 
 dependencies {
