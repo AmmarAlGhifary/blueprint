@@ -47,6 +47,10 @@ import kotlinx.serialization.modules.polymorphic
  * swallowed; it can never make [decodeScreen] throw. The screen and [DecodeError.raw] carry payload
  * text: keep them out of analytics and crash reporters, and log [DecodeError.message] instead.
  *
+ * A payload says which major version of the schema it was written for in `schema_version` (absent
+ * means 1). One outside [supportedSchemaVersions] decodes like any other and is reported as
+ * [DecodeErrorKind.UnsupportedVersion]; what to do about it is the host's decision.
+ *
  * @author Ammar Al Ghifary
  */
 public class Blueprint(
@@ -100,7 +104,18 @@ public class Blueprint(
     /** Same contract as the [String] overload: bad input degrades to an [UnknownComponent] body. */
     public fun decodeScreen(element: JsonElement): SduiScreen {
         val (screen, errors) = sink.collect { decodeGuarded(element) }
-        return finish(screen, errors)
+        // Read from the payload, outside the sink, so a salvage rollback cannot drop or repeat it.
+        return finish(screen, listOfNotNull(unsupportedVersion(element)) + errors)
+    }
+
+    private fun unsupportedVersion(element: JsonElement): DecodeError? {
+        val root = element as? JsonObject ?: return null
+        // Absent and unreadable values are not versions: the latter is reported by the envelope decode.
+        val declared = (root["schema_version"] as? JsonPrimitive)?.intOrNull ?: return null
+        if (declared in supportedSchemaVersions) return null
+        val side = if (declared < supportedSchemaVersions.first) "older" else "newer"
+        val message = "Unsupported schema_version: $side than the supported range $supportedSchemaVersions"
+        return DecodeError(DecodeErrorKind.UnsupportedVersion, null, message, root)
     }
 
     private fun decodeGuarded(element: JsonElement): SduiScreen {
@@ -124,8 +139,8 @@ public class Blueprint(
     }
 
     /**
-     * The envelope failed to decode. Keep whatever is still usable: a bad `screen_id` or `version`
-     * must not throw away a perfectly good body.
+     * The envelope failed to decode. Keep whatever is still usable: a bad `screen_id`, `version` or
+     * `schema_version` must not throw away a perfectly good body.
      */
     private fun salvageScreen(root: JsonObject, error: IllegalArgumentException): SduiScreen {
         val message = describeFailure(error, sink.fieldNames)
@@ -144,6 +159,7 @@ public class Blueprint(
             id = (root["screen_id"] as? JsonPrimitive)?.contentOrNull,
             body = body ?: UnknownComponent(null, root, error = message),
             version = (root["version"] as? JsonPrimitive)?.intOrNull,
+            schemaVersion = (root["schema_version"] as? JsonPrimitive)?.intOrNull,
         )
     }
 
@@ -189,7 +205,13 @@ public class Blueprint(
         }
     }
 
-    internal companion object {
+    public companion object {
+        /**
+         * The payload schema majors this release of Blueprint was built for. A payload's
+         * `schema_version` outside this range is reported, not rejected.
+         */
+        public val supportedSchemaVersions: IntRange = 1..1
+
         /** JSON levels (objects and arrays) a payload may nest; a component takes two. About 6x real screens. */
         internal const val MAX_DEPTH: Int = 100
     }
