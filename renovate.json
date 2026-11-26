@@ -12,6 +12,7 @@
       "matchPackageNames": [
         "androidx.compose:compose-bom",
         "org.jetbrains.kotlin.**",
+        "org.jetbrains.kotlin:**",
         "com.android.tools.build:gradle",
         "com.android.application**",
         "com.android.library**",
