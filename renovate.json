@@ -23,8 +23,23 @@
       "description": "Toolchain floors: merge by hand only after checking AGP/Kotlin compatibility.",
       "matchPackageNames": [
         "gradle",
-        "org.jetbrains.compose**"
+        "org.jetbrains.compose**",
+        "org.jetbrains.kotlinx:kotlinx-serialization**"
       ],
+      "groupName": "toolchain",
+      "addLabels": [
+        "toolchain-floor"
+      ]
+    },
+    {
+      "description": "The test-only Compose BOM (composeBomLatest) is not a consumer floor, so it leaves the hold above and joins the toolchain group. composeBom stays held.",
+      "matchPackageNames": [
+        "androidx.compose:compose-bom"
+      ],
+      "matchJsonata": [
+        "sharedVariableName = 'composeBomLatest'"
+      ],
+      "enabled": true,
       "groupName": "toolchain",
       "addLabels": [
         "toolchain-floor"
