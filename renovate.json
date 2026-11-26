@@ -13,10 +13,22 @@
         "androidx.compose:compose-bom",
         "org.jetbrains.kotlin.**",
         "com.android.tools.build:gradle",
-        "com.android.application",
-        "com.android.library"
+        "com.android.application**",
+        "com.android.library**",
+        "com.android.kotlin.multiplatform.library**"
       ],
       "enabled": false
+    },
+    {
+      "description": "Toolchain floors: merge by hand only after checking AGP/Kotlin compatibility.",
+      "matchPackageNames": [
+        "gradle",
+        "org.jetbrains.compose**"
+      ],
+      "groupName": "toolchain",
+      "addLabels": [
+        "toolchain-floor"
+      ]
     }
   ]
 }
