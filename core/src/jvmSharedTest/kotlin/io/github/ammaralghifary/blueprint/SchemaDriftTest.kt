@@ -11,6 +11,7 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.int
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import org.junit.Assert.assertEquals
@@ -68,6 +69,13 @@ class SchemaDriftTest {
 
     @Test
     fun theScreenEnvelopeMatches() = assertMatches("Screen", schema, SduiScreen.serializer())
+
+    @Test
+    fun theSchemaVersionLimitsAreTheSupportedRange() {
+        val node = schema["properties"]!!.jsonObject["schema_version"]!!.jsonObject
+        assertEquals(Blueprint.supportedSchemaVersions.first, node["minimum"]!!.jsonPrimitive.int)
+        assertEquals(Blueprint.supportedSchemaVersions.last, node["maximum"]!!.jsonPrimitive.int)
+    }
 
     @Test
     fun everyDefinitionACoreModelPointsAtExists() {

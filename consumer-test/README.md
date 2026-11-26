@@ -14,17 +14,19 @@ It is a standalone Gradle build, not part of the main one. Nothing here is publi
 - a `@Serializable` model and a registered renderer for a component of its own (`component<T>("type") { … }`);
 - a container that renders its children with `scope.Render` and `scope.RenderAll`, and fires `scope.dispatch`;
 - `Blueprint(...)` with both callbacks, `decodeScreen`, and a `@Composable` that calls `BlueprintRenderer`.
+- `sduiActions()`, a `SduiActionController` with a handler, `ProvideSduiActions` and a read of
+  `LocalSduiActionContext`.
 
-It declares only the two Blueprint libraries, Compose and material3. It does not declare
+It declares only the three Blueprint libraries, Compose and material3. It does not declare
 `kotlinx-serialization`, so if the library's POM stops exposing it, this project stops compiling.
 
 ## Run it locally
 
-From the repository root. Step 1 publishes the two libraries to Maven Local (`~/.m2`); step 2 compiles the
+From the repository root. Step 1 publishes the three libraries to Maven Local (`~/.m2`); step 2 compiles the
 consumer against them.
 
 ```bash
-./gradlew :core:publishToMavenLocal :defaults:publishToMavenLocal
+./gradlew :core:publishToMavenLocal :defaults:publishToMavenLocal :actions:publishToMavenLocal
 
 ./gradlew -p consumer-test :app:compileDebugKotlin -Pkotlin=2.3.21 -Pandroid.useAndroidX=true
 ```

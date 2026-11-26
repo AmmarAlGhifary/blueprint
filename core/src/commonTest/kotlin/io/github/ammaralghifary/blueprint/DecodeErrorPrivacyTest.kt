@@ -80,6 +80,8 @@ class DecodeErrorPrivacyTest {
             "a bare word instead of an object" to """{"body": $SECRET}""",
             "bad screen metadata" to """{"screen_id":{"a":"$SECRET"},"body":{"type":"text","text":"x"}}""",
             "a secret as the unregistered type" to """{"body":{"type":"$SECRET"}}""",
+            "a secret as the schema_version" to """{"schema_version":"$SECRET","body":{"type":"text","text":"x"}}""",
+            "a secret beside an unsupported schema_version" to """{"schema_version":2,"screen_id":"$SECRET","body":{"type":"text","text":"$SECRET"}}""",
             "a host model whose own check fails" to """{"body":{"type":"strict","n":-1}}""",
         )
         for ((label, payload) in cases) {
@@ -92,6 +94,14 @@ class DecodeErrorPrivacyTest {
             }
             treeErrors(screen.body).forEach { assertFalse(it.contains(SECRET), "[$label] error leaked: $it") }
         }
+    }
+
+    @Test
+    fun anUnsupportedVersionMessageNamesTheRangeButNotTheNumberSent() {
+        decode("""{"schema_version":424242,"screen_id":"$SECRET","body":{"type":"text","text":"x"}}""")
+        val error = seen.single()
+        assertEquals("Unsupported schema_version: newer than the supported range 1..1", error.message)
+        assertEquals("DecodeError(kind=UnsupportedVersion, message=${error.message})", error.toString())
     }
 
     @Test

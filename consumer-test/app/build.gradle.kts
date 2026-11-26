@@ -64,4 +64,5 @@ dependencies {
 
     implementation("io.github.ammaralghifary:blueprint-core:$blueprintVersion")
     implementation("io.github.ammaralghifary:blueprint-defaults:$blueprintVersion")
+    implementation("io.github.ammaralghifary:blueprint-actions:$blueprintVersion")
 }

@@ -22,4 +22,5 @@ dependencyResolutionManagement {
 rootProject.name = "blueprint"
 include(":core")
 include(":defaults")
+include(":actions")
 include(":app")

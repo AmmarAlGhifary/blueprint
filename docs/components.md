@@ -43,8 +43,8 @@ Read by `text` and `button`. Host components can reuse them with `modifier.toTex
 |---|---|---|
 | `text` | **`text`**, `style` `display\|headline\|title\|body\|label` (default `body`), `max_lines`, `align` `start\|center\|end` | |
 | `image` | **`url`**, `content_description`, `scale` `fit\|crop\|fill` (default `fit`) | Coil |
-| `button` | **`text`**, `action`, `variant` `filled\|outlined\|text` (default `filled`) | disabled when `action` is absent |
-| `card` | `children`, `action` | tappable when `action` is set |
+| `button` | **`text`**, `action`, `variant` `filled\|outlined\|text` (default `filled`) | disabled when `action` is absent or [running](#actions) |
+| `card` | `children`, `action` | tappable when `action` is set and not [running](#actions) |
 | `column` | `children`, `arrangement` `start\|center\|end\|space_between\|space_around\|space_evenly`, `scrollable` (default false) | |
 | `row` | `children`, `arrangement` (same set) | |
 | `box` | `children` | |
@@ -53,6 +53,69 @@ Read by `text` and `button`. Host components can reuse them with `modifier.toTex
 | `divider` | `thickness` (dp, default 1), `color` (hex) | |
 
 Action: `{"type": "navigate", "destination": "…", "params": {"k": "v"}}` → `NavigateAction`.
+
+## Actions
+
+`blueprint-actions` is an optional module with three more actions and a controller that follows each action
+while the app handles it.
+
+| `type` | Fields (**required** in bold) | Kotlin |
+|---|---|---|
+| `open_url` | **`url`** | `OpenUrlAction` |
+| `submit` | **`target`**, `params` (string values) | `SubmitAction` |
+| `set_state` | **`key`**, **`value`** (string, number, boolean, or `null` to remove) | `SetStateAction` |
+
+```kotlin
+val blueprint = Blueprint(sduiRegistry {
+    include(DefaultSduiRegistry)
+    sduiActions()                                  // open_url, submit, set_state
+})
+
+@Composable
+fun Screen(screen: SduiScreen) {
+    val scope = rememberCoroutineScope()
+    val controller = remember {
+        SduiActionController(
+            scope,
+            handler = { event ->
+                when (val action = event.action) {
+                    is SubmitAction -> if (api.send(action)) ActionResult.Done else ActionResult.Failed
+                    else -> ActionResult.NotHandled
+                }
+            },
+            onHandlerError = { _, error -> report(error) },
+        )
+    }
+    ProvideSduiActions(controller) {
+        BlueprintRenderer(screen, blueprint, onActionEvent = controller::onActionEvent)
+    }
+}
+```
+
+**Your handler has the final say, and the library does nothing outside the app.** It never navigates, opens a
+URL or sends data. Check a server-sent URL before you open it.
+
+| What happens | Status of the action |
+|---|---|
+| dispatched | `Running`; the handler is started. An equal action dispatched meanwhile is not handled again |
+| handler returns `Done` or `Failed`, or throws (`Failed`, and `onHandlerError` is told) | kept until it is dispatched again or `controller.reset()` |
+| handler returns `NotHandled` for `set_state` | the controller stores the value; `Done` |
+| handler returns `NotHandled` for anything else, including an unknown action | `Idle`; nothing happens |
+| the controller's scope is cancelled | `Idle` |
+
+- While an action is `Running`, a stock `button` or `card` that carries it is disabled, and a button shows a
+  small progress indicator if it is still running after about 300 ms.
+- Actions that are equal share one status, since the payload has no node id yet: two buttons with the same
+  action are busy together. Make your own action classes data classes.
+- `set_state` writes flat keys into one store per controller, which is not persisted. Your own components read
+  it with `LocalSduiActionContext.current?.stateValue("key")`; no stock component does. `controller.setState`
+  and `controller.stateValues` are the host's side of it.
+- `reset()` forgets finished statuses. It leaves running actions and the stored state alone.
+- `onAction` on `BlueprintRenderer` is still called for every dispatch. Handle each action in one place, the
+  handler or `onAction`, not both.
+- Without a controller nothing changes: actions reach your callbacks as before and have no status.
+- **Privacy:** URLs, params, keys and values are payload text. The three actions leave them out of
+  `toString()`, and the library logs nothing.
 
 **Lists in unbounded space:** a lazy `list` needs bounded room on its scroll axis. Inside a `column` with
 `"scrollable": true`, or inside another list's item, it renders as a plain stack instead (every item is
@@ -77,7 +140,7 @@ composed, not just the visible ones), so prefer `column` for short content and `
 { "type": "divider", "thickness": 1, "color": "#CFD8DC" }
 ```
 
-A complete payload: `defaults/src/test/resources/stock_screen.json`.
+A complete payload: `defaults/src/jvmSharedTest/resources/stock_screen.json`.
 
 ## Schema
 
@@ -118,4 +181,5 @@ BlueprintRenderer(
 
 ## Non-goals
 
-Icons, forms/inputs/state, grids, tabs, app bars, theming tokens, and KSP codegen for custom components.
+Icons, forms and inputs, server-driven reading of state, grids, tabs, app bars, theming tokens, and KSP
+codegen for custom components.

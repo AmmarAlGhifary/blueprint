@@ -39,9 +39,13 @@ see the header of `blueprint.d.ts`.
 | `image` | `url` |
 | `button` | `text` |
 | `navigate` action | `destination` |
+| `open_url` action | `url` |
+| `submit` action | `target` |
+| `set_state` action | `key`, and `value` (which may be `null`) |
 | `modifier.width` / `height` | `type`, and `value` when `type` is `exact` |
 
 Everything else is optional. A missing required field degrades only that node; its siblings still render.
+A degraded action leaves its component in place and is delivered to the app as an unknown action.
 
 ## How tolerant it is
 
@@ -60,7 +64,9 @@ while the schema exists to catch mistakes.
 - a colour that is not `#RGB`, `#RRGGBB` or `#AARRGGBB`: skipped when drawing;
 - an `exact` size with no `value`: ignored;
 - a node with no string `type`: shown as unknown;
-- `null` on an optional field: treated as absent;
+- `null` on an optional field: treated as absent (`set_state`'s `value` is required, and its `null` removes
+  the key);
+- a `schema_version` outside the supported range: decoded as usual and reported (see [Versioning](#versioning));
 - a number or boolean sent as a quoted string, such as `"size": "12"`.
 
 **The one gap the other way:** a JSON Schema validator treats `1.0` as an integer and cannot tell it from
@@ -69,12 +75,31 @@ while the schema exists to catch mistakes.
 Integers are 32-bit; a larger one, or a decimal, makes the decoder reject the field. Dp values are clamped:
 below 0 to 0 and above 16384 to 16384.
 
+## Versioning
+
+`schema_version` is an integer naming the major version of this schema a screen was written for. It is
+optional, and absent means 1. `Blueprint.supportedSchemaVersions` is the range a release was built for,
+currently `1..1`.
+
+- **The number changes only for a breaking change**: removing or renaming a field, changing what one means,
+  or adding a required one. Additive changes never bump it, because an app already ignores unknown fields
+  and degrades unknown types.
+- **Outside the range** the screen still decodes and renders. The decoder reports
+  `DecodeErrorKind.UnsupportedVersion` once, to `onDecodeError` and `onDecoded`; the app decides what to do.
+- **Unreadable** (such as `"two"`, `1.5` or an object) is treated like any bad envelope field: reported as
+  `InvalidPayload`, `schemaVersion` is null, and the rest of the screen is kept.
+
+`version` is a different field and belongs to your server, for example a content revision. Blueprint keeps it
+as sent and does not act on it.
+
 ## Where each part lives
 
-- **`:core`**: the screen envelope (`screen_id`, `version`, `body`), the `modifier` box model, and the model
-  of the `navigate` action.
+- **`:core`**: the screen envelope (`screen_id`, `version`, `schema_version`, `body`), the `modifier` box
+  model, and the model of the `navigate` action.
 - **`:defaults`**: the ten stock components (`text`, `image`, `button`, `card`, `column`, `row`, `box`,
   `list`, `spacer`, `divider`) and the registration of `navigate`.
+- **`:actions`**: the `open_url`, `submit` and `set_state` actions, registered with `sduiActions()`. An app
+  without it treats them as unknown actions.
 - **Your app**: any other `type`. Register it with `component<T>("type") { … }` and add its interface to
   `BlueprintScreen<…>`.
 
@@ -82,8 +107,8 @@ Keys are `snake_case` in JSON and `camelCase` in Kotlin (`corner_radius` is `cor
 
 ## Checked against
 
-- `defaults/src/test/resources/stock_screen.json` **validates**.
-- `core/src/test/resources/home_dashboard.json` **fails at one place on purpose**: `body/children/0/size`.
+- `defaults/src/jvmSharedTest/resources/stock_screen.json` **validates**.
+- `core/src/jvmSharedTest/resources/home_dashboard.json` **fails at one place on purpose**: `body/children/0/size`.
   It is a real-world server payload, and its `spacer` sends the token `"medium"`, where the neutral stock
   `spacer` takes a dp number. The library degrades only that spacer and renders the rest. Every other
   host-specific type in the file is an unknown `type` and is accepted.
@@ -94,12 +119,15 @@ Keys are `snake_case` in JSON and `camelCase` in Kotlin (`corner_radius` is `cor
 
 ## Keeping them in step
 
-Two tests compare the schema with the code, so changing a model without updating the schema fails the build.
-`SchemaDriftTest` (in `:core`) covers the screen, `modifier`, `padding`, `size` and `navigate` models.
+Three tests compare the schema with the code, so changing a model without updating the schema fails the build.
+`SchemaDriftTest` (in `:core`) covers the screen, `modifier`, `padding`, `size` and `navigate` models, and
+that the `schema_version` limits equal `Blueprint.supportedSchemaVersions`.
 `DefaultsSchemaDriftTest` (in `:defaults`) covers the ten stock components: their field names, which are
 required, each field's JSON type, that the registry and the schema list the same types, that `navigate`
 decodes to a real action, and the enum values of `text.style`, `text.align`, `image.scale`, `column` and `row`
 `arrangement` and `modifier.alignment` against what the token mappers recognise.
+`ActionsSchemaDriftTest` (in `:actions`) covers the three actions it registers: their field names, which are
+required, each field's JSON type, and that every action type in the schema decodes to a real action.
 
 Not checked automatically: the values of `button.variant` and `list.orientation` (their branching is inline
 in the renderers), and `blueprint.d.ts`. When you change either, or add a stock component, update

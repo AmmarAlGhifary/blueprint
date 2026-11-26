@@ -5,17 +5,38 @@ All notable changes to Blueprint are recorded here. The format follows
 [Semantic Versioning](https://semver.org/) once 0.1.0 is published. The version number lives in
 `gradle.properties` (`VERSION_NAME`).
 
-## [Unreleased]
+## [0.4.0] - 2026-11-26
 
 ### Added
 
-- `blueprint-core` is now a Kotlin Multiplatform library built on Compose Multiplatform, with targets for
-  Android, desktop (JVM), `iosArm64` and `iosSimulatorArm64`. Decoding, the registry, the renderer and the
-  server modifier are shared code. `iosX64` is not built: Compose Multiplatform no longer publishes it.
-  `blueprint-defaults` is still Android only.
+- `blueprint-core` and `blueprint-defaults` are now Kotlin Multiplatform libraries built on Compose
+  Multiplatform, with targets for Android, desktop (JVM), `iosArm64` and `iosSimulatorArm64`. Decoding, the
+  registry, the renderer, the server modifier and the stock components are shared code. `iosX64` is not
+  built: Compose Multiplatform no longer publishes it.
 - On the new targets the default fallback follows the build type where there is one: a debug iOS binary
   draws the labelled box. On desktop it draws nothing; use `fallback { ... }` to show a placeholder. On
   iOS a stack overflow cannot be caught, so the payload depth limit is what keeps decoding safe there.
+- An optional `schema_version` payload field names the major version of the schema a screen was written
+  for; absent means 1. `Blueprint.supportedSchemaVersions` is the range a release supports, currently
+  `1..1`, and `SduiScreen.schemaVersion` is the value as sent. A screen outside the range still decodes and
+  renders, and is reported once as `DecodeErrorKind.UnsupportedVersion`. A value that cannot be read is
+  reported as `InvalidPayload` and leaves `schemaVersion` null. The `version` field is unchanged.
+- A new optional artifact, `blueprint-actions`, multiplatform with the same targets. `sduiActions()`
+  registers three actions: `open_url` (`OpenUrlAction`), `submit` (`SubmitAction`) and `set_state`
+  (`SetStateAction`). Your `SduiActionHandler` returns an `ActionResult` (`Done`, `Failed` or `NotHandled`),
+  a `SduiActionController` follows each action and keeps the state `set_state` writes, and
+  `ProvideSduiActions` makes the controller available to the screen.
+  - The host has the final say: the library never navigates, opens a URL or sends data.
+  - When the handler returns `NotHandled` for `set_state`, the library writes the value itself.
+  - `set_state` requires `value`: without it the action degrades to `UnknownAction`, and an explicit `null`
+    removes the key.
+  - `onAction` on `BlueprintRenderer` is still called for every dispatch, so handle each action in one
+    place, the handler or `onAction`.
+  - `reset()` clears only `Done` and `Failed` statuses; running actions and stored state are kept.
+- `blueprint-core` has `ActionStatus` (`Idle`, `Running`, `Done`, `Failed`), `SduiActionContext` and
+  `LocalSduiActionContext`, which is null unless something provides it. These are additions only.
+- The stock `button` and `card` are disabled while their action is `Running`, and a button shows a progress
+  indicator if that lasts about 300 ms. `blueprint-defaults` does not depend on `blueprint-actions`.
 
 ### Changed
 
@@ -23,13 +44,23 @@ All notable changes to Blueprint are recorded here. The format follows
   `languageVersion`/`apiVersion` 2.3, their POMs declare `kotlin-stdlib` **2.3.21**, and the iOS libraries
   use klib ABI 2.3.
 - **Breaking:** the Android Compose floor is now **1.11.2** (BOM 2026.05.01, `material3` 1.4.0), was 1.7.0.
-  `blueprint-core` gets it through Compose Multiplatform **1.11.1**.
+  The libraries get it through Compose Multiplatform **1.11.1** (`org.jetbrains.compose.material3` 1.9.0).
 - **Breaking:** apps need `compileSdk` **35** or later, and Android Gradle Plugin 8.6 or later, both of
   which that Compose release requires. `minSdk` stays 23.
+- **Breaking:** `DecodeErrorKind` has a new entry, `UnsupportedVersion`, so an exhaustive `when` over it no
+  longer compiles until it handles the new entry.
+- **Breaking:** `SduiScreen` has a new last property, `schemaVersion`, which changes the signatures of its
+  constructor and `copy()`. Code compiled against 0.3.0 must be recompiled.
+- **Breaking:** `blueprint-defaults` loads images with **Coil 3.4.0** instead of Coil 2, using OkHttp on
+  Android and desktop and Ktor (Darwin engine) on iOS. For apps this means:
+  - An app that configured Coil 2's `ImageLoader` must move that setup to Coil 3.
+  - Coil 3 ignores HTTP cache headers unless the app adds `coil-network-cache-control`.
+  - Coil is an `implementation` dependency, so an app that configures it declares Coil 3.4.0 itself. Coil
+    3.5.0 and later require a newer `kotlin-stdlib` than the 2.3 floor.
 - `kotlinx-serialization-json` is now 1.11.0.
-- Gradle users keep the `io.github.ammaralghifary:blueprint-core` coordinate; Gradle picks the artifact for
-  each target. A build that reads only POM files must depend on `blueprint-core-android` or
-  `blueprint-core-desktop`.
+- Gradle users keep the `io.github.ammaralghifary:blueprint-core` and `blueprint-defaults` coordinates;
+  Gradle picks the artifact for each target. A build that reads only POM files must depend on the platform
+  artifact, such as `blueprint-core-android` or `blueprint-core-desktop`.
 
 ## [0.3.0] - 2026-11-17
 
