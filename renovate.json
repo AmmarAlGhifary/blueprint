@@ -17,6 +17,17 @@
         "com.android.library"
       ],
       "enabled": false
+    },
+    {
+      "description": "Toolchain floors: merge by hand only after checking AGP/Kotlin compatibility.",
+      "matchPackageNames": [
+        "gradle",
+        "org.jetbrains.compose**"
+      ],
+      "groupName": "toolchain",
+      "addLabels": [
+        "toolchain-floor"
+      ]
     }
   ]
 }
