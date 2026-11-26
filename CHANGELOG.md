@@ -21,6 +21,22 @@ All notable changes to Blueprint are recorded here. The format follows
   `1..1`, and `SduiScreen.schemaVersion` is the value as sent. A screen outside the range still decodes and
   renders, and is reported once as `DecodeErrorKind.UnsupportedVersion`. A value that cannot be read is
   reported as `InvalidPayload` and leaves `schemaVersion` null. The `version` field is unchanged.
+- A new optional artifact, `blueprint-actions`, multiplatform with the same targets. `sduiActions()`
+  registers three actions: `open_url` (`OpenUrlAction`), `submit` (`SubmitAction`) and `set_state`
+  (`SetStateAction`). Your `SduiActionHandler` returns an `ActionResult` (`Done`, `Failed` or `NotHandled`),
+  a `SduiActionController` follows each action and keeps the state `set_state` writes, and
+  `ProvideSduiActions` makes the controller available to the screen.
+  - The host has the final say: the library never navigates, opens a URL or sends data.
+  - When the handler returns `NotHandled` for `set_state`, the library writes the value itself.
+  - `set_state` requires `value`: without it the action degrades to `UnknownAction`, and an explicit `null`
+    removes the key.
+  - `onAction` on `BlueprintRenderer` is still called for every dispatch, so handle each action in one
+    place, the handler or `onAction`.
+  - `reset()` clears only `Done` and `Failed` statuses; running actions and stored state are kept.
+- `blueprint-core` has `ActionStatus` (`Idle`, `Running`, `Done`, `Failed`), `SduiActionContext` and
+  `LocalSduiActionContext`, which is null unless something provides it. These are additions only.
+- The stock `button` and `card` are disabled while their action is `Running`, and a button shows a progress
+  indicator if that lasts about 300 ms. `blueprint-defaults` does not depend on `blueprint-actions`.
 
 ### Changed
 

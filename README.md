@@ -9,7 +9,7 @@ screens. You fetch the JSON, call `Blueprint.decodeScreen`, and render the resul
 
 ## Install
 
-Both libraries come from Maven Central:
+The libraries come from Maven Central:
 
 ```kotlin
 // settings.gradle.kts
@@ -25,13 +25,16 @@ dependencies {
     implementation("io.github.ammaralghifary:blueprint-core:0.4.0")
     // Optional: ready-made text, image, button, card, row, column, ... (Material 3 and Coil)
     implementation("io.github.ammaralghifary:blueprint-defaults:0.4.0")
+    // Optional: open_url, submit and set_state actions
+    implementation("io.github.ammaralghifary:blueprint-actions:0.4.0")
 }
 ```
 
 `blueprint-core` is the engine and needs only Compose and kotlinx.serialization. `blueprint-defaults`
-is the opt-in stock component pack and already includes `blueprint-core`.
+is the opt-in stock component pack and already includes `blueprint-core`. `blueprint-actions` is opt-in too;
+it includes `blueprint-core` but not the stock pack.
 
-Both libraries are multiplatform: Android, desktop (JVM), `iosArm64` and `iosSimulatorArm64`. The
+All three are multiplatform: Android, desktop (JVM), `iosArm64` and `iosSimulatorArm64`. The
 coordinates are the same everywhere, in `commonMain` too; Gradle module metadata picks the artifact for each
 platform.
 
@@ -99,6 +102,72 @@ A payload for the registry above:
 
 The stock components and their JSON are documented in [docs/components.md](docs/components.md). `:app` in
 this repository is a small sample that uses all of the above.
+
+## Actions
+
+With `blueprint-actions`, a controller follows each action from `Running` to `Done` or `Failed`, and stock
+buttons and cards are disabled while theirs is running. Register the actions, write a handler and wrap the
+renderer:
+
+```kotlin
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalUriHandler
+import io.github.ammaralghifary.blueprint.Blueprint
+import io.github.ammaralghifary.blueprint.actions.ActionResult
+import io.github.ammaralghifary.blueprint.actions.OpenUrlAction
+import io.github.ammaralghifary.blueprint.actions.ProvideSduiActions
+import io.github.ammaralghifary.blueprint.actions.SduiActionController
+import io.github.ammaralghifary.blueprint.actions.SubmitAction
+import io.github.ammaralghifary.blueprint.actions.sduiActions
+import io.github.ammaralghifary.blueprint.defaults.DefaultSduiRegistry
+import io.github.ammaralghifary.blueprint.model.SduiScreen
+import io.github.ammaralghifary.blueprint.registry.sduiRegistry
+import io.github.ammaralghifary.blueprint.render.BlueprintRenderer
+
+val blueprint = Blueprint(
+    sduiRegistry {
+        include(DefaultSduiRegistry)
+        sduiActions()                                     // open_url, submit, set_state
+    },
+)
+
+@Composable
+fun ActionScreen(
+    screen: SduiScreen,
+    isAllowed: (String) -> Boolean,                       // your check for a server-sent URL
+    send: suspend (SubmitAction) -> Boolean,              // your networking
+) {
+    val scope = rememberCoroutineScope()
+    val uriHandler = LocalUriHandler.current
+    val controller = remember {
+        SduiActionController(
+            scope,
+            handler = { event ->
+                when (val action = event.action) {
+                    is OpenUrlAction ->
+                        if (isAllowed(action.url)) {
+                            uriHandler.openUri(action.url)
+                            ActionResult.Done
+                        } else {
+                            ActionResult.Failed
+                        }
+                    is SubmitAction -> if (send(action)) ActionResult.Done else ActionResult.Failed
+                    else -> ActionResult.NotHandled       // `set_state` is then stored for you
+                }
+            },
+        )
+    }
+    ProvideSduiActions(controller) {
+        BlueprintRenderer(screen, blueprint, onActionEvent = controller::onActionEvent)
+    }
+}
+```
+
+Your handler has the final say: the library never navigates, opens a URL or sends data. Handle each action in
+one place, the handler or `onAction`, since both are called. The full rules are in
+[docs/components.md](docs/components.md#actions).
 
 ## Tolerant decoding
 
