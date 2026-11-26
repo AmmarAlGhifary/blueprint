@@ -19,6 +19,8 @@ composeMaterial3 = "1.9.0"
 # Tests only, so the render tests exercise current Compose.
 composeBomLatest = "2026.06.01"
 kotlinxSerialization = "1.11.0"
+# What Compose already resolves to, so :actions asks apps for nothing newer.
+kotlinxCoroutines = "1.9.0"
 activityCompose = "1.9.3"
 # 3.4.0 is the newest Coil within the floor: 3.5.0 and later require kotlin-stdlib 2.4.
 coil = "3.4.0"
@@ -44,6 +46,8 @@ androidx-compose-foundation = { group = "androidx.compose.foundation", name = "f
 androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
+kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
+kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
 coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
 coil-network-okhttp = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coil" }
 coil-network-ktor3 = { group = "io.coil-kt.coil3", name = "coil-network-ktor3", version.ref = "coil" }

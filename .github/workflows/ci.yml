@@ -33,12 +33,12 @@ jobs:
         run: ./gradlew apiCheck
 
       - name: Unit tests
-        run: ./gradlew :core:testAndroidHostTest :core:desktopTest :defaults:testAndroidHostTest :defaults:desktopTest
+        run: ./gradlew :core:testAndroidHostTest :core:desktopTest :defaults:testAndroidHostTest :defaults:desktopTest :actions:testAndroidHostTest :actions:desktopTest
 
       # The old-Compose floor and explicitApi() are enforced by compiling the release libraries. assemble covers
       # every target, the iOS klibs included (they cross-compile on Linux).
       - name: Release libraries
-        run: ./gradlew :core:assemble :defaults:assemble
+        run: ./gradlew :core:assemble :defaults:assemble :actions:assemble
 
       - name: Sample app
         run: ./gradlew :app:assembleDebug
@@ -51,6 +51,7 @@ jobs:
           path: |
             core/build/reports/tests
             defaults/build/reports/tests
+            actions/build/reports/tests
           if-no-files-found: ignore
 
   # A tiny app outside the main build compiles against the *published* libraries on several Kotlin versions,
@@ -81,7 +82,7 @@ jobs:
       - uses: gradle/actions/setup-gradle@v6
 
       - name: Publish the libraries to Maven Local
-        run: ./gradlew :core:publishToMavenLocal :defaults:publishToMavenLocal
+        run: ./gradlew :core:publishToMavenLocal :defaults:publishToMavenLocal :actions:publishToMavenLocal
 
       - name: Compile the consumer (${{ matrix.name }})
         run: ./gradlew -p consumer-test :app:compileDebugKotlin ${{ matrix.props }} -Pandroid.useAndroidX=true
@@ -102,7 +103,7 @@ jobs:
       - uses: gradle/actions/setup-gradle@v6
 
       - name: Library tests on the iOS simulator
-        run: ./gradlew :core:iosSimulatorArm64Test :defaults:iosSimulatorArm64Test
+        run: ./gradlew :core:iosSimulatorArm64Test :defaults:iosSimulatorArm64Test :actions:iosSimulatorArm64Test
 
       - name: Upload test reports
         if: failure()
@@ -112,4 +113,5 @@ jobs:
           path: |
             core/build/reports/tests
             defaults/build/reports/tests
+            actions/build/reports/tests
           if-no-files-found: ignore

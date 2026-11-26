@@ -1,0 +1,140 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <blueprint:actions>
+final enum class io.github.ammaralghifary.blueprint.actions/ActionResult : kotlin/Enum<io.github.ammaralghifary.blueprint.actions/ActionResult> { // io.github.ammaralghifary.blueprint.actions/ActionResult|null[0]
+    enum entry Done // io.github.ammaralghifary.blueprint.actions/ActionResult.Done|null[0]
+    enum entry Failed // io.github.ammaralghifary.blueprint.actions/ActionResult.Failed|null[0]
+    enum entry NotHandled // io.github.ammaralghifary.blueprint.actions/ActionResult.NotHandled|null[0]
+
+    final val entries // io.github.ammaralghifary.blueprint.actions/ActionResult.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.ammaralghifary.blueprint.actions/ActionResult> // io.github.ammaralghifary.blueprint.actions/ActionResult.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): io.github.ammaralghifary.blueprint.actions/ActionResult // io.github.ammaralghifary.blueprint.actions/ActionResult.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<io.github.ammaralghifary.blueprint.actions/ActionResult> // io.github.ammaralghifary.blueprint.actions/ActionResult.values|values#static(){}[0]
+}
+
+abstract fun interface io.github.ammaralghifary.blueprint.actions/SduiActionHandler { // io.github.ammaralghifary.blueprint.actions/SduiActionHandler|null[0]
+    abstract suspend fun handle(io.github.ammaralghifary.blueprint.model/ActionEvent): io.github.ammaralghifary.blueprint.actions/ActionResult // io.github.ammaralghifary.blueprint.actions/SduiActionHandler.handle|handle(io.github.ammaralghifary.blueprint.model.ActionEvent){}[0]
+}
+
+final class io.github.ammaralghifary.blueprint.actions/OpenUrlAction : io.github.ammaralghifary.blueprint.model/SduiAction { // io.github.ammaralghifary.blueprint.actions/OpenUrlAction|null[0]
+    constructor <init>(kotlin/String) // io.github.ammaralghifary.blueprint.actions/OpenUrlAction.<init>|<init>(kotlin.String){}[0]
+
+    final val url // io.github.ammaralghifary.blueprint.actions/OpenUrlAction.url|{}url[0]
+        final fun <get-url>(): kotlin/String // io.github.ammaralghifary.blueprint.actions/OpenUrlAction.url.<get-url>|<get-url>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.ammaralghifary.blueprint.actions/OpenUrlAction.component1|component1(){}[0]
+    final fun copy(kotlin/String = ...): io.github.ammaralghifary.blueprint.actions/OpenUrlAction // io.github.ammaralghifary.blueprint.actions/OpenUrlAction.copy|copy(kotlin.String){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.ammaralghifary.blueprint.actions/OpenUrlAction.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.ammaralghifary.blueprint.actions/OpenUrlAction.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.ammaralghifary.blueprint.actions/OpenUrlAction.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.ammaralghifary.blueprint.actions/OpenUrlAction> { // io.github.ammaralghifary.blueprint.actions/OpenUrlAction.$serializer|null[0]
+        final val descriptor // io.github.ammaralghifary.blueprint.actions/OpenUrlAction.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.ammaralghifary.blueprint.actions/OpenUrlAction.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.ammaralghifary.blueprint.actions/OpenUrlAction.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.ammaralghifary.blueprint.actions/OpenUrlAction // io.github.ammaralghifary.blueprint.actions/OpenUrlAction.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.ammaralghifary.blueprint.actions/OpenUrlAction) // io.github.ammaralghifary.blueprint.actions/OpenUrlAction.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.ammaralghifary.blueprint.actions.OpenUrlAction){}[0]
+    }
+
+    final object Companion { // io.github.ammaralghifary.blueprint.actions/OpenUrlAction.Companion|null[0]
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.ammaralghifary.blueprint.actions/OpenUrlAction> // io.github.ammaralghifary.blueprint.actions/OpenUrlAction.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final class io.github.ammaralghifary.blueprint.actions/SduiActionController : io.github.ammaralghifary.blueprint.render/SduiActionContext { // io.github.ammaralghifary.blueprint.actions/SduiActionController|null[0]
+    constructor <init>(kotlinx.coroutines/CoroutineScope, io.github.ammaralghifary.blueprint.actions/SduiActionHandler, kotlin/Function2<io.github.ammaralghifary.blueprint.model/ActionEvent, kotlin/Throwable, kotlin/Unit> = ...) // io.github.ammaralghifary.blueprint.actions/SduiActionController.<init>|<init>(kotlinx.coroutines.CoroutineScope;io.github.ammaralghifary.blueprint.actions.SduiActionHandler;kotlin.Function2<io.github.ammaralghifary.blueprint.model.ActionEvent,kotlin.Throwable,kotlin.Unit>){}[0]
+
+    final val stateValues // io.github.ammaralghifary.blueprint.actions/SduiActionController.stateValues|{}stateValues[0]
+        final fun <get-stateValues>(): kotlin.collections/Map<kotlin/String, kotlinx.serialization.json/JsonPrimitive> // io.github.ammaralghifary.blueprint.actions/SduiActionController.stateValues.<get-stateValues>|<get-stateValues>(){}[0]
+
+    final fun onActionEvent(io.github.ammaralghifary.blueprint.model/ActionEvent) // io.github.ammaralghifary.blueprint.actions/SduiActionController.onActionEvent|onActionEvent(io.github.ammaralghifary.blueprint.model.ActionEvent){}[0]
+    final fun reset() // io.github.ammaralghifary.blueprint.actions/SduiActionController.reset|reset(){}[0]
+    final fun setState(kotlin/String, kotlinx.serialization.json/JsonPrimitive?) // io.github.ammaralghifary.blueprint.actions/SduiActionController.setState|setState(kotlin.String;kotlinx.serialization.json.JsonPrimitive?){}[0]
+    final fun stateValue(kotlin/String): kotlinx.serialization.json/JsonPrimitive? // io.github.ammaralghifary.blueprint.actions/SduiActionController.stateValue|stateValue(kotlin.String){}[0]
+    final fun statusOf(io.github.ammaralghifary.blueprint.model/SduiAction): io.github.ammaralghifary.blueprint.model/ActionStatus // io.github.ammaralghifary.blueprint.actions/SduiActionController.statusOf|statusOf(io.github.ammaralghifary.blueprint.model.SduiAction){}[0]
+}
+
+final class io.github.ammaralghifary.blueprint.actions/SetStateAction : io.github.ammaralghifary.blueprint.model/SduiAction { // io.github.ammaralghifary.blueprint.actions/SetStateAction|null[0]
+    constructor <init>(kotlin/String, kotlinx.serialization.json/JsonPrimitive?) // io.github.ammaralghifary.blueprint.actions/SetStateAction.<init>|<init>(kotlin.String;kotlinx.serialization.json.JsonPrimitive?){}[0]
+
+    final val key // io.github.ammaralghifary.blueprint.actions/SetStateAction.key|{}key[0]
+        final fun <get-key>(): kotlin/String // io.github.ammaralghifary.blueprint.actions/SetStateAction.key.<get-key>|<get-key>(){}[0]
+    final val value // io.github.ammaralghifary.blueprint.actions/SetStateAction.value|{}value[0]
+        final fun <get-value>(): kotlinx.serialization.json/JsonPrimitive? // io.github.ammaralghifary.blueprint.actions/SetStateAction.value.<get-value>|<get-value>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.ammaralghifary.blueprint.actions/SetStateAction.component1|component1(){}[0]
+    final fun component2(): kotlinx.serialization.json/JsonPrimitive? // io.github.ammaralghifary.blueprint.actions/SetStateAction.component2|component2(){}[0]
+    final fun copy(kotlin/String = ..., kotlinx.serialization.json/JsonPrimitive? = ...): io.github.ammaralghifary.blueprint.actions/SetStateAction // io.github.ammaralghifary.blueprint.actions/SetStateAction.copy|copy(kotlin.String;kotlinx.serialization.json.JsonPrimitive?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.ammaralghifary.blueprint.actions/SetStateAction.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.ammaralghifary.blueprint.actions/SetStateAction.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.ammaralghifary.blueprint.actions/SetStateAction.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.ammaralghifary.blueprint.actions/SetStateAction> { // io.github.ammaralghifary.blueprint.actions/SetStateAction.$serializer|null[0]
+        final val descriptor // io.github.ammaralghifary.blueprint.actions/SetStateAction.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.ammaralghifary.blueprint.actions/SetStateAction.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.ammaralghifary.blueprint.actions/SetStateAction.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.ammaralghifary.blueprint.actions/SetStateAction // io.github.ammaralghifary.blueprint.actions/SetStateAction.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.ammaralghifary.blueprint.actions/SetStateAction) // io.github.ammaralghifary.blueprint.actions/SetStateAction.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.ammaralghifary.blueprint.actions.SetStateAction){}[0]
+    }
+
+    final object Companion { // io.github.ammaralghifary.blueprint.actions/SetStateAction.Companion|null[0]
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.ammaralghifary.blueprint.actions/SetStateAction> // io.github.ammaralghifary.blueprint.actions/SetStateAction.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final class io.github.ammaralghifary.blueprint.actions/SubmitAction : io.github.ammaralghifary.blueprint.model/SduiAction { // io.github.ammaralghifary.blueprint.actions/SubmitAction|null[0]
+    constructor <init>(kotlin/String, kotlin.collections/Map<kotlin/String, kotlin/String> = ...) // io.github.ammaralghifary.blueprint.actions/SubmitAction.<init>|<init>(kotlin.String;kotlin.collections.Map<kotlin.String,kotlin.String>){}[0]
+
+    final val params // io.github.ammaralghifary.blueprint.actions/SubmitAction.params|{}params[0]
+        final fun <get-params>(): kotlin.collections/Map<kotlin/String, kotlin/String> // io.github.ammaralghifary.blueprint.actions/SubmitAction.params.<get-params>|<get-params>(){}[0]
+    final val target // io.github.ammaralghifary.blueprint.actions/SubmitAction.target|{}target[0]
+        final fun <get-target>(): kotlin/String // io.github.ammaralghifary.blueprint.actions/SubmitAction.target.<get-target>|<get-target>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.ammaralghifary.blueprint.actions/SubmitAction.component1|component1(){}[0]
+    final fun component2(): kotlin.collections/Map<kotlin/String, kotlin/String> // io.github.ammaralghifary.blueprint.actions/SubmitAction.component2|component2(){}[0]
+    final fun copy(kotlin/String = ..., kotlin.collections/Map<kotlin/String, kotlin/String> = ...): io.github.ammaralghifary.blueprint.actions/SubmitAction // io.github.ammaralghifary.blueprint.actions/SubmitAction.copy|copy(kotlin.String;kotlin.collections.Map<kotlin.String,kotlin.String>){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.ammaralghifary.blueprint.actions/SubmitAction.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.ammaralghifary.blueprint.actions/SubmitAction.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.ammaralghifary.blueprint.actions/SubmitAction.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<io.github.ammaralghifary.blueprint.actions/SubmitAction> { // io.github.ammaralghifary.blueprint.actions/SubmitAction.$serializer|null[0]
+        final val descriptor // io.github.ammaralghifary.blueprint.actions/SubmitAction.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // io.github.ammaralghifary.blueprint.actions/SubmitAction.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // io.github.ammaralghifary.blueprint.actions/SubmitAction.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): io.github.ammaralghifary.blueprint.actions/SubmitAction // io.github.ammaralghifary.blueprint.actions/SubmitAction.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, io.github.ammaralghifary.blueprint.actions/SubmitAction) // io.github.ammaralghifary.blueprint.actions/SubmitAction.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;io.github.ammaralghifary.blueprint.actions.SubmitAction){}[0]
+    }
+
+    final object Companion { // io.github.ammaralghifary.blueprint.actions/SubmitAction.Companion|null[0]
+        final val $childSerializers // io.github.ammaralghifary.blueprint.actions/SubmitAction.Companion.$childSerializers|{}$childSerializers[0]
+
+        final fun serializer(): kotlinx.serialization/KSerializer<io.github.ammaralghifary.blueprint.actions/SubmitAction> // io.github.ammaralghifary.blueprint.actions/SubmitAction.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final val io.github.ammaralghifary.blueprint.actions/io_github_ammaralghifary_blueprint_actions_OpenUrlAction$stableprop // io.github.ammaralghifary.blueprint.actions/io_github_ammaralghifary_blueprint_actions_OpenUrlAction$stableprop|#static{}io_github_ammaralghifary_blueprint_actions_OpenUrlAction$stableprop[0]
+final val io.github.ammaralghifary.blueprint.actions/io_github_ammaralghifary_blueprint_actions_OpenUrlAction_$serializer$stableprop // io.github.ammaralghifary.blueprint.actions/io_github_ammaralghifary_blueprint_actions_OpenUrlAction_$serializer$stableprop|#static{}io_github_ammaralghifary_blueprint_actions_OpenUrlAction_$serializer$stableprop[0]
+final val io.github.ammaralghifary.blueprint.actions/io_github_ammaralghifary_blueprint_actions_SduiActionController$stableprop // io.github.ammaralghifary.blueprint.actions/io_github_ammaralghifary_blueprint_actions_SduiActionController$stableprop|#static{}io_github_ammaralghifary_blueprint_actions_SduiActionController$stableprop[0]
+final val io.github.ammaralghifary.blueprint.actions/io_github_ammaralghifary_blueprint_actions_SetStateAction$stableprop // io.github.ammaralghifary.blueprint.actions/io_github_ammaralghifary_blueprint_actions_SetStateAction$stableprop|#static{}io_github_ammaralghifary_blueprint_actions_SetStateAction$stableprop[0]
+final val io.github.ammaralghifary.blueprint.actions/io_github_ammaralghifary_blueprint_actions_SetStateAction_$serializer$stableprop // io.github.ammaralghifary.blueprint.actions/io_github_ammaralghifary_blueprint_actions_SetStateAction_$serializer$stableprop|#static{}io_github_ammaralghifary_blueprint_actions_SetStateAction_$serializer$stableprop[0]
+final val io.github.ammaralghifary.blueprint.actions/io_github_ammaralghifary_blueprint_actions_SubmitAction$stableprop // io.github.ammaralghifary.blueprint.actions/io_github_ammaralghifary_blueprint_actions_SubmitAction$stableprop|#static{}io_github_ammaralghifary_blueprint_actions_SubmitAction$stableprop[0]
+final val io.github.ammaralghifary.blueprint.actions/io_github_ammaralghifary_blueprint_actions_SubmitAction_$serializer$stableprop // io.github.ammaralghifary.blueprint.actions/io_github_ammaralghifary_blueprint_actions_SubmitAction_$serializer$stableprop|#static{}io_github_ammaralghifary_blueprint_actions_SubmitAction_$serializer$stableprop[0]
+
+final fun (io.github.ammaralghifary.blueprint.registry/SduiRegistryBuilder).io.github.ammaralghifary.blueprint.actions/sduiActions() // io.github.ammaralghifary.blueprint.actions/sduiActions|sduiActions@io.github.ammaralghifary.blueprint.registry.SduiRegistryBuilder(){}[0]
+final fun io.github.ammaralghifary.blueprint.actions/ProvideSduiActions(io.github.ammaralghifary.blueprint.actions/SduiActionController, kotlin/Function2<androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>, androidx.compose.runtime/Composer?, kotlin/Int) // io.github.ammaralghifary.blueprint.actions/ProvideSduiActions|ProvideSduiActions(io.github.ammaralghifary.blueprint.actions.SduiActionController;kotlin.Function2<androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>;androidx.compose.runtime.Composer?;kotlin.Int){}[0]
+final fun io.github.ammaralghifary.blueprint.actions/io_github_ammaralghifary_blueprint_actions_OpenUrlAction$stableprop_getter(): kotlin/Int // io.github.ammaralghifary.blueprint.actions/io_github_ammaralghifary_blueprint_actions_OpenUrlAction$stableprop_getter|io_github_ammaralghifary_blueprint_actions_OpenUrlAction$stableprop_getter(){}[0]
+final fun io.github.ammaralghifary.blueprint.actions/io_github_ammaralghifary_blueprint_actions_OpenUrlAction_$serializer$stableprop_getter(): kotlin/Int // io.github.ammaralghifary.blueprint.actions/io_github_ammaralghifary_blueprint_actions_OpenUrlAction_$serializer$stableprop_getter|io_github_ammaralghifary_blueprint_actions_OpenUrlAction_$serializer$stableprop_getter(){}[0]
+final fun io.github.ammaralghifary.blueprint.actions/io_github_ammaralghifary_blueprint_actions_SduiActionController$stableprop_getter(): kotlin/Int // io.github.ammaralghifary.blueprint.actions/io_github_ammaralghifary_blueprint_actions_SduiActionController$stableprop_getter|io_github_ammaralghifary_blueprint_actions_SduiActionController$stableprop_getter(){}[0]
+final fun io.github.ammaralghifary.blueprint.actions/io_github_ammaralghifary_blueprint_actions_SetStateAction$stableprop_getter(): kotlin/Int // io.github.ammaralghifary.blueprint.actions/io_github_ammaralghifary_blueprint_actions_SetStateAction$stableprop_getter|io_github_ammaralghifary_blueprint_actions_SetStateAction$stableprop_getter(){}[0]
+final fun io.github.ammaralghifary.blueprint.actions/io_github_ammaralghifary_blueprint_actions_SetStateAction_$serializer$stableprop_getter(): kotlin/Int // io.github.ammaralghifary.blueprint.actions/io_github_ammaralghifary_blueprint_actions_SetStateAction_$serializer$stableprop_getter|io_github_ammaralghifary_blueprint_actions_SetStateAction_$serializer$stableprop_getter(){}[0]
+final fun io.github.ammaralghifary.blueprint.actions/io_github_ammaralghifary_blueprint_actions_SubmitAction$stableprop_getter(): kotlin/Int // io.github.ammaralghifary.blueprint.actions/io_github_ammaralghifary_blueprint_actions_SubmitAction$stableprop_getter|io_github_ammaralghifary_blueprint_actions_SubmitAction$stableprop_getter(){}[0]
+final fun io.github.ammaralghifary.blueprint.actions/io_github_ammaralghifary_blueprint_actions_SubmitAction_$serializer$stableprop_getter(): kotlin/Int // io.github.ammaralghifary.blueprint.actions/io_github_ammaralghifary_blueprint_actions_SubmitAction_$serializer$stableprop_getter|io_github_ammaralghifary_blueprint_actions_SubmitAction_$serializer$stableprop_getter(){}[0]

@@ -63,8 +63,8 @@ subprojects {
     }
 }
 
-// Maven Central coordinates and POM, shared by the two published libraries (:core, :defaults). Each module
-// adds its own name and description. The sample app does not apply the plugin, so it is not published.
+// Maven Central coordinates and POM, shared by the published libraries (:core, :defaults, :actions). Each
+// module adds its own name and description. The sample app does not apply the plugin, so it is not published.
 //
 // Credentials and signing keys come only from the developer's own ~/.gradle/gradle.properties (or CI
 // secrets exposed as ORG_GRADLE_PROJECT_* variables): mavenCentralUsername, mavenCentralPassword,

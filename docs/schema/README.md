@@ -39,9 +39,13 @@ see the header of `blueprint.d.ts`.
 | `image` | `url` |
 | `button` | `text` |
 | `navigate` action | `destination` |
+| `open_url` action | `url` |
+| `submit` action | `target` |
+| `set_state` action | `key`, and `value` (which may be `null`) |
 | `modifier.width` / `height` | `type`, and `value` when `type` is `exact` |
 
 Everything else is optional. A missing required field degrades only that node; its siblings still render.
+A degraded action leaves its component in place and is delivered to the app as an unknown action.
 
 ## How tolerant it is
 
@@ -60,7 +64,8 @@ while the schema exists to catch mistakes.
 - a colour that is not `#RGB`, `#RRGGBB` or `#AARRGGBB`: skipped when drawing;
 - an `exact` size with no `value`: ignored;
 - a node with no string `type`: shown as unknown;
-- `null` on an optional field: treated as absent;
+- `null` on an optional field: treated as absent (`set_state`'s `value` is required, and its `null` removes
+  the key);
 - a `schema_version` outside the supported range: decoded as usual and reported (see [Versioning](#versioning));
 - a number or boolean sent as a quoted string, such as `"size": "12"`.
 
@@ -93,6 +98,8 @@ as sent and does not act on it.
   model, and the model of the `navigate` action.
 - **`:defaults`**: the ten stock components (`text`, `image`, `button`, `card`, `column`, `row`, `box`,
   `list`, `spacer`, `divider`) and the registration of `navigate`.
+- **`:actions`**: the `open_url`, `submit` and `set_state` actions, registered with `sduiActions()`. An app
+  without it treats them as unknown actions.
 - **Your app**: any other `type`. Register it with `component<T>("type") { … }` and add its interface to
   `BlueprintScreen<…>`.
 
@@ -112,13 +119,15 @@ Keys are `snake_case` in JSON and `camelCase` in Kotlin (`corner_radius` is `cor
 
 ## Keeping them in step
 
-Two tests compare the schema with the code, so changing a model without updating the schema fails the build.
+Three tests compare the schema with the code, so changing a model without updating the schema fails the build.
 `SchemaDriftTest` (in `:core`) covers the screen, `modifier`, `padding`, `size` and `navigate` models, and
 that the `schema_version` limits equal `Blueprint.supportedSchemaVersions`.
 `DefaultsSchemaDriftTest` (in `:defaults`) covers the ten stock components: their field names, which are
 required, each field's JSON type, that the registry and the schema list the same types, that `navigate`
 decodes to a real action, and the enum values of `text.style`, `text.align`, `image.scale`, `column` and `row`
 `arrangement` and `modifier.alignment` against what the token mappers recognise.
+`ActionsSchemaDriftTest` (in `:actions`) covers the three actions it registers: their field names, which are
+required, each field's JSON type, and that every action type in the schema decodes to a real action.
 
 Not checked automatically: the values of `button.variant` and `list.orientation` (their branching is inline
 in the renderers), and `blueprint.d.ts`. When you change either, or add a stock component, update

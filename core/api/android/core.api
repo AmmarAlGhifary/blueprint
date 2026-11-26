@@ -23,6 +23,16 @@ public final class io/github/ammaralghifary/blueprint/model/ActionEvent {
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class io/github/ammaralghifary/blueprint/model/ActionStatus : java/lang/Enum {
+	public static final field Done Lio/github/ammaralghifary/blueprint/model/ActionStatus;
+	public static final field Failed Lio/github/ammaralghifary/blueprint/model/ActionStatus;
+	public static final field Idle Lio/github/ammaralghifary/blueprint/model/ActionStatus;
+	public static final field Running Lio/github/ammaralghifary/blueprint/model/ActionStatus;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/ammaralghifary/blueprint/model/ActionStatus;
+	public static fun values ()[Lio/github/ammaralghifary/blueprint/model/ActionStatus;
+}
+
 public final class io/github/ammaralghifary/blueprint/model/DecodeError {
 	public static final field $stable I
 	public fun <init> (Lio/github/ammaralghifary/blueprint/model/DecodeErrorKind;Ljava/lang/String;Ljava/lang/String;Lkotlinx/serialization/json/JsonObject;)V
@@ -318,6 +328,15 @@ public final class io/github/ammaralghifary/blueprint/render/ComposableSingleton
 	public static final field INSTANCE Lio/github/ammaralghifary/blueprint/render/ComposableSingletons$DefaultFallbackKt;
 	public fun <init> ()V
 	public final fun getLambda$1582014037$core_release ()Lkotlin/jvm/functions/Function4;
+}
+
+public abstract interface class io/github/ammaralghifary/blueprint/render/SduiActionContext {
+	public abstract fun stateValue (Ljava/lang/String;)Lkotlinx/serialization/json/JsonPrimitive;
+	public abstract fun statusOf (Lio/github/ammaralghifary/blueprint/model/SduiAction;)Lio/github/ammaralghifary/blueprint/model/ActionStatus;
+}
+
+public final class io/github/ammaralghifary/blueprint/render/SduiActionContextKt {
+	public static final fun getLocalSduiActionContext ()Landroidx/compose/runtime/ProvidableCompositionLocal;
 }
 
 public abstract interface class io/github/ammaralghifary/blueprint/render/SduiScope {

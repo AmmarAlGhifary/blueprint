@@ -6,6 +6,19 @@
 // - Show declarations: true
 
 // Library unique name: <blueprint:core>
+final enum class io.github.ammaralghifary.blueprint.model/ActionStatus : kotlin/Enum<io.github.ammaralghifary.blueprint.model/ActionStatus> { // io.github.ammaralghifary.blueprint.model/ActionStatus|null[0]
+    enum entry Done // io.github.ammaralghifary.blueprint.model/ActionStatus.Done|null[0]
+    enum entry Failed // io.github.ammaralghifary.blueprint.model/ActionStatus.Failed|null[0]
+    enum entry Idle // io.github.ammaralghifary.blueprint.model/ActionStatus.Idle|null[0]
+    enum entry Running // io.github.ammaralghifary.blueprint.model/ActionStatus.Running|null[0]
+
+    final val entries // io.github.ammaralghifary.blueprint.model/ActionStatus.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.ammaralghifary.blueprint.model/ActionStatus> // io.github.ammaralghifary.blueprint.model/ActionStatus.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): io.github.ammaralghifary.blueprint.model/ActionStatus // io.github.ammaralghifary.blueprint.model/ActionStatus.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<io.github.ammaralghifary.blueprint.model/ActionStatus> // io.github.ammaralghifary.blueprint.model/ActionStatus.values|values#static(){}[0]
+}
+
 final enum class io.github.ammaralghifary.blueprint.model/DecodeErrorKind : kotlin/Enum<io.github.ammaralghifary.blueprint.model/DecodeErrorKind> { // io.github.ammaralghifary.blueprint.model/DecodeErrorKind|null[0]
     enum entry InvalidAction // io.github.ammaralghifary.blueprint.model/DecodeErrorKind.InvalidAction|null[0]
     enum entry InvalidComponent // io.github.ammaralghifary.blueprint.model/DecodeErrorKind.InvalidComponent|null[0]
@@ -26,6 +39,11 @@ abstract interface io.github.ammaralghifary.blueprint.model/SduiAction // io.git
 abstract interface io.github.ammaralghifary.blueprint.model/SduiComponent { // io.github.ammaralghifary.blueprint.model/SduiComponent|null[0]
     abstract val modifier // io.github.ammaralghifary.blueprint.model/SduiComponent.modifier|{}modifier[0]
         abstract fun <get-modifier>(): io.github.ammaralghifary.blueprint.model/SduiModifier? // io.github.ammaralghifary.blueprint.model/SduiComponent.modifier.<get-modifier>|<get-modifier>(){}[0]
+}
+
+abstract interface io.github.ammaralghifary.blueprint.render/SduiActionContext { // io.github.ammaralghifary.blueprint.render/SduiActionContext|null[0]
+    abstract fun stateValue(kotlin/String): kotlinx.serialization.json/JsonPrimitive? // io.github.ammaralghifary.blueprint.render/SduiActionContext.stateValue|stateValue(kotlin.String){}[0]
+    abstract fun statusOf(io.github.ammaralghifary.blueprint.model/SduiAction): io.github.ammaralghifary.blueprint.model/ActionStatus // io.github.ammaralghifary.blueprint.render/SduiActionContext.statusOf|statusOf(io.github.ammaralghifary.blueprint.model.SduiAction){}[0]
 }
 
 abstract interface io.github.ammaralghifary.blueprint.render/SduiScope { // io.github.ammaralghifary.blueprint.render/SduiScope|null[0]
@@ -351,6 +369,8 @@ final val io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blue
 final val io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_UnknownComponent$stableprop // io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_UnknownComponent$stableprop|#static{}io_github_ammaralghifary_blueprint_model_UnknownComponent$stableprop[0]
 final val io.github.ammaralghifary.blueprint.registry/io_github_ammaralghifary_blueprint_registry_SduiRegistry$stableprop // io.github.ammaralghifary.blueprint.registry/io_github_ammaralghifary_blueprint_registry_SduiRegistry$stableprop|#static{}io_github_ammaralghifary_blueprint_registry_SduiRegistry$stableprop[0]
 final val io.github.ammaralghifary.blueprint.registry/io_github_ammaralghifary_blueprint_registry_SduiRegistryBuilder$stableprop // io.github.ammaralghifary.blueprint.registry/io_github_ammaralghifary_blueprint_registry_SduiRegistryBuilder$stableprop|#static{}io_github_ammaralghifary_blueprint_registry_SduiRegistryBuilder$stableprop[0]
+final val io.github.ammaralghifary.blueprint.render/LocalSduiActionContext // io.github.ammaralghifary.blueprint.render/LocalSduiActionContext|{}LocalSduiActionContext[0]
+    final fun <get-LocalSduiActionContext>(): androidx.compose.runtime/ProvidableCompositionLocal<io.github.ammaralghifary.blueprint.render/SduiActionContext?> // io.github.ammaralghifary.blueprint.render/LocalSduiActionContext.<get-LocalSduiActionContext>|<get-LocalSduiActionContext>(){}[0]
 final val io.github.ammaralghifary.blueprint/io_github_ammaralghifary_blueprint_Blueprint$stableprop // io.github.ammaralghifary.blueprint/io_github_ammaralghifary_blueprint_Blueprint$stableprop|#static{}io_github_ammaralghifary_blueprint_Blueprint$stableprop[0]
 
 final fun (io.github.ammaralghifary.blueprint.model/SduiModifier).io.github.ammaralghifary.blueprint.modifier/toComposeModifier(androidx.compose.ui/Modifier = ...): androidx.compose.ui/Modifier // io.github.ammaralghifary.blueprint.modifier/toComposeModifier|toComposeModifier@io.github.ammaralghifary.blueprint.model.SduiModifier(androidx.compose.ui.Modifier){}[0]
