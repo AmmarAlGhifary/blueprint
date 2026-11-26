@@ -6,7 +6,7 @@
  * or action 'type' it does not know, so one new server component never breaks a screen. These types
  * are stricter on purpose, so the compiler catches a typo or a missing required field before it ships.
  *
- * The stock components and the 'navigate' action are typed in full. To send a component or action of
+ * The stock components and the 'navigate', 'open_url', 'submit' and 'set_state' actions are typed in full. To send a component or action of
  * your own (one the host app registered), pass its interface as a type argument:
  *
  *     interface ScheduleCard { type: "schedule_card"; title: string; time: string }
@@ -80,8 +80,41 @@ export interface NavigateAction {
   params?: { [key: string]: string };
 }
 
-/** `NavigateAction`, plus any action of your own: `BlueprintAction<{ type: "share"; url: string }>`. */
-export type BlueprintAction<A extends { type: string } = never> = NavigateAction | A;
+/**
+ * Asks the host to open `url`. Needs `blueprint-actions` in the app; Blueprint never opens it, the host's
+ * action handler does.
+ */
+export interface OpenUrlAction {
+  type: "open_url";
+  url: string;
+}
+
+/** Asks the host to send `params` to `target`. Needs `blueprint-actions`; Blueprint never sends anything. */
+export interface SubmitAction {
+  type: "submit";
+  target: string;
+  /** String arguments for `target`. Values must be strings. */
+  params?: { [key: string]: string };
+}
+
+/**
+ * Stores `value` under `key` in the app, or removes the key when `value` is null, unless the host's action
+ * handler takes it. Needs `blueprint-actions`. Only the app's own components read this state.
+ */
+export interface SetStateAction {
+  type: "set_state";
+  key: string;
+  /** Required. `null` removes the key. */
+  value: string | number | boolean | null;
+}
+
+/** The built-in actions, plus any action of your own: `BlueprintAction<{ type: "share"; text: string }>`. */
+export type BlueprintAction<A extends { type: string } = never> =
+  | NavigateAction
+  | OpenUrlAction
+  | SubmitAction
+  | SetStateAction
+  | A;
 
 interface ComponentBase {
   modifier?: BlueprintModifier;

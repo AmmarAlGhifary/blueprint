@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Blueprint screen",
-  "description": "The payload a server sends to Blueprint (https://github.com/AmmarAlGhifary/blueprint). The library is tolerant and this schema is deliberately stricter, so a validator catches mistakes the decoder would quietly absorb. Both accept unknown fields anywhere (ignored) and a component or action 'type' they do not know. The schema rejects, but the decoder accepts: an enum-like string it does not recognise (it falls back to a default; this includes modifier.alignment and a size's type); a colour that is not hex (skipped when drawing); an 'exact' size with no value (ignored); a node with no string 'type' (shown as unknown); null on an optional field (treated as absent); a schema_version outside the supported range (decoded and reported); and a number or boolean sent as a quoted string. One gap the other way: a validator treats 1.0 as an integer and the decoder does not.",
+  "description": "The payload a server sends to Blueprint (https://github.com/AmmarAlGhifary/blueprint). The library is tolerant and this schema is deliberately stricter, so a validator catches mistakes the decoder would quietly absorb. Both accept unknown fields anywhere (ignored) and a component or action 'type' they do not know. The schema rejects, but the decoder accepts: an enum-like string it does not recognise (it falls back to a default; this includes modifier.alignment and a size's type); a colour that is not hex (skipped when drawing); an 'exact' size with no value (ignored); a node with no string 'type' (shown as unknown); null on an optional field (treated as absent; set_state's value is required and its null is meaningful); a schema_version outside the supported range (decoded and reported); and a number or boolean sent as a quoted string. One gap the other way: a validator treats 1.0 as an integer and the decoder does not.",
   "type": "object",
   "properties": {
     "screen_id": {
@@ -194,8 +194,75 @@
         "destination"
       ]
     },
+    "OpenUrlAction": {
+      "description": "Registered by blueprint-actions. Asks the host to open url. Blueprint never opens it: the host's action handler does.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "open_url"
+        },
+        "url": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "url"
+      ]
+    },
+    "SubmitAction": {
+      "description": "Registered by blueprint-actions. Asks the host to send params to target. Blueprint never sends anything: the host's action handler does.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "submit"
+        },
+        "target": {
+          "type": "string",
+          "description": "A name the host app understands."
+        },
+        "params": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "String arguments for target. Values must be strings."
+        }
+      },
+      "required": [
+        "type",
+        "target"
+      ]
+    },
+    "SetStateAction": {
+      "description": "Registered by blueprint-actions. Stores value under key in the app, or removes the key when value is null, unless the host's action handler takes the action itself. Only the app's own components read this state; no stock component does.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "set_state"
+        },
+        "key": {
+          "type": "string",
+          "description": "A flat key; there is no nesting."
+        },
+        "value": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "null"
+          ],
+          "description": "Required. null removes the key."
+        }
+      },
+      "required": [
+        "type",
+        "key",
+        "value"
+      ]
+    },
     "Action": {
-      "description": "Something a component fires when tapped. The stock pack registers 'navigate'. Any other 'type' is accepted: the host may register its own, and an unknown one becomes an UnknownAction that is still delivered to the host.",
+      "description": "Something a component fires when tapped. The stock pack registers 'navigate'; blueprint-actions registers 'open_url', 'submit' and 'set_state'. Any other 'type' is accepted: the host may register its own, and an unknown one becomes an UnknownAction that is still delivered to the host.",
       "type": "object",
       "properties": {
         "type": {
@@ -219,6 +286,51 @@
           },
           "then": {
             "$ref": "#/$defs/NavigateAction"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "open_url"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "$ref": "#/$defs/OpenUrlAction"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "submit"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "$ref": "#/$defs/SubmitAction"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "set_state"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "$ref": "#/$defs/SetStateAction"
           }
         }
       ]
