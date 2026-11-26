@@ -1,6 +1,5 @@
 package io.github.ammaralghifary.blueprint.defaults
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Button
@@ -23,7 +22,6 @@ import kotlinx.serialization.Serializable
  *
  * @author Ammar Al Ghifary
  */
-@SuppressLint("UnsafeOptInUsageError")
 @Serializable
 public data class SduiButton(
     val text: String,
@@ -37,7 +35,6 @@ public data class SduiButton(
  *
  * @author Ammar Al Ghifary
  */
-@SuppressLint("UnsafeOptInUsageError")
 @Serializable
 public data class SduiCard(
     val children: List<SduiComponent> = emptyList(),

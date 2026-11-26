@@ -1,12 +1,11 @@
 package io.github.ammaralghifary.blueprint.defaults
 
-import android.annotation.SuppressLint
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
-import coil.compose.AsyncImage
+import coil3.compose.AsyncImage
 import io.github.ammaralghifary.blueprint.model.SduiComponent
 import io.github.ammaralghifary.blueprint.model.SduiModifier
 import io.github.ammaralghifary.blueprint.modifier.toTextStyle
@@ -19,7 +18,6 @@ import kotlinx.serialization.Serializable
  *
  * @author Ammar Al Ghifary
  */
-@SuppressLint("UnsafeOptInUsageError")
 @Serializable
 public data class SduiText(
     val text: String,
@@ -35,7 +33,6 @@ public data class SduiText(
  *
  * @author Ammar Al Ghifary
  */
-@SuppressLint("UnsafeOptInUsageError")
 @Serializable
 public data class SduiImage(
     val url: String,
