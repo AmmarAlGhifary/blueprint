@@ -12,6 +12,7 @@ final enum class io.github.ammaralghifary.blueprint.model/DecodeErrorKind : kotl
     enum entry InvalidPayload // io.github.ammaralghifary.blueprint.model/DecodeErrorKind.InvalidPayload|null[0]
     enum entry ModifierIgnored // io.github.ammaralghifary.blueprint.model/DecodeErrorKind.ModifierIgnored|null[0]
     enum entry UnregisteredType // io.github.ammaralghifary.blueprint.model/DecodeErrorKind.UnregisteredType|null[0]
+    enum entry UnsupportedVersion // io.github.ammaralghifary.blueprint.model/DecodeErrorKind.UnsupportedVersion|null[0]
 
     final val entries // io.github.ammaralghifary.blueprint.model/DecodeErrorKind.entries|#static{}entries[0]
         final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.ammaralghifary.blueprint.model/DecodeErrorKind> // io.github.ammaralghifary.blueprint.model/DecodeErrorKind.entries.<get-entries>|<get-entries>#static(){}[0]
@@ -214,19 +215,22 @@ final class io.github.ammaralghifary.blueprint.model/SduiPadding { // io.github.
 }
 
 final class io.github.ammaralghifary.blueprint.model/SduiScreen { // io.github.ammaralghifary.blueprint.model/SduiScreen|null[0]
-    constructor <init>(kotlin/String? = ..., io.github.ammaralghifary.blueprint.model/SduiComponent, kotlin/Int? = ...) // io.github.ammaralghifary.blueprint.model/SduiScreen.<init>|<init>(kotlin.String?;io.github.ammaralghifary.blueprint.model.SduiComponent;kotlin.Int?){}[0]
+    constructor <init>(kotlin/String? = ..., io.github.ammaralghifary.blueprint.model/SduiComponent, kotlin/Int? = ..., kotlin/Int? = ...) // io.github.ammaralghifary.blueprint.model/SduiScreen.<init>|<init>(kotlin.String?;io.github.ammaralghifary.blueprint.model.SduiComponent;kotlin.Int?;kotlin.Int?){}[0]
 
     final val body // io.github.ammaralghifary.blueprint.model/SduiScreen.body|{}body[0]
         final fun <get-body>(): io.github.ammaralghifary.blueprint.model/SduiComponent // io.github.ammaralghifary.blueprint.model/SduiScreen.body.<get-body>|<get-body>(){}[0]
     final val id // io.github.ammaralghifary.blueprint.model/SduiScreen.id|{}id[0]
         final fun <get-id>(): kotlin/String? // io.github.ammaralghifary.blueprint.model/SduiScreen.id.<get-id>|<get-id>(){}[0]
+    final val schemaVersion // io.github.ammaralghifary.blueprint.model/SduiScreen.schemaVersion|{}schemaVersion[0]
+        final fun <get-schemaVersion>(): kotlin/Int? // io.github.ammaralghifary.blueprint.model/SduiScreen.schemaVersion.<get-schemaVersion>|<get-schemaVersion>(){}[0]
     final val version // io.github.ammaralghifary.blueprint.model/SduiScreen.version|{}version[0]
         final fun <get-version>(): kotlin/Int? // io.github.ammaralghifary.blueprint.model/SduiScreen.version.<get-version>|<get-version>(){}[0]
 
     final fun component1(): kotlin/String? // io.github.ammaralghifary.blueprint.model/SduiScreen.component1|component1(){}[0]
     final fun component2(): io.github.ammaralghifary.blueprint.model/SduiComponent // io.github.ammaralghifary.blueprint.model/SduiScreen.component2|component2(){}[0]
     final fun component3(): kotlin/Int? // io.github.ammaralghifary.blueprint.model/SduiScreen.component3|component3(){}[0]
-    final fun copy(kotlin/String? = ..., io.github.ammaralghifary.blueprint.model/SduiComponent = ..., kotlin/Int? = ...): io.github.ammaralghifary.blueprint.model/SduiScreen // io.github.ammaralghifary.blueprint.model/SduiScreen.copy|copy(kotlin.String?;io.github.ammaralghifary.blueprint.model.SduiComponent;kotlin.Int?){}[0]
+    final fun component4(): kotlin/Int? // io.github.ammaralghifary.blueprint.model/SduiScreen.component4|component4(){}[0]
+    final fun copy(kotlin/String? = ..., io.github.ammaralghifary.blueprint.model/SduiComponent = ..., kotlin/Int? = ..., kotlin/Int? = ...): io.github.ammaralghifary.blueprint.model/SduiScreen // io.github.ammaralghifary.blueprint.model/SduiScreen.copy|copy(kotlin.String?;io.github.ammaralghifary.blueprint.model.SduiComponent;kotlin.Int?;kotlin.Int?){}[0]
     final fun equals(kotlin/Any?): kotlin/Boolean // io.github.ammaralghifary.blueprint.model/SduiScreen.equals|equals(kotlin.Any?){}[0]
     final fun hashCode(): kotlin/Int // io.github.ammaralghifary.blueprint.model/SduiScreen.hashCode|hashCode(){}[0]
     final fun toString(): kotlin/String // io.github.ammaralghifary.blueprint.model/SduiScreen.toString|toString(){}[0]
@@ -324,6 +328,11 @@ final class io.github.ammaralghifary.blueprint/Blueprint { // io.github.ammaralg
 
     final fun decodeScreen(kotlin/String): io.github.ammaralghifary.blueprint.model/SduiScreen // io.github.ammaralghifary.blueprint/Blueprint.decodeScreen|decodeScreen(kotlin.String){}[0]
     final fun decodeScreen(kotlinx.serialization.json/JsonElement): io.github.ammaralghifary.blueprint.model/SduiScreen // io.github.ammaralghifary.blueprint/Blueprint.decodeScreen|decodeScreen(kotlinx.serialization.json.JsonElement){}[0]
+
+    final object Companion { // io.github.ammaralghifary.blueprint/Blueprint.Companion|null[0]
+        final val supportedSchemaVersions // io.github.ammaralghifary.blueprint/Blueprint.Companion.supportedSchemaVersions|{}supportedSchemaVersions[0]
+            final fun <get-supportedSchemaVersions>(): kotlin.ranges/IntRange // io.github.ammaralghifary.blueprint/Blueprint.Companion.supportedSchemaVersions.<get-supportedSchemaVersions>|<get-supportedSchemaVersions>(){}[0]
+    }
 }
 
 final val io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_ActionEvent$stableprop // io.github.ammaralghifary.blueprint.model/io_github_ammaralghifary_blueprint_model_ActionEvent$stableprop|#static{}io_github_ammaralghifary_blueprint_model_ActionEvent$stableprop[0]

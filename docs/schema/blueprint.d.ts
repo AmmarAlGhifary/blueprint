@@ -212,5 +212,7 @@ export interface BlueprintScreen<C extends CustomComponent = never, A extends { 
   screen_id?: string;
   /** The payload version the server declares. Kept as sent; Blueprint does not act on it. */
   version?: number;
+  /** Major version of this schema the screen was written for. Absent means 1. */
+  schema_version?: 1;
   body: BlueprintComponent<C, A>;
 }

@@ -29,6 +29,12 @@ public enum class DecodeErrorKind {
 
     /** The screen itself was unreadable (bad JSON, missing body, too deep) or its metadata was dropped. */
     InvalidPayload,
+
+    /**
+     * The payload's `schema_version` is outside [Blueprint.supportedSchemaVersions]. The screen is
+     * still decoded; parts of it may be missing or read differently than the server meant.
+     */
+    UnsupportedVersion,
 }
 
 /**

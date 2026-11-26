@@ -82,6 +82,16 @@ class DecodedSummaryTest {
     }
 
     @Test
+    fun anUnsupportedSchemaVersionReachesTheSummaryAlongWithItsScreen() {
+        val screen = blueprint.decodeScreen("""{"schema_version":2,"body":{"type":"text","text":"a"}}""")
+        val call = calls.single()
+        assertSame(screen, call.screen)
+        assertEquals(2, call.screen.schemaVersion)
+        assertEquals(listOf(DecodeErrorKind.UnsupportedVersion), call.errors.map { it.kind })
+        assertEquals(perError, call.errors)
+    }
+
+    @Test
     fun aThrowingSummaryCallbackIsSwallowedAndErrorsWereStillDelivered() {
         val b = Blueprint(
             summaryRegistry,
