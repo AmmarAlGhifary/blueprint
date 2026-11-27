@@ -23,7 +23,7 @@ dependencyResolutionManagement {
 // app/build.gradle.kts
 dependencies {
     implementation("io.github.ammaralghifary:blueprint-core:0.4.0")
-    // Optional: ready-made text, image, button, card, row, column, ... (Material 3 and Coil)
+    // Optional: ready-made text, image, button, card, row, column, dialog, ... (Material 3 and Coil)
     implementation("io.github.ammaralghifary:blueprint-defaults:0.4.0")
     // Optional: open_url, submit and set_state actions
     implementation("io.github.ammaralghifary:blueprint-actions:0.4.0")
@@ -100,7 +100,8 @@ A payload for the registry above:
 }
 ```
 
-The stock components and their JSON are documented in [docs/components.md](docs/components.md). `:app` in
+The stock components (`text`, `image`, `button`, `card`, `column`, `row`, `box`, `list`, `spacer`, `divider`
+and, from 0.5.0, `dialog`) and their JSON are documented in [docs/components.md](docs/components.md). `:app` in
 this repository is a small sample that uses all of the above.
 
 ## Actions

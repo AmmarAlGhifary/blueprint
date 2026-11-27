@@ -51,8 +51,83 @@ Read by `text` and `button`. Host components can reuse them with `modifier.toTex
 | `list` | `children`, `orientation` `vertical\|horizontal`, `spacing` (dp) | lazy |
 | `spacer` | `size` (dp, default 8) | |
 | `divider` | `thickness` (dp, default 1), `color` (hex) | |
+| `dialog` | **`primary`**, `secondary`, `title`, `message`, `dismissible` (default true), `on_dismiss` | a modal [dialog](#dialogs); `modifier` is not used |
 
 Action: `{"type": "navigate", "destination": "…", "params": {"k": "v"}}` → `NavigateAction`.
+
+## Dialogs
+
+`dialog` is a Material 3 alert with one or two buttons. A server sends it, or the app builds it itself.
+
+```json
+{ "type": "dialog", "title": "No connection", "message": "Check your network and try again.",
+  "primary": { "label": "Retry", "action": { "type": "navigate", "destination": "reload" }, "disabled_seconds": 5 },
+  "secondary": { "label": "Close" },
+  "dismissible": true, "on_dismiss": { "type": "navigate", "destination": "back" } }
+```
+
+A button has a **`label`**, an optional `action`, and optional `disabled_seconds`. `primary` is the filled
+confirm button and `secondary` the text button beside it.
+
+| What happens | The dialog |
+|---|---|
+| a button without an action is tapped | closes |
+| a button with an action is tapped, nothing tracks actions | dispatches it and closes |
+| the same under a [controller](#actions) | stays open, the button disabled (with a spinner after about 300 ms) while the action is `Running`; the other button stays usable |
+| the action ends `Done` or `Idle` (including `NotHandled`) | closes |
+| the action ends `Failed` | stays open and the button works again, so the user can retry |
+| tap outside or back press, `dismissible` | closes and dispatches `on_dismiss` |
+| tap outside or back press, not `dismissible` | stays; only the buttons close it |
+
+- `disabled_seconds` disables a button for that long from when the dialog first appears and counts down in its
+  label, such as `Retry (5)`, for example for a server's `Retry-After`. 0 or less means no wait; more than 600
+  counts as 600.
+- In a payload the dialog is shown while its node is there and takes no space in place. A lazy `list` with
+  `spacing` still keeps a gap for its item, so put a dialog in a `column`.
+- Once closed it stays closed for an equal dialog at the same position, also across a refetch; a dialog with
+  any different value shows again. An action that decodes as unknown is never equal to a refetched one.
+- The action is dispatched like any other, with the dialog as `ActionEvent.source`.
+
+### Building one in the app
+
+For errors the server cannot describe (the device is offline, or the response is plain text), build the dialog
+from your own error mapping and show it with `BlueprintDialog`. It needs no `Blueprint`, registry or JSON, and
+takes your own actions:
+
+```kotlin
+data object Reload : SduiAction
+data object GoBack : SduiAction
+
+fun dialogFor(error: LoadError) = SduiDialog(
+    title = if (error is LoadError.Offline) "No connection" else "Something went wrong",
+    message = error.userMessage,
+    primary = SduiDialogButton("Retry", Reload, disabledSeconds = error.retryAfterSeconds),
+    secondary = SduiDialogButton("Back", GoBack),
+    dismissible = false,
+)
+
+@Composable
+fun LoadErrorDialog(error: LoadError?, onReload: () -> Unit, onBack: () -> Unit, onClose: () -> Unit) {
+    if (error == null) return
+    BlueprintDialog(
+        dialog = dialogFor(error),
+        onDismissRequest = onClose,           // you own the visibility: clear the error here
+        onAction = { action ->
+            when (action) {
+                Reload -> onReload()
+                GoBack -> onBack()
+            }
+        },
+    )
+}
+```
+
+- `onDismissRequest` means the dialog wants to close; it stays on screen until you stop calling it.
+- Make your actions data classes or objects, or `remember` the dialog: the countdown and the awaited action
+  belong to one dialog value.
+- To keep it open while a slow retry runs, wrap it in `ProvideSduiActions(controller)` and pass
+  `onAction = { controller.onActionEvent(ActionEvent(it, dialog)) }`. Your handler then reports `Done` or
+  `Failed`.
 
 ## Actions
 
@@ -103,8 +178,8 @@ URL or sends data. Check a server-sent URL before you open it.
 | handler returns `NotHandled` for anything else, including an unknown action | `Idle`; nothing happens |
 | the controller's scope is cancelled | `Idle` |
 
-- While an action is `Running`, a stock `button` or `card` that carries it is disabled, and a button shows a
-  small progress indicator if it is still running after about 300 ms.
+- While an action is `Running`, a stock `button`, `card` or [dialog](#dialogs) button that carries it is
+  disabled, and a button shows a small progress indicator if it is still running after about 300 ms.
 - Actions that are equal share one status, since the payload has no node id yet: two buttons with the same
   action are busy together. Make your own action classes data classes.
 - `set_state` writes flat keys into one store per controller, which is not persisted. Your own components read

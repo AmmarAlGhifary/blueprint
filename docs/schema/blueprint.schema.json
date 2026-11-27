@@ -636,8 +636,65 @@
         "type"
       ]
     },
+    "DialogButton": {
+      "description": "A button of the stock dialog. Without an action it only closes the dialog.",
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string"
+        },
+        "action": {
+          "$ref": "#/$defs/Action"
+        },
+        "disabled_seconds": {
+          "$ref": "#/$defs/int32",
+          "description": "Seconds the button stays disabled, with a countdown, from when the dialog appears. 0 or less means none; more than 600 counts as 600."
+        }
+      },
+      "required": [
+        "label"
+      ]
+    },
+    "Dialog": {
+      "description": "Stock component (:defaults). A modal alert, shown while the node is in the payload; it takes no space in place. A button with an action dispatches it; if the app tracks actions, the dialog stays open while it runs and after it fails, and closes otherwise.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "dialog"
+        },
+        "title": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "primary": {
+          "$ref": "#/$defs/DialogButton"
+        },
+        "secondary": {
+          "$ref": "#/$defs/DialogButton"
+        },
+        "dismissible": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether a tap outside or a back press closes it."
+        },
+        "on_dismiss": {
+          "$ref": "#/$defs/Action",
+          "description": "Fired when it is dismissed that way, not when a button closes it."
+        },
+        "modifier": {
+          "$ref": "#/$defs/Modifier",
+          "description": "Accepted like on every component, but a dialog does not use it."
+        }
+      },
+      "required": [
+        "type",
+        "primary"
+      ]
+    },
     "Component": {
-      "description": "One node of the tree. The ten stock types are checked in full. Any other 'type' is accepted and left to the host's registry; an app that does not know it shows a placeholder in debug builds and nothing in release, and the rest of the screen still renders.",
+      "description": "One node of the tree. The eleven stock types are checked in full. Any other 'type' is accepted and left to the host's registry; an app that does not know it shows a placeholder in debug builds and nothing in release, and the rest of the screen still renders.",
       "type": "object",
       "properties": {
         "type": {
@@ -799,6 +856,21 @@
           },
           "then": {
             "$ref": "#/$defs/Divider"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "dialog"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "$ref": "#/$defs/Dialog"
           }
         }
       ]

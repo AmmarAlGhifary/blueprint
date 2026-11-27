@@ -7,7 +7,7 @@ import io.github.ammaralghifary.blueprint.registry.sduiRegistry
 
 /**
  * The opt-in stock component pack: `text`, `image`, `button`, `card`, `column`, `row`, `box`, `list`,
- * `spacer`, `divider` and the `navigate` action. Use as-is or [SduiRegistryBuilder.include] it and
+ * `spacer`, `divider`, `dialog` and the `navigate` action. Use as-is or [SduiRegistryBuilder.include] it and
  * add or `replace` types.
  */
 public val DefaultSduiRegistry: SduiRegistry = sduiRegistry {
@@ -21,5 +21,6 @@ public val DefaultSduiRegistry: SduiRegistry = sduiRegistry {
     component<SduiList>("list") { c, mod, scope -> RenderList(c, mod, scope) }
     component<SduiSpacer>("spacer") { c, mod, _ -> RenderSpacer(c, mod) }
     component<SduiDivider>("divider") { c, mod, _ -> RenderDivider(c, mod) }
+    component<SduiDialog>("dialog") { c, _, scope -> RenderDialog(c, scope) }
     action<NavigateAction>("navigate")
 }
