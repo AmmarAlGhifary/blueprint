@@ -30,7 +30,10 @@
         ] },
       { "type": "button", "text": "Track delivery", "variant": "filled",
         "action": { "type": "navigate", "destination": "tracking" } },
-      { "type": "button", "text": "Cancel", "variant": "outlined" }
+      { "type": "button", "text": "Cancel", "variant": "outlined" },
+      { "type": "dialog", "title": "Delivery moved", "message": "Your order now arrives on Friday.",
+        "primary": { "label": "See details", "action": { "type": "navigate", "destination": "tracking" } },
+        "secondary": { "label": "Close" } }
     ]
   }
 }

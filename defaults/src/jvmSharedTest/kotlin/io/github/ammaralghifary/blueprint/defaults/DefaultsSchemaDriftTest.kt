@@ -41,6 +41,7 @@ class DefaultsSchemaDriftTest {
         "list" to SduiList.serializer(),
         "spacer" to SduiSpacer.serializer(),
         "divider" to SduiDivider.serializer(),
+        "dialog" to SduiDialog.serializer(),
     )
 
     private fun def(name: String): JsonObject = schema["\$defs"]!!.jsonObject[name]!!.jsonObject
@@ -108,6 +109,27 @@ class DefaultsSchemaDriftTest {
                 val name = serializer.descriptor.getElementName(i)
                 assertEquals("$type.$name: type differs", modelType(serializer.descriptor.getElementDescriptor(i)), schemaType(props.getValue(name).jsonObject))
             }
+        }
+    }
+
+    @Test
+    fun theDialogButtonMatchesItsDefinition() {
+        // Not a component, so the loops above do not reach it.
+        val serializer = SduiDialogButton.serializer()
+        val node = def("DialogButton")
+        val props = node["properties"]!!.jsonObject
+        val names = elements(serializer).map { serializer.descriptor.getElementName(it) }
+        assertEquals("fields", names.toSet(), props.keys)
+        assertEquals(
+            "required fields",
+            names.filterIndexed { i, _ -> !serializer.descriptor.isElementOptional(i) }.toSet(),
+            strings(node, "required"),
+        )
+        for ((i, name) in names.withIndex()) {
+            assertEquals("$name: type differs", modelType(serializer.descriptor.getElementDescriptor(i)), schemaType(props.getValue(name).jsonObject))
+        }
+        for (button in listOf("primary", "secondary")) {
+            assertEquals(button, "#/\$defs/DialogButton", def("Dialog")["properties"]!!.jsonObject.getValue(button).jsonObject["\$ref"]!!.jsonPrimitive.content)
         }
     }
 

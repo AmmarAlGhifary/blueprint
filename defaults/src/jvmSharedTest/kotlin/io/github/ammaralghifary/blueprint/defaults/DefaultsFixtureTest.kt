@@ -32,7 +32,7 @@ class DefaultsFixtureTest {
         val types = nodes.map { it::class }.toSet()
         listOf(
             SduiText::class, SduiImage::class, SduiButton::class, SduiCard::class, SduiColumn::class,
-            SduiRow::class, SduiBox::class, SduiList::class, SduiSpacer::class, SduiDivider::class,
+            SduiRow::class, SduiBox::class, SduiList::class, SduiSpacer::class, SduiDivider::class, SduiDialog::class,
         ).forEach { assertTrue("fixture misses ${it.simpleName}", it in types) }
     }
 

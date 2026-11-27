@@ -216,6 +216,33 @@ export interface DividerComponent extends ComponentBase {
   color?: BlueprintColor;
 }
 
+/** A button of a dialog. Without an `action` it only closes the dialog. */
+export interface DialogButton<A extends { type: string } = never> {
+  label: string;
+  action?: BlueprintAction<A>;
+  /**
+   * Seconds the button stays disabled, with a countdown, from when the dialog appears. 0 or less means
+   * none; more than 600 counts as 600.
+   */
+  disabled_seconds?: number;
+}
+
+/**
+ * A modal alert, shown while the node is in the payload; it takes no space in place. A button with an action
+ * dispatches it; if the app tracks actions, the dialog stays open while it runs and after it fails.
+ */
+export interface DialogComponent<A extends { type: string } = never> extends ComponentBase {
+  type: "dialog";
+  title?: string;
+  message?: string;
+  primary: DialogButton<A>;
+  secondary?: DialogButton<A>;
+  /** Whether a tap outside or a back press closes it. Default true. */
+  dismissible?: boolean;
+  /** Fired when it is dismissed that way, not when a button closes it. */
+  on_dismiss?: BlueprintAction<A>;
+}
+
 /** What a component of your own must look like: a `type` string, and optionally a `modifier`. */
 export interface CustomComponent {
   type: string;
@@ -234,6 +261,7 @@ export type BlueprintComponent<C extends CustomComponent = never, A extends { ty
   | ListComponent<C, A>
   | SpacerComponent
   | DividerComponent
+  | DialogComponent<A>
   | C;
 
 /**
