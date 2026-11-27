@@ -16,3 +16,4 @@ build/
 
 # Internal planning notes (local only)
 /docs/plans/
+/graphify-out
