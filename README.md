@@ -4,7 +4,7 @@ Blueprint is a Kotlin Multiplatform library for **server-driven UI** on Android,
 backend sends a JSON description of a screen, and Blueprint turns it into Compose UI. It does not fetch
 screens. You fetch the JSON, call `Blueprint.decodeScreen`, and render the result.
 
-> **Status: 0.4.0, on Maven Central.** The API may still change before 1.0.
+> **Status: 0.5.0, on Maven Central.** The API may still change before 1.0.
 > See [CHANGELOG.md](CHANGELOG.md).
 
 ## Install
@@ -22,11 +22,11 @@ dependencyResolutionManagement {
 
 // app/build.gradle.kts
 dependencies {
-    implementation("io.github.ammaralghifary:blueprint-core:0.4.0")
+    implementation("io.github.ammaralghifary:blueprint-core:0.5.0")
     // Optional: ready-made text, image, button, card, row, column, dialog, ... (Material 3 and Coil)
-    implementation("io.github.ammaralghifary:blueprint-defaults:0.4.0")
+    implementation("io.github.ammaralghifary:blueprint-defaults:0.5.0")
     // Optional: open_url, submit and set_state actions
-    implementation("io.github.ammaralghifary:blueprint-actions:0.4.0")
+    implementation("io.github.ammaralghifary:blueprint-actions:0.5.0")
 }
 ```
 
@@ -107,8 +107,8 @@ this repository is a small sample that uses all of the above.
 ## Actions
 
 With `blueprint-actions`, a controller follows each action from `Running` to `Done` or `Failed`, and stock
-buttons and cards are disabled while theirs is running. Register the actions, write a handler and wrap the
-renderer:
+buttons, cards and dialog buttons are disabled while theirs is running. Register the actions, write a handler
+and wrap the renderer:
 
 ```kotlin
 import androidx.compose.runtime.Composable

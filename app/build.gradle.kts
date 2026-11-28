@@ -14,8 +14,8 @@ android {
         applicationId = "io.github.ammaralghifary.blueprint.sample"
         minSdk = 23
         targetSdk = 36
-        versionCode = 2
-        versionName = "0.4.0"
+        versionCode = 3
+        versionName = "0.5.0"
     }
 
     buildTypes {
