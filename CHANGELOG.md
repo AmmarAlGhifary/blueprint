@@ -5,7 +5,7 @@ All notable changes to Blueprint are recorded here. The format follows
 [Semantic Versioning](https://semver.org/) once 0.1.0 is published. The version number lives in
 `gradle.properties` (`VERSION_NAME`).
 
-## [Unreleased]
+## [0.5.0] - 2026-11-28
 
 ### Added
 
@@ -16,8 +16,12 @@ All notable changes to Blueprint are recorded here. The format follows
     button's action is running and after it fails, so the user can retry.
   - `BlueprintDialog` shows an `SduiDialog` the app built itself, with no `Blueprint`, registry or JSON, for
     example for an offline error.
-  - An app that already registers its own `dialog` type next to `include(DefaultSduiRegistry)` now gets a
-    duplicate-type error; add `replace = true` to that registration.
+
+### Changed
+
+- **Breaking** for apps that register a `dialog` type themselves: `DefaultSduiRegistry` now registers
+  `dialog`, so an app that registers its own next to `include(DefaultSduiRegistry)` gets a duplicate-type
+  error. Add `replace = true` to that registration and keep it after the `include`.
 
 ## [0.4.0] - 2026-11-26
 
