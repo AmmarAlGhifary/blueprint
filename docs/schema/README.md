@@ -38,6 +38,8 @@ see the header of `blueprint.d.ts`.
 | `text` | `text` |
 | `image` | `url` |
 | `button` | `text` |
+| `dialog` | `primary` |
+| a dialog button | `label` |
 | `navigate` action | `destination` |
 | `open_url` action | `url` |
 | `submit` action | `target` |
@@ -96,8 +98,8 @@ as sent and does not act on it.
 
 - **`:core`**: the screen envelope (`screen_id`, `version`, `schema_version`, `body`), the `modifier` box
   model, and the model of the `navigate` action.
-- **`:defaults`**: the ten stock components (`text`, `image`, `button`, `card`, `column`, `row`, `box`,
-  `list`, `spacer`, `divider`) and the registration of `navigate`.
+- **`:defaults`**: the eleven stock components (`text`, `image`, `button`, `card`, `column`, `row`, `box`,
+  `list`, `spacer`, `divider`, `dialog`) and the registration of `navigate`.
 - **`:actions`**: the `open_url`, `submit` and `set_state` actions, registered with `sduiActions()`. An app
   without it treats them as unknown actions.
 - **Your app**: any other `type`. Register it with `component<T>("type") { … }` and add its interface to
@@ -122,7 +124,7 @@ Keys are `snake_case` in JSON and `camelCase` in Kotlin (`corner_radius` is `cor
 Three tests compare the schema with the code, so changing a model without updating the schema fails the build.
 `SchemaDriftTest` (in `:core`) covers the screen, `modifier`, `padding`, `size` and `navigate` models, and
 that the `schema_version` limits equal `Blueprint.supportedSchemaVersions`.
-`DefaultsSchemaDriftTest` (in `:defaults`) covers the ten stock components: their field names, which are
+`DefaultsSchemaDriftTest` (in `:defaults`) covers the eleven stock components and the dialog button: their field names, which are
 required, each field's JSON type, that the registry and the schema list the same types, that `navigate`
 decodes to a real action, and the enum values of `text.style`, `text.align`, `image.scale`, `column` and `row`
 `arrangement` and `modifier.alignment` against what the token mappers recognise.

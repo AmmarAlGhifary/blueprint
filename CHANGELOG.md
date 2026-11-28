@@ -5,6 +5,24 @@ All notable changes to Blueprint are recorded here. The format follows
 [Semantic Versioning](https://semver.org/) once 0.1.0 is published. The version number lives in
 `gradle.properties` (`VERSION_NAME`).
 
+## [0.5.0] - 2026-11-28
+
+### Added
+
+- `blueprint-defaults` has a stock `dialog` component: a Material 3 alert with a title, a message, a primary
+  and an optional secondary button (each a label and an optional action), `dismissible` with `on_dismiss`,
+  and `disabled_seconds` for a countdown before a button works, for example after `Retry-After`.
+  - Under a controller (`blueprint-actions` or your own `SduiActionContext`) it stays open while a tapped
+    button's action is running and after it fails, so the user can retry.
+  - `BlueprintDialog` shows an `SduiDialog` the app built itself, with no `Blueprint`, registry or JSON, for
+    example for an offline error.
+
+### Changed
+
+- **Breaking** for apps that register a `dialog` type themselves: `DefaultSduiRegistry` now registers
+  `dialog`, so an app that registers its own next to `include(DefaultSduiRegistry)` gets a duplicate-type
+  error. Add `replace = true` to that registration and keep it after the `include`.
+
 ## [0.4.0] - 2026-11-26
 
 ### Added

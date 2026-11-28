@@ -3,6 +3,7 @@ public final class io/github/ammaralghifary/blueprint/defaults/ComposableSinglet
 	public fun <init> ()V
 	public final fun getLambda$-1072250335$defaults_release ()Lkotlin/jvm/functions/Function5;
 	public final fun getLambda$-1232192162$defaults_release ()Lkotlin/jvm/functions/Function5;
+	public final fun getLambda$-1559222710$defaults_release ()Lkotlin/jvm/functions/Function5;
 	public final fun getLambda$-1966077618$defaults_release ()Lkotlin/jvm/functions/Function5;
 	public final fun getLambda$-2062967962$defaults_release ()Lkotlin/jvm/functions/Function5;
 	public final fun getLambda$-498683015$defaults_release ()Lkotlin/jvm/functions/Function5;
@@ -15,6 +16,10 @@ public final class io/github/ammaralghifary/blueprint/defaults/ComposableSinglet
 
 public final class io/github/ammaralghifary/blueprint/defaults/DefaultSduiRegistryKt {
 	public static final fun getDefaultSduiRegistry ()Lio/github/ammaralghifary/blueprint/registry/SduiRegistry;
+}
+
+public final class io/github/ammaralghifary/blueprint/defaults/DialogKt {
+	public static final fun BlueprintDialog (Lio/github/ammaralghifary/blueprint/defaults/SduiDialog;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;II)V
 }
 
 public final class io/github/ammaralghifary/blueprint/defaults/SduiBox : io/github/ammaralghifary/blueprint/model/SduiComponent {
@@ -155,6 +160,82 @@ public final synthetic class io/github/ammaralghifary/blueprint/defaults/SduiCol
 }
 
 public final class io/github/ammaralghifary/blueprint/defaults/SduiColumn$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/ammaralghifary/blueprint/defaults/SduiDialog : io/github/ammaralghifary/blueprint/model/SduiComponent {
+	public static final field $stable I
+	public static final field Companion Lio/github/ammaralghifary/blueprint/defaults/SduiDialog$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Lio/github/ammaralghifary/blueprint/defaults/SduiDialogButton;Lio/github/ammaralghifary/blueprint/defaults/SduiDialogButton;ZLio/github/ammaralghifary/blueprint/model/SduiAction;Lio/github/ammaralghifary/blueprint/model/SduiModifier;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Lio/github/ammaralghifary/blueprint/defaults/SduiDialogButton;Lio/github/ammaralghifary/blueprint/defaults/SduiDialogButton;ZLio/github/ammaralghifary/blueprint/model/SduiAction;Lio/github/ammaralghifary/blueprint/model/SduiModifier;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Lio/github/ammaralghifary/blueprint/defaults/SduiDialogButton;
+	public final fun component4 ()Lio/github/ammaralghifary/blueprint/defaults/SduiDialogButton;
+	public final fun component5 ()Z
+	public final fun component6 ()Lio/github/ammaralghifary/blueprint/model/SduiAction;
+	public final fun component7 ()Lio/github/ammaralghifary/blueprint/model/SduiModifier;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Lio/github/ammaralghifary/blueprint/defaults/SduiDialogButton;Lio/github/ammaralghifary/blueprint/defaults/SduiDialogButton;ZLio/github/ammaralghifary/blueprint/model/SduiAction;Lio/github/ammaralghifary/blueprint/model/SduiModifier;)Lio/github/ammaralghifary/blueprint/defaults/SduiDialog;
+	public static synthetic fun copy$default (Lio/github/ammaralghifary/blueprint/defaults/SduiDialog;Ljava/lang/String;Ljava/lang/String;Lio/github/ammaralghifary/blueprint/defaults/SduiDialogButton;Lio/github/ammaralghifary/blueprint/defaults/SduiDialogButton;ZLio/github/ammaralghifary/blueprint/model/SduiAction;Lio/github/ammaralghifary/blueprint/model/SduiModifier;ILjava/lang/Object;)Lio/github/ammaralghifary/blueprint/defaults/SduiDialog;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDismissible ()Z
+	public final fun getMessage ()Ljava/lang/String;
+	public fun getModifier ()Lio/github/ammaralghifary/blueprint/model/SduiModifier;
+	public final fun getOnDismiss ()Lio/github/ammaralghifary/blueprint/model/SduiAction;
+	public final fun getPrimary ()Lio/github/ammaralghifary/blueprint/defaults/SduiDialogButton;
+	public final fun getSecondary ()Lio/github/ammaralghifary/blueprint/defaults/SduiDialogButton;
+	public final fun getTitle ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/ammaralghifary/blueprint/defaults/SduiDialog$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field $stable I
+	public static final field INSTANCE Lio/github/ammaralghifary/blueprint/defaults/SduiDialog$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/ammaralghifary/blueprint/defaults/SduiDialog;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/ammaralghifary/blueprint/defaults/SduiDialog;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/ammaralghifary/blueprint/defaults/SduiDialog$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/ammaralghifary/blueprint/defaults/SduiDialogButton {
+	public static final field $stable I
+	public static final field Companion Lio/github/ammaralghifary/blueprint/defaults/SduiDialogButton$Companion;
+	public fun <init> (Ljava/lang/String;Lio/github/ammaralghifary/blueprint/model/SduiAction;Ljava/lang/Integer;)V
+	public synthetic fun <init> (Ljava/lang/String;Lio/github/ammaralghifary/blueprint/model/SduiAction;Ljava/lang/Integer;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lio/github/ammaralghifary/blueprint/model/SduiAction;
+	public final fun component3 ()Ljava/lang/Integer;
+	public final fun copy (Ljava/lang/String;Lio/github/ammaralghifary/blueprint/model/SduiAction;Ljava/lang/Integer;)Lio/github/ammaralghifary/blueprint/defaults/SduiDialogButton;
+	public static synthetic fun copy$default (Lio/github/ammaralghifary/blueprint/defaults/SduiDialogButton;Ljava/lang/String;Lio/github/ammaralghifary/blueprint/model/SduiAction;Ljava/lang/Integer;ILjava/lang/Object;)Lio/github/ammaralghifary/blueprint/defaults/SduiDialogButton;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAction ()Lio/github/ammaralghifary/blueprint/model/SduiAction;
+	public final fun getDisabledSeconds ()Ljava/lang/Integer;
+	public final fun getLabel ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/ammaralghifary/blueprint/defaults/SduiDialogButton$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field $stable I
+	public static final field INSTANCE Lio/github/ammaralghifary/blueprint/defaults/SduiDialogButton$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/ammaralghifary/blueprint/defaults/SduiDialogButton;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/ammaralghifary/blueprint/defaults/SduiDialogButton;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class io/github/ammaralghifary/blueprint/defaults/SduiDialogButton$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
